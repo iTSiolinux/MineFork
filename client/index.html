@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="keywords" content="MineResource, Platformer, 2D Game, Multiplayer, Adventure, Pixel Art, Resource Management, Node.js, HTML5, Canvas, JavaScript, Ubuntu, Game Development">
+    <meta name="description" content="MineResource is an engaging 2D multiplayer platformer game with a top-down perspective. Immerse yourself in a world of resource management, strategic gameplay, and thrilling battles. Explore diverse environments, gather resources, and deploy servers with Node.js. MineResource offers a unique gaming experience with minimal dependencies, perfect for Ubuntu enthusiasts who love coding in Python and JavaScript. Join the community, contribute to the project, and embark on a coding adventure in the world of MineResource.">
+
+    <!-- Page title and favicon -->
+    <title>MineResource</title>
+    <link rel="icon" href="/IMG/player.png" type="image/x-icon">
+
+    <!-- Page style -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Page scripts -->
+    <script id="Destroy">
+        window.addEventListener("load", async (e)=> {
+            const scripts = ["/JS/Load.js", "/JS/Entity.js", "/JS/Game.js"]
+
+            async function loadClasses(array, index = 0){
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = array[index];
+                document.head.appendChild(script)
+
+                script.addEventListener("load", ()=>{
+                    if (array[index + 1] !== undefined){
+                        loadClasses(array, index + 1);
+                    }
+                })
+            }
+
+            await loadClasses(scripts);
+
+            document.getElementById("Destroy").remove()
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>
