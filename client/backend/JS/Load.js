@@ -5,7 +5,8 @@ const scale = 64,
         );
     },
     CANVAS = document.createElement('canvas'),
-    DRAW = CANVAS.getContext('2d');
+    DRAW = CANVAS.getContext('2d'),
+    FPS = 1000 / 60;
 
 CANVAS.width = window.innerWidth * 0.95;
 CANVAS.height = window.innerHeight * 0.95;
@@ -32,6 +33,6 @@ class TextureLoader {
     }
 }
 
-const Texture = new TextureLoader("/IMG/null.png")
 
+const Texture = new TextureLoader("/IMG/null.png")
 Texture.loadImage("/IMG/player.png", "player")
