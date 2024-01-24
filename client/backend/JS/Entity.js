@@ -30,12 +30,12 @@ class Entity {
 
     // update function
     update = () => {
-        this.render.main()
+        this.updatePhysics()
     }
 
     // render array
     render = {
-        main: () => {
+        update: () => {
             this.render.base()
         },
         base: () => {
@@ -46,7 +46,7 @@ class Entity {
             DRAW.translate(this.POS.x, this.POS.y);
         
             // Rotate around the center
-            DRAW.rotate(this.angle);
+            DRAW.rotate(this.angle * Math.PI / 180);
         
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
@@ -79,8 +79,26 @@ class Entity {
         this.VEL = { x: X, y: Y };
     }
 
+    updatePhysics () {
+        this.SPEED.x += this.VEL.x
+        this.SPEED.y += this.VEL.y
+
+        this.POS.x += this.SPEED.x
+        this.POS.y += this.SPEED.y
+    }
+
 }
 
 class Player extends Entity {
+    constructor (values){
+        super(values)
+
+        // starting by adding hands
+        this.hands = [{x: 0, y: 0, w: this.size, h: this.size / 4}, {x: 0, y: 0, w: this.size, h: this.size / 4}]
+    }
+
+    lookAtMouse () {
+        
+    }
 
 }
