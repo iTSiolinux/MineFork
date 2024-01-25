@@ -2,3 +2,7 @@ html, body {
     display: grid;
     overflow: hidden;
 }
+
+canvas {
+    cursor: none;
+}

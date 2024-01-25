@@ -2,6 +2,7 @@
 
 // Main game object...
 const Game = {
+    isDebugging: false,
     canvas: CANVAS,
     awake: () => {
         console.log("Game is awaked!")
@@ -29,6 +30,8 @@ const Game = {
 
     },
     update: () => {
+        Game.player.update()
+
         Game.arrays.entitys.forEach(entity => {
             entity?.update()
         })
@@ -51,7 +54,7 @@ Game.Camera = {
     },
     update: () => {
         Game.Camera.follow()
-        DRAW.setTransform(1, 0, 0, 1, -Game.Camera.POS.x, -Game.Camera.POS.y);
+        DRAW.setTransform(1, 0, 0, 1, -Game.Camera.POS.x + Game.canvas.width / 2, -Game.Camera.POS.y + Game.canvas.height / 2);
     }
 };
 
@@ -67,12 +70,15 @@ Game.render = {
         Game.Camera.update()
         Game.render.entitys()
 
+        Game.render.mouse()
+    },
+    mouse: () => {
         DRAW.save()
         DRAW.fillStyle = "red"
-        DRAW.fillRect(Game.mouse.data.position.canvas.x - 8, Game.mouse.data.position.canvas.y - 8, 16, 16)
+        DRAW.drawImage(Texture.getImage("cursor"), Game.mouse.data.position.canvas.x - scale / 4, Game.mouse.data.position.canvas.y - scale / 4, scale / 2, scale / 2)
         DRAW.restore()
     },
-    refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x, Game.Camera.POS.y, CANVAS.width, CANVAS.height) },
+    refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height) },
     entitys: () => {
         Game.arrays.entitys.forEach(entity => {
             entity?.render?.update()
@@ -116,8 +122,8 @@ Game.events = {
             Game.keyboard.array[event.keyCode] = event.type;
         } else if (event instanceof MouseEvent) {
             // setting the mouse position by the client pos
-            Game.mouse.data.position.window.x = event.clientX;
-            Game.mouse.data.position.window.y = event.clientY;
+            Game.mouse.data.position.window.x = event.clientX - Game.canvas.offsetLeft - Game.canvas.width / 2;
+            Game.mouse.data.position.window.y = event.clientY - Game.canvas.offsetTop - Game.canvas.height / 2;
 
             // calculating realative to the canvas on Game.Camera.follow
         } else {

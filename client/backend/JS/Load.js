@@ -36,3 +36,4 @@ class TextureLoader {
 
 const Texture = new TextureLoader("/IMG/null.png")
 Texture.loadImage("/IMG/player.png", "player")
+Texture.loadImage("/IMG/_cursor.png", "cursor")

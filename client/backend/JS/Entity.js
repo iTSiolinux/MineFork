@@ -94,20 +94,61 @@ class Player extends Entity {
         super(values)
 
         // starting by adding hands
-        this.hands = [{x: 0, y: 0, w: this.size, h: this.size / 4}, {x: 0, y: 0, w: this.size, h: this.size / 4}]
+        this.hands = [{x: -32, y: 16, w: this.w / 2, h: this.h / 4}, {x: -32, y: -32, w: this.w / 2, h: this.h / 4}]
+
+        this.update = () => {
+            this.updatePhysics()
+            this.lookAtMouse()
+        }
     }
 
-    lookAtMouse () {
-        const mouseX = GAME.mouse.position.x;
-        const mouseY = GAME.mouse.position.y;
-
-        // Calculate the angle between the player and the mouse cursor
-        const deltaX = mouseX - (gameCanvas.width / 2);
-        const deltaY = mouseY - (gameCanvas.height / 2);
-        const angle = Math.atan2(deltaY, deltaX);
-
-        // Update player rotation
-        player.rotation = angle;
+    lookAtMouse() {
+        const mousePos = Game.mouse.data.position.canvas;
+        const deltaX = Game.Camera.POS.x - mousePos.x + Game.player.POS.x;
+        const deltaY = Game.Camera.POS.y - mousePos.y + Game.player.POS.y;
+    
+        // Calculate the angle in radians
+        const angleRadians = Math.atan2(deltaY, deltaX);
+    
+        // Convert radians to degrees
+        this.angle = angleRadians * (180 / Math.PI);
     }
+    
 
+    render = {
+        update: () => {
+            this.render.base()
+        },
+        base: () => {
+            // Save original drawing context
+            DRAW.save();
+
+            // Translate to the center of the object
+            DRAW.translate(this.POS.x, this.POS.y);
+        
+            // Rotate around the center
+            DRAW.rotate(this.angle * Math.PI / 180);
+        
+            // Render the fists of the player
+            this.render.hands()
+
+            // Draw the image with its center at (0, 0)
+            DRAW.drawImage(
+                this.texture,
+                -this.w / 2,
+                -this.h / 2,
+                this.w,
+                this.h
+            );
+        
+            // Restore the original drawing context
+            DRAW.restore();
+        },
+        hands: () => {
+            DRAW.fillStyle = Game.isDebugging ? "red" : 'rgb(255 184 45)';
+            DRAW.fillRect(this.hands[0].x, this.hands[0].y, this.hands[0].w, this.hands[0].h); // the RED hand
+            DRAW.fillStyle = Game.isDebugging ? "blue" : 'rgb(255 184 45)';
+            DRAW.fillRect(this.hands[1].x, this.hands[1].y, this.hands[1].w, this.hands[1].h); // the BLUE hand!
+        }
+    }
 }
