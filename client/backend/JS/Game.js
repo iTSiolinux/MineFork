@@ -69,7 +69,7 @@ Game.render = {
 
         DRAW.save()
         DRAW.fillStyle = "red"
-        DRAW.fillRect(Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y, 16, 16)
+        DRAW.fillRect(Game.mouse.data.position.canvas.x - 8, Game.mouse.data.position.canvas.y - 8, 16, 16)
         DRAW.restore()
     },
     refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x, Game.Camera.POS.y, CANVAS.width, CANVAS.height) },

@@ -2,8 +2,3 @@ html, body {
     display: grid;
     overflow: hidden;
 }
-
-canvas {
-    align-self: center;
-    justify-self: center;
-}
