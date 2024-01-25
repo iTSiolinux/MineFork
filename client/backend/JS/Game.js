@@ -28,15 +28,23 @@ const Game = {
         Game.arrays.entitys.push(p)
         Game.player = p;
 
+        // Test block
+        const b = new Block({texture: Texture.getImage("oak"), w: 2, h: 2})
+        Game.arrays.blocks.push(b)
+
+
     },
     update: () => {
         Game.keyboard.update()
-
 
         Game.player.update()
 
         Game.arrays.entitys.forEach(entity => {
             entity?.update()
+        })
+
+        Game.arrays.blocks.forEach(block => {
+            block?.update()
         })
     },
     updateInterval: null,
@@ -63,7 +71,7 @@ Game.Camera = {
 
 // Game data located here for now
 Game.arrays = {
-    entitys: []
+    entitys: [], blocks: []
 }
 
 // Game render system
@@ -72,6 +80,7 @@ Game.render = {
         Game.render.refreshCanvas()
         Game.Camera.update()
         Game.render.entitys()
+        Game.render.blocks()
 
         Game.render.mouse()
     },
@@ -85,6 +94,11 @@ Game.render = {
     entitys: () => {
         Game.arrays.entitys.forEach(entity => {
             entity?.render?.update()
+        })
+    },
+    blocks: () => {
+        Game.arrays.blocks.forEach(block => {
+            block?.render?.update()
         })
     }
 }
@@ -177,7 +191,6 @@ Game.keyboard = {
         } else if (keys[68] == "keyup"){
             POS.x--;
         }
-
 
         Game.player.setSpeed(POS.x, POS.y);
     }

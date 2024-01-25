@@ -36,7 +36,9 @@ class Entity {
     // render array
     render = {
         update: () => {
-            this.render.base()
+            if (this.isVisible){
+                this.render.base()
+            }
         },
         base: () => {
             // Save original drawing context
@@ -122,7 +124,9 @@ class Player extends Entity {
 
     render = {
         update: () => {
-            this.render.base()
+            if (this.isVisible){
+                this.render.base()
+            }
         },
         base: () => {
             // Save original drawing context
