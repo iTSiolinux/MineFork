@@ -30,6 +30,9 @@ const Game = {
 
     },
     update: () => {
+        Game.keyboard.update()
+
+
         Game.player.update()
 
         Game.arrays.entitys.forEach(entity => {
@@ -120,6 +123,9 @@ Game.events = {
     handler(event) {
         if (event instanceof KeyboardEvent) {
             Game.keyboard.array[event.keyCode] = event.type;
+            if (Game.isDebugging) 
+                alert(event.keyCode + ' ' + event.type);
+
         } else if (event instanceof MouseEvent) {
             // setting the mouse position by the client pos
             Game.mouse.data.position.window.x = event.clientX - Game.canvas.offsetLeft - Game.canvas.width / 2;
@@ -139,7 +145,42 @@ Game.keyboard = {
         onKeyDown: null,
         onKeyUp: null
     },
-    array: []
+    array: [],
+    update () {
+        const keys = Game.keyboard.array;
+        const POS = {x: 0, y: 0}
+
+        // up key
+        if (keys[87] == "keydown"){
+            POS.y--;
+        } else if (keys[87] == "keyup"){
+            POS.y++;
+        }
+
+        // down key
+        if (keys[83] == "keydown"){
+            POS.y++;
+        } else if (keys[83] == "keyup"){
+            POS.y--;
+        }
+
+        // left key
+        if (keys[65] == "keydown"){
+            POS.x--;
+        } else if (keys[65] == "keyup"){
+            POS.x++;
+        }
+
+        // right key
+        if (keys[68] == "keydown"){
+            POS.x++;
+        } else if (keys[68] == "keyup"){
+            POS.x--;
+        }
+
+
+        Game.player.setSpeed(POS.x, POS.y);
+    }
 }
 
 // The mouse data

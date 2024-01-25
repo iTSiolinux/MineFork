@@ -104,9 +104,14 @@ class Player extends Entity {
 
     lookAtMouse() {
         const mousePos = Game.mouse.data.position.canvas;
-        const deltaX = Game.Camera.POS.x - mousePos.x + Game.player.POS.x;
-        const deltaY = Game.Camera.POS.y - mousePos.y + Game.player.POS.y;
+        let deltaX = Game.Camera.POS.x - mousePos.x + Game.player.POS.x,
+        deltaY = Game.Camera.POS.y - mousePos.y + Game.player.POS.y;
     
+        if (Game.Camera.target){
+            deltaX -= Game.player.POS.x;
+            deltaY -= Game.player.POS.y;
+        }
+
         // Calculate the angle in radians
         const angleRadians = Math.atan2(deltaY, deltaX);
     
