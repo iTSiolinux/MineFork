@@ -98,7 +98,16 @@ class Player extends Entity {
     }
 
     lookAtMouse () {
-        
+        const mouseX = GAME.mouse.position.x;
+        const mouseY = GAME.mouse.position.y;
+
+        // Calculate the angle between the player and the mouse cursor
+        const deltaX = mouseX - (gameCanvas.width / 2);
+        const deltaY = mouseY - (gameCanvas.height / 2);
+        const angle = Math.atan2(deltaY, deltaX);
+
+        // Update player rotation
+        player.rotation = angle;
     }
 
 }

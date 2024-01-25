@@ -2,6 +2,7 @@
 
 // Main game object...
 const Game = {
+    canvas: CANVAS,
     awake: () => {
         console.log("Game is awaked!")
         // registering some events listeners before awaking the game
@@ -12,13 +13,20 @@ const Game = {
         window.addEventListener('keyup', Game.events.onKeyUp)
 
         // mouse event
-        window.addEventListener('mousedown', Game.events.onMouseDown)
-        window.addEventListener('mouseup', Game.events.onMouseUp)
+        Game.canvas.addEventListener('mousemove', Game.events.onMouseMove)
+        Game.canvas.addEventListener('mousedown', Game.events.onMouseDown)
+        Game.canvas.addEventListener('mouseup', Game.events.onMouseUp)
 
 
         // awaking the game update loop
         Game.updateInterval = setInterval(Game.update, 5)
         Game.renderInterval = setInterval(Game.render.update, FPS)
+        
+        // Player 
+        const p = new Player({POS: {x: 64, y: 64}, texture: Texture.getImage("player")})
+        Game.arrays.entitys.push(p)
+        Game.player = p;
+
     },
     update: () => {
         Game.arrays.entitys.forEach(entity => {
@@ -37,6 +45,9 @@ Game.Camera = {
         if (Game.Camera.target?.POS) {
             Game.Camera.POS = Game.Camera.target.POS
         }
+        // calculating realative to the canvas
+        Game.mouse.data.position.canvas.x = Game.mouse.data.position.window.x + Game.Camera.POS.x;
+        Game.mouse.data.position.canvas.y = Game.mouse.data.position.window.y + Game.Camera.POS.y;
     },
     update: () => {
         Game.Camera.follow()
@@ -55,8 +66,13 @@ Game.render = {
         Game.render.refreshCanvas()
         Game.Camera.update()
         Game.render.entitys()
+
+        DRAW.save()
+        DRAW.fillStyle = "red"
+        DRAW.fillRect(Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y, 16, 16)
+        DRAW.restore()
     },
-    refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - CANVAS.width / 2, Game.Camera.POS.y - CANVAS.height / 2, CANVAS.width, CANVAS.height) },
+    refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x, Game.Camera.POS.y, CANVAS.width, CANVAS.height) },
     entitys: () => {
         Game.arrays.entitys.forEach(entity => {
             entity?.render?.update()
@@ -80,6 +96,11 @@ Game.events = {
         Game.keyboard.last.event = event;
         Game.keyboard.last.onKeyUp = event;
     },
+    onMouseMove: (event) => {
+        Game.events.handler(event);
+        Game.mouse.last.event = event;
+        Game.mouse.last.onMouseMove = event;
+    },
     onMouseDown: (event) => {
         Game.events.handler(event);
         Game.mouse.last.event = event;
@@ -98,9 +119,7 @@ Game.events = {
             Game.mouse.data.position.window.x = event.clientX;
             Game.mouse.data.position.window.y = event.clientY;
 
-            // calculating realative to the canvas
-            Game.mouse.data.position.canvas.x = event.clientX + Game.Camera.POS.x;
-            Game.mouse.data.position.canvas.y = event.clientY + Game.Camera.POS.y;
+            // calculating realative to the canvas on Game.Camera.follow
         } else {
             console.error("not handled input: " + event.toString())
         }
