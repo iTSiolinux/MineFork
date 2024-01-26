@@ -36,9 +36,8 @@ const Game = {
         const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2 })
         Game.arrays.blocks.push(b)
 
-        // Test button
-        const btn = new Button({ texture: Texture.getImage("slot") })
-        Game.arrays.GUI.push(btn)
+        // Activate slots render
+        Game.slots.summon()
     },
     update: () => {
         Game.keyboard.update()
@@ -250,18 +249,19 @@ Game.mouse = {
 Game.slots = {
     hotbar: [],
     summon: () => {
-        const slotScale = 2,
-        slotMargin = scale / 4,
-        minX = -(slotMargin * 4 + slotScale * 4);
+        const slotScale = 0.5,
+        slotMargin = scale / 8,
+        minX = -(slotMargin * 4 + slotScale * 4) * slotMargin / 2;
 
 
-        for (i = 0; i <= 8; i++) {
+        for (i = 0; i < 8; i++) {
             Game.slots.hotbar[i] = new Button(
                 {
                     texture: Texture.getImage("slot"),
-                    POS: {x: minX + i * (slotScale + slotMargin ), y: 0},
+                    POS: {x: minX + i * (slotScale * scale + slotMargin ), y: Game.canvas.height / 2 - slotScale * scale / 2},
                     w: slotScale,
-                    h: slotScale
+                    h: slotScale,
+                    ID: "SLOT-" + i
                 }
             )
             Game.arrays.GUI.push(Game.slots.hotbar[i])

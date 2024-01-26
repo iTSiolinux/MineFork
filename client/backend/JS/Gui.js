@@ -6,6 +6,7 @@ class Button {
         this.angle = values?.angle || 0;
 
         this.POS = values?.POS || { x: 0, y: 0 }
+        this.ID = values?.ID || null;
     }
 
     // Events
@@ -19,7 +20,8 @@ class Button {
     }
 
     onHover() {
-        console.log("Mouse is over: " + this)
+        if (Game.isDebugging)
+            console.log("Mouse is over: " + this.ID);
     }
 
     // Functions
