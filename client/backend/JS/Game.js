@@ -7,7 +7,7 @@ const Game = {
     awake: () => {
         console.log("Game is awaked!")
         // registering some events listeners before awaking the game
-        document.addEventListener('resize', Game.events.onResize)
+        window.addEventListener('resize', Game.events.onResize)
 
         // keyboard event
         document.addEventListener('keydown', Game.events.onKeyDown)
@@ -23,25 +23,31 @@ const Game = {
         // awaking the game update loop
         Game.updateInterval = setInterval(Game.update, 5)
         Game.renderInterval = setInterval(Game.render.update, FPS)
-        
+
         // Player 
-        const p = new Player({POS: {x: 64, y: 64}, texture: Texture.getImage("player")})
+        const p = new Player({ POS: { x: 64, y: 64 }, texture: Texture.getImage("player") })
         Game.arrays.entitys.push(p)
         Game.player = p;
 
         // Attaching player to the camera as target
-        Game.Camera.target = p; 
+        Game.Camera.target = p;
 
         // Test block
-        const b = new Block({texture: Texture.getImage("oak"), w: 2, h: 2})
+        const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2 })
         Game.arrays.blocks.push(b)
 
-
+        // Test button
+        const btn = new Button({ texture: Texture.getImage("slot") })
+        Game.arrays.GUI.push(btn)
     },
     update: () => {
         Game.keyboard.update()
 
         Game.player.update()
+
+        Game.arrays.GUI.forEach(Button => {
+            Button?.update()
+        })
 
         Game.arrays.entitys.forEach(entity => {
             entity?.update()
@@ -64,8 +70,8 @@ Game.Camera = {
             Game.Camera.POS = Game.Camera.target.POS
         }
         // calculating realative to the canvas
-        Game.mouse.data.position.canvas.x = Game.mouse.data.position.window.x + Game.Camera.POS.x;
-        Game.mouse.data.position.canvas.y = Game.mouse.data.position.window.y + Game.Camera.POS.y;
+        Game.mouse.data.position.canvas.x = Game.mouse.data.position.window.x + Game.Camera.POS.x - scale / 4;
+        Game.mouse.data.position.canvas.y = Game.mouse.data.position.window.y + Game.Camera.POS.y - scale / 4;
     },
     update: () => {
         Game.Camera.follow()
@@ -75,7 +81,7 @@ Game.Camera = {
 
 // Game data located here for now
 Game.arrays = {
-    entitys: [], blocks: []
+    entitys: [], blocks: [], GUI: []
 }
 
 // Game render system
@@ -85,14 +91,9 @@ Game.render = {
         Game.Camera.update()
         Game.render.entitys()
         Game.render.blocks()
+        Game.render.GUI()
 
         Game.render.mouse()
-    },
-    mouse: () => {
-        DRAW.save()
-        DRAW.fillStyle = "red"
-        DRAW.drawImage(Texture.getImage("cursor"), Game.mouse.data.position.canvas.x - scale / 4, Game.mouse.data.position.canvas.y - scale / 4, scale / 2, scale / 2)
-        DRAW.restore()
     },
     refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height) },
     entitys: () => {
@@ -104,12 +105,24 @@ Game.render = {
         Game.arrays.blocks.forEach(block => {
             block?.render?.update()
         })
-    }
+    },
+    GUI: () => {
+        Game.arrays.GUI.forEach(GUI => {
+            GUI?.render()
+        })
+    },
+    mouse: () => {
+        DRAW.save()
+        DRAW.fillStyle = "red"
+        DRAW.drawImage(Texture.getImage("cursor"), Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y, scale / 2, scale / 2)
+        DRAW.restore()
+    },
 }
 
 // Handle window events
 Game.events = {
     onResize: () => {
+        console.log("hi")
         CANVAS.width = window.innerWidth * 0.95;
         CANVAS.height = window.innerHeight * 0.95;
     },
@@ -146,7 +159,7 @@ Game.events = {
     handler(event) {
         if (event instanceof KeyboardEvent) {
             Game.keyboard.array[event.keyCode] = event.type;
-            if (Game.isDebugging) 
+            if (Game.isDebugging)
                 alert(event.keyCode + ' ' + event.type);
 
         } else if (event instanceof MouseEvent) {
@@ -170,39 +183,39 @@ Game.keyboard = {
         onKeyUp: null
     },
     array: [],
-    update () {
+    update() {
         const keys = Game.keyboard.array;
-        const POS = {x: 0, y: 0}
+        const POS = { x: 0, y: 0 }
 
         // up key
-        if (keys[87] == "keypress"){
+        if (keys[87] == "keypress") {
             POS.y--;
-        } else if (keys[87] == "keyup"){
+        } else if (keys[87] == "keyup") {
             POS.y++;
         }
 
         // down key
-        if (keys[83] == "keypress"){
+        if (keys[83] == "keypress") {
             POS.y++;
-        } else if (keys[83] == "keyup"){
+        } else if (keys[83] == "keyup") {
             POS.y--;
         }
 
         // left key
-        if (keys[65] == "keypress"){
+        if (keys[65] == "keypress") {
             POS.x--;
-        } else if (keys[65] == "keyup"){
+        } else if (keys[65] == "keyup") {
             POS.x++;
         }
 
         // right key
-        if (keys[68] == "keypress"){
+        if (keys[68] == "keypress") {
             POS.x++;
-        } else if (keys[68] == "keyup"){
+        } else if (keys[68] == "keyup") {
             POS.x--;
         }
 
-        Game.player.setSpeed(POS.x, POS.y);
+        Game.player.setSpeed(POS.x, POS.y)
     }
 }
 
@@ -215,10 +228,44 @@ Game.mouse = {
     },
     data: {
         position: {
-            canvas: {x: 0, y: 0},
-            window: {x: 0, y: 0}
+            canvas: { x: 0, y: 0 },
+            window: { x: 0, y: 0 }
         },
         isDown: false
+    },
+    isOver: (object) => {
+        const mouseX = Game.mouse.data.position.canvas.x - Game.Camera.POS.x;
+        const mouseY = Game.mouse.data.position.canvas.y - Game.Camera.POS.y;
+
+        return (
+            mouseX >= object.POS.x - object.w / 2 &&
+            mouseX <= object.POS.x + object.w / 2 &&
+            mouseY >= object.POS.y - object.h / 2 &&
+            mouseY <= object.POS.y + object.h / 2
+        );
+    }
+
+}
+
+Game.slots = {
+    hotbar: [],
+    summon: () => {
+        const slotScale = 2,
+        slotMargin = scale / 4,
+        minX = -(slotMargin * 4 + slotScale * 4);
+
+
+        for (i = 0; i <= 8; i++) {
+            Game.slots.hotbar[i] = new Button(
+                {
+                    texture: Texture.getImage("slot"),
+                    POS: {x: minX + i * (slotScale + slotMargin ), y: 0},
+                    w: slotScale,
+                    h: slotScale
+                }
+            )
+            Game.arrays.GUI.push(Game.slots.hotbar[i])
+        }
     }
 }
 
