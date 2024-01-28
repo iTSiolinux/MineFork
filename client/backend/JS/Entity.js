@@ -17,6 +17,7 @@ class Entity {
         this.POS = values?.POS || { x: 0, y: 0 };
         this.VEL = { x: 0, y: 0 };
         this.SPEED = { x: 0, y: 0 };
+        this.INV = values?.INV || []
 
         this.onSpawn()
     }
@@ -123,11 +124,20 @@ class Player extends Entity {
     }
 
     
-    pickupItems () {
-        Game.arrays.items.forEach(item => {
-            
+    pickupItems() {
+        Game.arrays.items.forEach((item, index) => {
+            if (isColliding(this, item)) {
+                if (this.INV.length < 8) {
+                    // Adding it to the inventory array
+                    this.INV.push(item);
+    
+                    // Removing from the game array
+                    Game.arrays.items.splice(index, 1);
+                }
+            }
         });
     }
+    
 
     render = {
         update: () => {

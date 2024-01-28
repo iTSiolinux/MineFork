@@ -33,11 +33,11 @@ const Game = {
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2 })
-        // Game.arrays.blocks.push(b)
+        const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2, POS: {x: -64, y: -64 }})
+        Game.arrays.blocks.push(b)
 
         // Test item
-        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 1})
+        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 1, POS: {x: 64, y: 64}})
         Game.arrays.items.push(i)
     },
     update: () => {
@@ -128,7 +128,6 @@ Game.render = {
 // Handle window events
 Game.events = {
     onResize: () => {
-        console.log("hi")
         CANVAS.width = window.innerWidth * 0.95;
         CANVAS.height = window.innerHeight * 0.95;
     },

@@ -25,10 +25,10 @@ class Item {
         // Draw the image with its center at (0, 0)
         DRAW.drawImage(
             this.texture,
-            -this.size / 2,
-            -this.size / 2,
-            this.size,
-            this.size
+            -this.w / 2,
+            -this.h / 2,
+            this.w,
+            this.h
         );
 
         // Restore the original drawing context

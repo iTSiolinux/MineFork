@@ -6,11 +6,12 @@ const scale = 64,
     },
     isColliding = (obj, obj2) => {
         return (
-            (obj.POS.x + obj.w > obj2.POS.x && obj2.POS.x - obj2.w <  obj.POS.x) // horizontal collison
+            (obj.POS.x + obj.w >= obj2.POS.x && obj2.POS.x - obj2.w <= obj.POS.x) // horizontal collision
             &&
-            (true)
-        )
-    }
+            (obj.POS.y + obj.h >= obj2.POS.y && obj2.POS.y - obj2.h <= obj.POS.y) // vertical collision
+        );
+    };
+    
     CANVAS = document.createElement('canvas'),
     DRAW = CANVAS.getContext('2d'),
     FPS = 1000 / 60;
