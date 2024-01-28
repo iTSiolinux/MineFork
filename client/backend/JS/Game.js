@@ -35,9 +35,6 @@ const Game = {
         // Test block
         const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2 })
         Game.arrays.blocks.push(b)
-
-        // Activate slots render
-        Game.slots.summon()
     },
     update: () => {
         Game.keyboard.update()
@@ -157,7 +154,7 @@ Game.events = {
     },
     handler(event) {
         if (event instanceof KeyboardEvent) {
-            Game.keyboard.array[event.keyCode] = event.type;
+            Game.keyboard.array[event.keyCode] = !(event.type == "keyup");
             if (Game.isDebugging)
                 alert(event.keyCode + ' ' + event.type);
 
@@ -187,30 +184,30 @@ Game.keyboard = {
         const POS = { x: 0, y: 0 }
 
         // up key
-        if (keys[87] == "keypress") {
+        if (keys[87]) {
             POS.y--;
-        } else if (keys[87] == "keyup") {
+        } else if (!keys[87]) {
             POS.y++;
         }
 
         // down key
-        if (keys[83] == "keypress") {
+        if (keys[83]) {
             POS.y++;
-        } else if (keys[83] == "keyup") {
+        } else if (!keys[83]) {
             POS.y--;
         }
 
         // left key
-        if (keys[65] == "keypress") {
+        if (keys[65]) {
             POS.x--;
-        } else if (keys[65] == "keyup") {
+        } else if (!keys[65]) {
             POS.x++;
         }
 
         // right key
-        if (keys[68] == "keypress") {
+        if (keys[68]) {
             POS.x++;
-        } else if (keys[68] == "keyup") {
+        } else if (!keys[68]) {
             POS.x--;
         }
 
@@ -244,29 +241,6 @@ Game.mouse = {
         );
     }
 
-}
-
-Game.slots = {
-    hotbar: [],
-    summon: () => {
-        const slotScale = 0.5,
-        slotMargin = scale / 8,
-        minX = -(slotMargin * 4 + slotScale * 4) * slotMargin / 2;
-
-
-        for (i = 0; i < 8; i++) {
-            Game.slots.hotbar[i] = new Button(
-                {
-                    texture: Texture.getImage("slot"),
-                    POS: {x: minX + i * (slotScale * scale + slotMargin ), y: Game.canvas.height / 2 - slotScale * scale / 2},
-                    w: slotScale,
-                    h: slotScale,
-                    ID: "SLOT-" + i
-                }
-            )
-            Game.arrays.GUI.push(Game.slots.hotbar[i])
-        }
-    }
 }
 
 setTimeout(Game.awake, 1000)
