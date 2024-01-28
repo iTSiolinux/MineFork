@@ -101,6 +101,7 @@ class Player extends Entity {
         this.update = () => {
             this.updatePhysics()
             this.lookAtMouse()
+            this.pickupItems()
         }
     }
 
@@ -120,7 +121,13 @@ class Player extends Entity {
         // Convert radians to degrees
         this.angle = angleRadians * (180 / Math.PI);
     }
+
     
+    pickupItems () {
+        Game.arrays.items.forEach(item => {
+            
+        });
+    }
 
     render = {
         update: () => {

@@ -4,6 +4,13 @@ const scale = 64,
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
     },
+    isColliding = (obj, obj2) => {
+        return (
+            (obj.POS.x + obj.w > obj2.POS.x && obj2.POS.x - obj2.w <  obj.POS.x) // horizontal collison
+            &&
+            (true)
+        )
+    }
     CANVAS = document.createElement('canvas'),
     DRAW = CANVAS.getContext('2d'),
     FPS = 1000 / 60;
