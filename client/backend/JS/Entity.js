@@ -8,9 +8,9 @@ class Entity {
         this.h = values?.h || scale;
         this.angle = values?.angle || 0;
 
-        this.uuid = values?.uuid || genUUID();
+        this.UUID = values?.UUID || genUUID();
         this.name = values?.name || null;
-        this.type = values?.type || null;
+        this.TYPE = values?.TYPE || null;
 
         this.isVisible = values?.isVisible || true;
 

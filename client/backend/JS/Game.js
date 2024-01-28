@@ -25,7 +25,7 @@ const Game = {
         Game.renderInterval = setInterval(Game.render.update, FPS)
 
         // Player 
-        const p = new Player({ POS: { x: 64, y: 64 }, texture: Texture.getImage("player") })
+        const p = new Player({ POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
         Game.arrays.entitys.push(p)
         Game.player = p;
 
@@ -34,7 +34,11 @@ const Game = {
 
         // Test block
         const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2 })
-        Game.arrays.blocks.push(b)
+        // Game.arrays.blocks.push(b)
+
+        // Test item
+        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 1})
+        Game.arrays.items.push(i)
     },
     update: () => {
         Game.keyboard.update()
@@ -77,7 +81,7 @@ Game.Camera = {
 
 // Game data located here for now
 Game.arrays = {
-    entitys: [], blocks: [], GUI: []
+    entitys: [], blocks: [], items: [], GUI: []
 }
 
 // Game render system
@@ -85,6 +89,7 @@ Game.render = {
     update() {
         Game.render.refreshCanvas()
         Game.Camera.update()
+        Game.render.items()
         Game.render.entitys()
         Game.render.blocks()
         Game.render.GUI()
@@ -92,6 +97,11 @@ Game.render = {
         Game.render.mouse()
     },
     refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height) },
+    items: () => {
+        Game.arrays.items.forEach(items => {
+            items?.render()
+        })
+    },
     entitys: () => {
         Game.arrays.entitys.forEach(entity => {
             entity?.render?.update()

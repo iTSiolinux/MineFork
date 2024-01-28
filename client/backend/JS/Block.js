@@ -11,8 +11,8 @@ class Block {
         this.POS = values?.POS || {x: 0, y: 0};
         this.angle = values?.angle || 0;
 
-        this.uuid = values?.uuid || genUUID();
-        this.type = values?.type || null;
+        this.UUID = values?.UUID || genUUID();
+        this.TYPE = values?.TYPE || null;
 
         this.onConstructor()
     }
