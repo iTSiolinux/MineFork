@@ -123,6 +123,7 @@ Game.render = {
         DRAW.drawImage(Texture.getImage("cursor"), Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y, scale / 2, scale / 2)
         DRAW.restore()
     },
+    // need to add summon gui functionality   
 }
 
 // Handle window events
