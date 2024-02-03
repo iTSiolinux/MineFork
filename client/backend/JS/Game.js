@@ -222,6 +222,13 @@ Game.keyboard = {
         }
 
         Game.player.setSpeed(POS.x, POS.y)
+
+        for (let i = 0; i < 8; i++) {
+            if (keys[49 + i]) {
+                Game.player.switchSlot(i + 1);
+                break;
+            }
+        }        
     }
 }
 
