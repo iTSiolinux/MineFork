@@ -33,11 +33,11 @@ const Game = {
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block({ texture: Texture.getImage("oak"), w: 2, h: 2, POS: {x: -64, y: -64 }})
+        const b = new Block({ texture: Texture.getImage("oak"), w: 128, h: 128, POS: {x: -64, y: -64 }})
         Game.arrays.blocks.push(b)
 
         // Test item
-        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 1, POS: {x: 64, y: 64}})
+        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 64, POS: {x: 64, y: 64}})
         Game.arrays.items.push(i)
     },
     update: () => {

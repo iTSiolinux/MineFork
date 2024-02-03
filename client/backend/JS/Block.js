@@ -4,8 +4,8 @@ class Block {
         this.HP = values?.HP || 1;
 
         this.texture = values?.texture || Texture.getImage("null");
-        this.w = values?.w * scale || scale;
-        this.h = values?.h * scale || scale;
+        this.w = values?.w || scale;
+        this.h = values?.h || scale;
         this.isVisible = values?.isVisible || true;
 
         this.POS = values?.POS || {x: 0, y: 0};

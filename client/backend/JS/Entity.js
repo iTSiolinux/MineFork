@@ -17,7 +17,7 @@ class Entity {
         this.POS = values?.POS || { x: 0, y: 0 };
         this.VEL = { x: 0, y: 0 };
         this.SPEED = { x: 0, y: 0 };
-        this.INV = values?.INV || []
+        this.INV = new Inv(values?.INV) || new Inv()
 
         this.onSpawn()
     }
@@ -37,7 +37,7 @@ class Entity {
     // render array
     render = {
         update: () => {
-            if (this.isVisible){
+            if (this.isVisible) {
                 this.render.base()
             }
         },
@@ -47,10 +47,10 @@ class Entity {
 
             // Translate to the center of the object
             DRAW.translate(this.POS.x, this.POS.y);
-        
+
             // Rotate around the center
             DRAW.rotate(this.angle * Math.PI / 180);
-        
+
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
                 this.texture,
@@ -59,7 +59,7 @@ class Entity {
                 this.w,
                 this.h
             );
-        
+
             // Restore the original drawing context
             DRAW.restore();
         }
@@ -82,7 +82,7 @@ class Entity {
         this.VEL = { x: X, y: Y };
     }
 
-    updatePhysics () {
+    updatePhysics() {
         this.SPEED.x += this.VEL.x
         this.SPEED.y += this.VEL.y
 
@@ -93,11 +93,11 @@ class Entity {
 }
 
 class Player extends Entity {
-    constructor (values){
+    constructor(values) {
         super(values)
 
         // starting by adding hands
-        this.hands = [{x: -32, y: 16, w: this.w / 2, h: this.h / 4}, {x: -32, y: -32, w: this.w / 2, h: this.h / 4}]
+        this.hands = [{ x: -32, y: 16, w: this.w / 2, h: this.h / 4 }, { x: -32, y: -32, w: this.w / 2, h: this.h / 4 }]
 
         this.update = () => {
             this.updatePhysics()
@@ -109,39 +109,34 @@ class Player extends Entity {
     lookAtMouse() {
         const mousePos = Game.mouse.data.position.canvas;
         let deltaX = Game.Camera.POS.x - mousePos.x + Game.player.POS.x,
-        deltaY = Game.Camera.POS.y - mousePos.y + Game.player.POS.y;
-    
-        if (Game.Camera.target){
+            deltaY = Game.Camera.POS.y - mousePos.y + Game.player.POS.y;
+
+        if (Game.Camera.target) {
             deltaX -= Game.player.POS.x;
             deltaY -= Game.player.POS.y;
         }
 
         // Calculate the angle in radians
         const angleRadians = Math.atan2(deltaY, deltaX);
-    
+
         // Convert radians to degrees
         this.angle = angleRadians * (180 / Math.PI);
     }
 
-    
+
     pickupItems() {
         Game.arrays.items.forEach((item, index) => {
             if (isColliding(this, item)) {
-                if (this.INV.length < 8) {
-                    // Adding it to the inventory array
-                    this.INV.push(item);
-    
-                    // Removing from the game array
-                    Game.arrays.items.splice(index, 1);
-                }
+                this.INV.addItem(item)
+                Game.arrays.items.splice(index, 1);
             }
         });
     }
-    
+
 
     render = {
         update: () => {
-            if (this.isVisible){
+            if (this.isVisible) {
                 this.render.base()
             }
         },
@@ -151,12 +146,13 @@ class Player extends Entity {
 
             // Translate to the center of the object
             DRAW.translate(this.POS.x, this.POS.y);
-        
+
             // Rotate around the center
             DRAW.rotate(this.angle * Math.PI / 180);
-        
+
             // Render the fists of the player
             this.render.hands()
+            this.render.handItem()
 
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
@@ -166,7 +162,7 @@ class Player extends Entity {
                 this.w,
                 this.h
             );
-        
+
             // Restore the original drawing context
             DRAW.restore();
         },
@@ -175,6 +171,21 @@ class Player extends Entity {
             DRAW.fillRect(this.hands[0].x, this.hands[0].y, this.hands[0].w, this.hands[0].h); // the RED hand
             DRAW.fillStyle = Game.isDebugging ? "blue" : 'rgb(255 184 45)';
             DRAW.fillRect(this.hands[1].x, this.hands[1].y, this.hands[1].w, this.hands[1].h); // the BLUE hand!
+        },
+        handItem: () => {
+            const handItem = Game.player.INV.items[Game.player.INV.handIndex];
+
+            const offsetX = this.hands[0].x - this.hands[0].w;
+
+            if (handItem instanceof Item) {
+                DRAW.drawImage(
+                    handItem.texture,
+                    offsetX,
+                    0,
+                    handItem.w,
+                    handItem.h
+                )
+            }
         }
     }
 }

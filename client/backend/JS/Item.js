@@ -1,8 +1,8 @@
 class Item {
     constructor(values) {
         this.texture = values?.texture || Texture.getImage("null");
-        this.w = (values?.w * scale  || scale) / 2;
-        this.h = (values?.h * scale  || scale) / 2;
+        this.w = values?.w  || scale / 2;
+        this.h = values?.h  || scale / 2;
         this.angle = values?.angle || 0;
 
         this.POS = values?.POS || {x: 0, y: 0}
