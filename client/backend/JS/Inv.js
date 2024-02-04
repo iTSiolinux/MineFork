@@ -17,6 +17,18 @@ class Inv {
             this.items.push(item);
     }
 
+    wearItem (item) {
+        if (item instanceof Item)
+            this.items.pop(item);
+            this.armor[item.armorSlot] = item
+    }
+
+    unWearItem (item) {
+        if (item instanceof Item)
+            this.items.push(item);
+            this.armor[item.armorSlot] = null
+    }
+
     removeItem(item) {
         if (item instanceof Item)
             this.items.pop(item);
