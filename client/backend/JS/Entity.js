@@ -1,3 +1,4 @@
+
 class Entity {
     constructor(values) {
         this.CONST_HP = values?.HP || 1;
@@ -98,11 +99,14 @@ class Player extends Entity {
 
         // starting by adding hands
         this.hands = [{ x: -32, y: 16, w: this.w / 2, h: this.h / 4 }, { x: -32, y: -32, w: this.w / 2, h: this.h / 4 }]
+        this.lastHit = 1;
+        this.isMining = false;
 
         this.update = () => {
             this.updatePhysics()
             this.lookAtMouse()
             this.pickupItems()
+            this.mine()
         }
     }
 
@@ -150,6 +154,28 @@ class Player extends Entity {
             this.INV.removeItem(handItem)
         }
     }
+
+    mine() {
+        if (!this.isMining && Game.mouse.data.isDown){
+            this.isMining = true;
+    
+            const Hand = this.hands[this.lastHit];
+            const Item = this.INV.items[this.INV.handIndex];
+            if (Item?.isTool != null && Item?.isTool){
+
+            } else {
+
+                Hand.x -= Hand.w / 2
+                setTimeout(()=>{
+                    Hand.x += Hand.w / 2
+                    this.isMining = false;
+                }, 350)
+            }
+        
+            this.lastHit ? (this.lastHit = 0) : (this.lastHit = 1);
+        }
+    }
+    
 
     render = {
         update: () => {

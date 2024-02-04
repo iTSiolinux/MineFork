@@ -157,11 +157,15 @@ Game.events = {
         Game.events.handler(event);
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseDown = event;
+
+        Game.mouse.data.isDown = true
     },
     onMouseUp: (event) => {
         Game.events.handler(event);
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseUp = event;
+
+        Game.mouse.data.isDown = false
     },
     onMouseContext: (event) => {
         event.preventDefault();
