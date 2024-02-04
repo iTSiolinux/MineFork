@@ -235,7 +235,12 @@ Game.keyboard = {
                 Game.player.switchSlot(i);
                 break;
             }
-        }        
+        }     
+        
+        // q key
+        if (keys[81]) {
+            Game.player.throw()
+        }
     }
 }
 

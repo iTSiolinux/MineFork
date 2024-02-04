@@ -123,7 +123,6 @@ class Player extends Entity {
         this.angle = angleRadians * (180 / Math.PI);
     }
 
-
     pickupItems() {
         Game.arrays.items.forEach((item, index) => {
             if (isColliding(this, item)) {
@@ -136,6 +135,19 @@ class Player extends Entity {
     switchSlot (number) {
         if (10 > number > 0){
             this.INV.handIndex = number
+        }
+    }
+
+    throw() {
+        const handItem = this.INV.items[this.INV.handIndex];
+        if (handItem instanceof Item) {
+            handItem.POS.x = Game.mouse.data.position.canvas.x;
+            handItem.POS.y = Game.mouse.data.position.canvas.y;
+
+
+            Game.arrays.items.push(handItem);
+
+            this.INV.removeItem(handItem)
         }
     }
 
