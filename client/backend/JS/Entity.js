@@ -176,7 +176,7 @@ class Player extends Entity {
         }
     }
     
-
+    
     render = {
         update: () => {
             if (this.isVisible) {
