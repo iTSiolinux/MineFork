@@ -5,12 +5,27 @@ const scale = 64,
         );
     },
     isColliding = (obj, obj2) => {
-        return (
-            (obj.POS.x + obj.w >= obj2.POS.x && obj2.POS.x - obj2.w <= obj.POS.x) // horizontal collision
-            &&
-            (obj.POS.y + obj.h >= obj2.POS.y && obj2.POS.y - obj2.h <= obj.POS.y) // vertical collision
-        );
+        // Calculate bounding box coordinates for both objects
+        const obj1Left = obj.POS.x - obj.w / 2;
+        const obj1Right = obj.POS.x + obj.w / 2;
+        const obj1Top = obj.POS.y - obj.h / 2;
+        const obj1Bottom = obj.POS.y + obj.h / 2;
+    
+        const obj2Left = obj2.POS.x - obj2.w / 2;
+        const obj2Right = obj2.POS.x + obj2.w / 2;
+        const obj2Top = obj2.POS.y - obj2.h / 2;
+        const obj2Bottom = obj2.POS.y + obj2.h / 2;
+    
+        // Check for horizontal overlap
+        const horizontalOverlap = obj1Left < obj2Right && obj1Right > obj2Left;
+    
+        // Check for vertical overlap
+        const verticalOverlap = obj1Top < obj2Bottom && obj1Bottom > obj2Top;
+    
+        // Return true if there is both horizontal and vertical overlap
+        return horizontalOverlap && verticalOverlap;
     };
+    
     
     CANVAS = document.createElement('canvas'),
     DRAW = CANVAS.getContext('2d'),
