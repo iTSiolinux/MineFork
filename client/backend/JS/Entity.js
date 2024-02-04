@@ -178,7 +178,7 @@ class Player extends Entity {
             DRAW.fillRect(this.hands[1].x, this.hands[1].y, this.hands[1].w, this.hands[1].h); // the BLUE hand!
         },
         handItem: () => {
-            const handItem = Game.player.INV.items[Game.player.INV.handIndex - 1];
+            const handItem = Game.player.INV.items[Game.player.INV.handIndex];
 
             const offsetX = this.hands[0].x - this.hands[0].w;
 

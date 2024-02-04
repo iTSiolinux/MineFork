@@ -18,6 +18,7 @@ const Game = {
         Game.canvas.addEventListener('mousemove', Game.events.onMouseMove)
         Game.canvas.addEventListener('mousedown', Game.events.onMouseDown)
         Game.canvas.addEventListener('mouseup', Game.events.onMouseUp)
+        Game.canvas.addEventListener('contextmenu', Game.events.onMouseContext)
 
 
         // awaking the game update loop
@@ -162,6 +163,12 @@ Game.events = {
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseUp = event;
     },
+    onMouseContext: (event) => {
+        event.preventDefault();
+        Game.events.handler(event);
+        Game.mouse.last.event = event;
+        Game.mouse.last.onMouseContext = event;
+    },
     handler(event) {
         if (event instanceof KeyboardEvent) {
             Game.keyboard.array[event.keyCode] = !(event.type == "keyup");
@@ -225,7 +232,7 @@ Game.keyboard = {
 
         for (let i = 0; i < 8; i++) {
             if (keys[49 + i]) {
-                Game.player.switchSlot(i + 1);
+                Game.player.switchSlot(i);
                 break;
             }
         }        
@@ -237,7 +244,8 @@ Game.mouse = {
     last: {
         event: null,
         onMouseDown: null,
-        onMouseUp: null
+        onMouseUp: null,
+        onMouseContext: null
     },
     data: {
         position: {
