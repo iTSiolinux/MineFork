@@ -25,6 +25,12 @@ class Block {
 
     }
 
+    damage () {
+        this.w *= 0.90
+        this.h *= 0.90
+        setTimeout(()=>{this.h *= 10 / 9;this.w *= 10 / 9}, 250)
+    }
+
     render = {
         update: () => {
             if (this.isVisible){

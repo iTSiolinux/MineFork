@@ -1,3 +1,4 @@
+
 class Entity {
     constructor(values) {
         this.CONST_HP = values?.HP || 1;
@@ -168,7 +169,7 @@ class Player extends Entity {
                 setTimeout(()=>{
                     Hand.x += Hand.w / 2
                     this.isMining = false;
-                }, 350)
+                }, 500)
             }
         
             this.lastHit ? (this.lastHit = 0) : (this.lastHit = 1);
@@ -176,27 +177,26 @@ class Player extends Entity {
     }
 
     hasPlayerHit () {
-        // loop each block until when is in the condition
-        for (const blockIndex in Game.arrays.blocks){
-            const B = Game.arrays.blocks[blockIndex]
-
-            const hand = this.hands[this.lastHit];
-            const handAdjusted = {
-                angle: this.angle,
-                POS: {
-                    x: hand.x + this.POS.x,
-                    y: hand.y + this.POS.y
-                },
-
-                w: hand.w,
-                h: hand.h
-            };
-
-            console.log("x: " + handAdjusted.POS.x + " y: " + handAdjusted.POS.y)
-
-
-            if (isColliding(handAdjusted, B)){
-                console.log(B)
+        // Get the hand being used for mining
+        const hand = this.hands[this.lastHit];
+    
+        // Adjust the hand position based on the player's position and angle
+        const handAdjusted = {
+            angle: this.angle,
+            POS: {
+                x: hand.x + this.POS.x + hand.w / 2,
+                y: hand.y + this.POS.y + hand.h / 2
+            },
+            w: hand.w,
+            h: hand.h
+        };
+    
+        // Loop through each block
+        for (const B of Game.arrays.blocks) {
+            // Check for collision
+            if (areRectanglesColliding(handAdjusted, B)) {
+                console.log("Collision with block:", B);
+                B?.damage();
             }
         }
     }
@@ -238,6 +238,9 @@ class Player extends Entity {
             DRAW.fillRect(this.hands[0].x, this.hands[0].y, this.hands[0].w, this.hands[0].h); // the RED hand
             DRAW.fillStyle = Game.isDebugging ? "blue" : 'rgb(255 184 45)';
             DRAW.fillRect(this.hands[1].x, this.hands[1].y, this.hands[1].w, this.hands[1].h); // the BLUE hand!
+            if (this.isMining){
+                this.render.minedHandDebug()
+            }
         },
         handItem: () => {
             const handItem = Game.player.INV.items[Game.player.INV.handIndex];
@@ -253,6 +256,28 @@ class Player extends Entity {
                     handItem.h
                 )
             }
+        },
+        minedHandDebug: () => {
+            const hand = this.hands[this.lastHit ? (0) : (1)];
+            console.log(this.lastHit ? (0) : (1))
+            const handAdjusted = {
+                angle: 0,
+                POS: {
+                    x: hand.x + hand.w / 2,
+                    y: hand.y + hand.h / 2
+                },
+                w: hand.w,
+                h: hand.h
+            }
+
+            DRAW.save();
+            DRAW.translate(handAdjusted.POS.x, handAdjusted.POS.y);
+            DRAW.rotate((handAdjusted.angle * Math.PI) / 180); // Convert degrees to radians
+            DRAW.strokeStyle = "green";
+            DRAW.beginPath();
+            DRAW.rect(-handAdjusted.w / 2, -handAdjusted.h / 2, handAdjusted.w, handAdjusted.h);
+            DRAW.stroke();
+            DRAW.restore();
         }
     }
 }
