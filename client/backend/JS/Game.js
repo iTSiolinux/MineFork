@@ -232,7 +232,7 @@ Game.keyboard = {
             POS.x--;
         }
 
-        Game.player.setSpeed(POS.x, POS.y)
+        Game.player.setSpeed(POS.x * 0.5, POS.y * 0.5)
 
         for (let i = 0; i < 8; i++) {
             if (keys[49 + i]) {

@@ -1,4 +1,3 @@
-
 class Entity {
     constructor(values) {
         this.CONST_HP = values?.HP || 1;
@@ -164,8 +163,8 @@ class Player extends Entity {
             if (Item?.isTool != null && Item?.isTool){
 
             } else {
-
                 Hand.x -= Hand.w / 2
+                const objects = this.hasPlayerHit();
                 setTimeout(()=>{
                     Hand.x += Hand.w / 2
                     this.isMining = false;
@@ -175,7 +174,32 @@ class Player extends Entity {
             this.lastHit ? (this.lastHit = 0) : (this.lastHit = 1);
         }
     }
-    
+
+    hasPlayerHit () {
+        // loop each block until when is in the condition
+        for (const blockIndex in Game.arrays.blocks){
+            const B = Game.arrays.blocks[blockIndex]
+
+            const hand = this.hands[this.lastHit];
+            const handAdjusted = {
+                angle: this.angle,
+                POS: {
+                    x: hand.x + this.POS.x,
+                    y: hand.y + this.POS.y
+                },
+
+                w: hand.w,
+                h: hand.h
+            };
+
+            console.log("x: " + handAdjusted.POS.x + " y: " + handAdjusted.POS.y)
+
+
+            if (isColliding(handAdjusted, B)){
+                console.log(B)
+            }
+        }
+    }
     
     render = {
         update: () => {
