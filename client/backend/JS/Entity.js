@@ -180,22 +180,16 @@ class Player extends Entity {
         // Get the hand being used for mining
         const hand = this.hands[this.lastHit];
     
-        // Adjust the hand position based on the player's position and angle
-        const handAdjusted = {
-            angle: this.angle,
-            POS: {
-                x: hand.x + this.POS.x + hand.w / 2,
-                y: hand.y + this.POS.y + hand.h / 2
-            },
-            w: hand.w,
-            h: hand.h
-        };
-    
         // Loop through each block
         for (const B of Game.arrays.blocks) {
             // Check for collision
-            console.log(distance(handAdjusted, B))
-            if (distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2) {
+            console.log("angle: " + this.angle + " calc block angle: " + calculateAngle(this, B))
+            if (
+                distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2 
+                && 
+                this.angle - 45 < Math.abs(calculateAngle(this, B)) && Math.abs(calculateAngle(this, B)) < this.angle + 45
+
+            ) {
                 B?.damage();
             }
         }

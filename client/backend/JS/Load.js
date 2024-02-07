@@ -31,7 +31,19 @@ const scale = 64,
     },
     distance = (o, o2) => {
         return Math.sqrt( (o.POS.x - o2.POS.x) ** 2 + (o.POS.y - o2.POS.y) ** 2 );
-    };
+    },
+    calculateAngle = (o, o2) => {
+        const deltaX = o.POS.x - o2.POS.x;
+        const deltaY = o.POS.y - o2.POS.y;
+        
+        // Calculate the angle using arctangent
+        const angleRadians = Math.atan2(deltaY, deltaX);
+    
+        // Convert the angle from radians to degrees
+        const angleDegrees = angleRadians * (180 / Math.PI);
+    
+        return angleDegrees;
+    }
 
 // chatGPT SAT function
 function areRectanglesColliding(rect1, rect2) {
