@@ -28,6 +28,9 @@ const scale = 64,
 
         // Return true if there is both horizontal and vertical overlap
         return horizontalOverlap && verticalOverlap;
+    },
+    distance = (o, o2) => {
+        return Math.sqrt( (o.POS.x - o2.POS.x) ** 2 + (o.POS.y - o2.POS.y) ** 2 );
     };
 
 // chatGPT SAT function

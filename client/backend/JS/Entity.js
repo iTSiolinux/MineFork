@@ -194,8 +194,8 @@ class Player extends Entity {
         // Loop through each block
         for (const B of Game.arrays.blocks) {
             // Check for collision
-            if (areRectanglesColliding(handAdjusted, B)) {
-                console.log("Collision with block:", B);
+            console.log(distance(handAdjusted, B))
+            if (distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2) {
                 B?.damage();
             }
         }
