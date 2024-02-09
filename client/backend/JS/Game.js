@@ -27,34 +27,36 @@ const Game = {
 
         // Player 
         const p = new Player({ POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
-        Game.arrays.entitys.push(p)
         Game.player = p;
 
         // Attaching player to the camera as target
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block({ texture: Texture.getImage("oak"), w: 128, h: 128, POS: {x: -64, y: -64 }})
-        Game.arrays.blocks.push(b)
+        const b = new Block(Game.v.block.oak, { POS: { x: -64, y: -64 } })
 
         // Test item
-        const i = new Item({texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 64, POS: {x: 64, y: 64}})
-        Game.arrays.items.push(i)
+        const i = new Item({ texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 64, POS: { x: 64, y: 64 } })
+
+
+        Game.Data.Add(p)
+        Game.Data.Add(b)
+        Game.Data.Add(i)
     },
     update: () => {
         Game.keyboard.update()
 
         Game.player.update()
 
-        Game.arrays.GUI.forEach(Button => {
+        Game.Data.GUI.forEach(Button => {
             Button?.update()
         })
 
-        Game.arrays.entitys.forEach(entity => {
+        Game.Data.entitys.forEach(entity => {
             entity?.update()
         })
 
-        Game.arrays.blocks.forEach(block => {
+        Game.Data.blocks.forEach(block => {
             block?.update()
         })
     },
@@ -78,11 +80,35 @@ Game.Camera = {
         Game.Camera.follow()
         DRAW.setTransform(1, 0, 0, 1, -Game.Camera.POS.x + Game.canvas.width / 2, -Game.Camera.POS.y + Game.canvas.height / 2);
     }
-};
+}
 
 // Game data located here for now
-Game.arrays = {
-    entitys: [], blocks: [], items: [], GUI: []
+Game.Data = {
+    entitys: [], blocks: [], items: [], GUI: [],
+
+    Add: (object) => {
+        if (object instanceof Block) {
+            Game.Data.blocks.push(object)
+        }
+        if (object instanceof Item) {
+            Game.Data.items.push(object)
+        }
+        if (object instanceof Entity) {
+            Game.Data.entitys.push(object)
+        }
+    },
+    Remove: (object) => {
+        if (object instanceof Block) {
+            Game.Data.blocks.pop(object)
+        }
+        if (object instanceof Item) {
+            Game.Data.items.pop(object)
+        }
+        if (object instanceof Entity) {
+            Game.Data.entitys.pop(object)
+        }
+    }
+
 }
 
 // Game render system
@@ -99,22 +125,22 @@ Game.render = {
     },
     refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height) },
     items: () => {
-        Game.arrays.items.forEach(items => {
+        Game.Data.items.forEach(items => {
             items?.render()
         })
     },
     entitys: () => {
-        Game.arrays.entitys.forEach(entity => {
+        Game.Data.entitys.forEach(entity => {
             entity?.render?.update()
         })
     },
     blocks: () => {
-        Game.arrays.blocks.forEach(block => {
+        Game.Data.blocks.forEach(block => {
             block?.render?.update()
         })
     },
     GUI: () => {
-        Game.arrays.GUI.forEach(GUI => {
+        Game.Data.GUI.forEach(GUI => {
             GUI?.render()
         })
     },
@@ -239,8 +265,8 @@ Game.keyboard = {
                 Game.player.switchSlot(i);
                 break;
             }
-        }     
-        
+        }
+
         // q key
         if (keys[81]) {
             Game.player.throw()
@@ -276,5 +302,24 @@ Game.mouse = {
     }
 
 }
+
+Game.vanilla = {
+    entity: {
+
+    },
+    block: {
+        oak: {
+            texture: Texture.getImage("oak"),
+            HP: 50,
+            w: 128,
+            h: 128,
+        }
+    },
+    item: {
+
+    }
+}
+
+Game.v = Game.vanilla;
 
 setTimeout(Game.awake, 1000)

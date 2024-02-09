@@ -1,34 +1,70 @@
 class Block {
-    constructor (values) {
-        this.CONST_HP = values?.CONST_HP || 1;
-        this.HP = values?.HP || 1;
+    constructor (values, additionalValues) {
+        // Use additionalValues if available, otherwise use values or default values
+        this.CONST_HP = additionalValues?.CONST_HP || values?.CONST_HP || 1;
+        this.HP = additionalValues?.HP || values?.HP || 1;
+    
+        this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
+        this.w = additionalValues?.w || values?.w || scale;
+        this.h = additionalValues?.h || values?.h || scale;
+        this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
+    
+        this.POS = additionalValues?.POS || values?.POS || {x: 0, y: 0};
+        this.angle = additionalValues?.angle || values?.angle || 0;
+    
+        this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
+        this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
+        this.DROPS =  additionalValues?.DROPS || values?.DROPS || [];
+        this.DPD = additionalValues?.DPD || values?.DPD; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
+    
+        this.onConstructor();
+    }    
 
-        this.texture = values?.texture || Texture.getImage("null");
-        this.w = values?.w || scale;
-        this.h = values?.h || scale;
-        this.isVisible = values?.isVisible || true;
-
-        this.POS = values?.POS || {x: 0, y: 0};
-        this.angle = values?.angle || 0;
-
-        this.UUID = values?.UUID || genUUID();
-        this.TYPE = values?.TYPE || null;
-
-        this.onConstructor()
-    }
+    // Events
 
     onConstructor () {
 
     }
 
+    onDeath () {
+
+    }
+
+    onDamage (dmg) {
+
+    }
+
+    // Functions
+
     update () {
 
     }
 
-    damage () {
+    damage (dmg) {
+        this.onDamage(dmg)
+
+
+        if (this.HP <= dmg){
+            this.HP = 0;
+            this.die()
+        } else {
+            this.HP -= dmg;
+        }
+
+        if (this.DROPS.length > 0){
+            for (let i = Math.round(dmg * this.DPD); i > 0; i--){
+                // roll items from this.DROPS
+            }
+        }
+
         this.w *= 0.90
         this.h *= 0.90
         setTimeout(()=>{this.h *= 10 / 9;this.w *= 10 / 9}, 250)
+    }
+
+    die () {
+        this.HP = 0;
+        Game.Data.Remove(this)
     }
 
     render = {

@@ -101,6 +101,7 @@ class Player extends Entity {
         this.hands = [{ x: -32, y: 16, w: this.w / 2, h: this.h / 4 }, { x: -32, y: -32, w: this.w / 2, h: this.h / 4 }]
         this.lastHit = 1;
         this.isMining = false;
+        this.base = values?.base || {dmg: 2};
 
         this.update = () => {
             this.updatePhysics()
@@ -128,10 +129,10 @@ class Player extends Entity {
     }
 
     pickupItems() {
-        Game.arrays.items.forEach((item, index) => {
+        Game.Data.items.forEach((item, index) => {
             if (isColliding(this, item)) {
                 this.INV.addItem(item)
-                Game.arrays.items.splice(index, 1);
+                Game.Data.items.splice(index, 1);
             }
         });
     }
@@ -149,7 +150,7 @@ class Player extends Entity {
             handItem.POS.y = Game.mouse.data.position.canvas.y;
 
 
-            Game.arrays.items.push(handItem);
+            Game.Data.items.push(handItem);
 
             this.INV.removeItem(handItem)
         }
@@ -165,7 +166,7 @@ class Player extends Entity {
 
             } else {
                 Hand.x -= Hand.w / 2
-                const objects = this.hasPlayerHit();
+                this.hasPlayerHit();
                 setTimeout(()=>{
                     Hand.x += Hand.w / 2
                     this.isMining = false;
@@ -181,7 +182,7 @@ class Player extends Entity {
         const hand = this.hands[this.lastHit];
     
         // Loop through each block
-        for (const B of Game.arrays.blocks) {
+        for (const B of Game.Data.blocks) {
             // Check for collision
             if (
                 distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2 
@@ -189,7 +190,7 @@ class Player extends Entity {
                 this.angle - 45 < Math.abs(calculateAngle(this, B)) && Math.abs(calculateAngle(this, B)) < this.angle + 45
 
             ) {
-                B?.damage();
+                B?.damage(this.base.dmg);
             }
         }
     }
