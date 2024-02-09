@@ -10,6 +10,7 @@ class Item {
         this.MaxStack = values?.MaxStack || 64;
         this.UUID = values?.UUID || genUUID()
         this.TYPE = values?.TYPE || null;
+        this.displayName = values?.displayName || null;
 
         // item optinal values
         this.armorSlot = values?.armorSlot || null

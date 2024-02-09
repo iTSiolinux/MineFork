@@ -183,7 +183,6 @@ class Player extends Entity {
         // Loop through each block
         for (const B of Game.arrays.blocks) {
             // Check for collision
-            console.log("angle: " + this.angle + " calc block angle: " + calculateAngle(this, B))
             if (
                 distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2 
                 && 
@@ -232,9 +231,6 @@ class Player extends Entity {
             DRAW.fillRect(this.hands[0].x, this.hands[0].y, this.hands[0].w, this.hands[0].h); // the RED hand
             DRAW.fillStyle = Game.isDebugging ? "blue" : 'rgb(255 184 45)';
             DRAW.fillRect(this.hands[1].x, this.hands[1].y, this.hands[1].w, this.hands[1].h); // the BLUE hand!
-            if (this.isMining){
-                this.render.minedHandDebug()
-            }
         },
         handItem: () => {
             const handItem = Game.player.INV.items[Game.player.INV.handIndex];
@@ -250,28 +246,6 @@ class Player extends Entity {
                     handItem.h
                 )
             }
-        },
-        minedHandDebug: () => {
-            const hand = this.hands[this.lastHit ? (0) : (1)];
-            console.log(this.lastHit ? (0) : (1))
-            const handAdjusted = {
-                angle: 0,
-                POS: {
-                    x: hand.x + hand.w / 2,
-                    y: hand.y + hand.h / 2
-                },
-                w: hand.w,
-                h: hand.h
-            }
-
-            DRAW.save();
-            DRAW.translate(handAdjusted.POS.x, handAdjusted.POS.y);
-            DRAW.rotate((handAdjusted.angle * Math.PI) / 180); // Convert degrees to radians
-            DRAW.strokeStyle = "green";
-            DRAW.beginPath();
-            DRAW.rect(-handAdjusted.w / 2, -handAdjusted.h / 2, handAdjusted.w, handAdjusted.h);
-            DRAW.stroke();
-            DRAW.restore();
         }
     }
 }
