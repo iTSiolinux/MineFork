@@ -44,6 +44,7 @@ const scale = 64,
 
         return angleDegrees;
     },
+    random = (min, max)=>{ return Math.round(Math.random * max) + min },
     CANVAS = document.createElement('canvas'),
     DRAW = CANVAS.getContext('2d'),
     FPS = 1000 / 60;
@@ -77,6 +78,7 @@ const Texture = new TextureLoader("/IMG/null.png")
 Texture.loadImage("/IMG/player.png", "player")
 Texture.loadImage("/IMG/_cursor.png", "cursor")
 Texture.loadImage("/IMG/oakTree.png", "oak")
+Texture.loadImage("/IMG/oak_drop.png", "oakDrop")
 Texture.loadImage("/IMG/slot.png", "slot")
 Texture.loadImage("/IMG/selectedSlot.png", "selectedSlot")
 Texture.loadImage("/IMG/stone_drop.png", "stoneDrop")

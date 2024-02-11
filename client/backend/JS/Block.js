@@ -53,7 +53,13 @@ class Block {
 
         if (this.DROPS.length > 0){
             for (let i = Math.round(dmg * this.DPD); i > 0; i--){
-                // roll items from this.DROPS
+                const INT_RANDOM = random(0, this.DROPS.length - 1),
+                ITEM = JSON.stringify(this.DROPS[INT_RANDOM]);
+
+                const reSummonedItem = new Item(JSON.parse())
+
+                
+                Game.Data.Add(ITEM)
             }
         }
 

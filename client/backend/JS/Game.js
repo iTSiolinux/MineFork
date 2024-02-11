@@ -36,7 +36,7 @@ const Game = {
         const b = new Block(Game.v.block.oak, { POS: { x: -64, y: -64 } })
 
         // Test item
-        const i = new Item({ texture: Texture.getImage("stoneDrop"), TYPE: "stoneDrop", size: 64, POS: { x: 64, y: 64 } })
+        const i = new Item({POS: { x: 64, y: 64 }} )
 
 
         Game.Data.Add(p)
@@ -309,14 +309,21 @@ Game.vanilla = {
     },
     block: {
         oak: {
+            TYPE: "Game:oak",
             texture: Texture.getImage("oak"),
             HP: 50,
             w: 128,
             h: 128,
+            DROPS: [Game.v.item.oak]
         }
     },
     item: {
-
+        oak: { 
+            texture: Texture.getImage("oakDrop"), 
+            TYPE: "Game:oakDrop", 
+            size: 64,
+            amount: 1
+        }
     }
 }
 
