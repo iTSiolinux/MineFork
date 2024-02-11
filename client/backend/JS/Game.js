@@ -33,10 +33,10 @@ const Game = {
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block(Game.v.block.oak, { POS: { x: -64, y: -64 } })
+        const b = new Block(Game.vanilla.block.oak, { POS: { x: -64, y: -64 } })
 
         // Test item
-        const i = new Item({POS: { x: 64, y: 64 }} )
+        const i = new Item(Game.vanilla.item.oakDrop, { POS: { x: 64, y: 64 } })
 
 
         Game.Data.Add(p)
@@ -61,7 +61,8 @@ const Game = {
         })
     },
     updateInterval: null,
-    renderInterval: null
+    renderInterval: null,
+    vanilla: null
 }
 
 // Game camera 
@@ -303,30 +304,30 @@ Game.mouse = {
 
 }
 
-Game.vanilla = {
-    entity: {
+// Vanilla pre-confguired values for blockws
+Game.vanilla = {}
 
-    },
-    block: {
-        oak: {
-            TYPE: "Game:oak",
-            texture: Texture.getImage("oak"),
-            HP: 50,
-            w: 128,
-            h: 128,
-            DROPS: [Game.v.item.oak]
-        }
-    },
-    item: {
-        oak: { 
-            texture: Texture.getImage("oakDrop"), 
-            TYPE: "Game:oakDrop", 
-            size: 64,
-            amount: 1
-        }
+Game.vanilla.item = {
+    oakDrop: {
+        texture: Texture.getImage("oakDrop"),
+        TYPE: "Game:oakDrop",
+        size: 64,
+        amount: 1
+    }
+},
+Game.vanilla.entity = {
+
+},
+Game.vanilla.block = {
+    oak: {
+        TYPE: "Game:oak",
+        texture: Texture.getImage("oak"),
+        HP: 50,
+        w: 128,
+        h: 128,
+        DROPS: [Game.vanilla.item.oakDrop]
     }
 }
 
-Game.v = Game.vanilla;
 
 setTimeout(Game.awake, 1000)

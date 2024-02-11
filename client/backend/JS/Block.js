@@ -51,16 +51,17 @@ class Block {
             this.HP -= dmg;
         }
 
-        if (this.DROPS.length > 0){
+        if (this.DROPS.length > 1){
             for (let i = Math.round(dmg * this.DPD); i > 0; i--){
                 const INT_RANDOM = random(0, this.DROPS.length - 1),
-                ITEM = JSON.stringify(this.DROPS[INT_RANDOM]);
-
-                const reSummonedItem = new Item(JSON.parse())
-
+                ITEM = new Item(this.DROPS[INT_RANDOM], {POS: {x: this.POS.x - this.w / 2, y: this.POS.y - this.h / 2}})
                 
                 Game.Data.Add(ITEM)
             }
+        } else if (this.DROPS.length == 1){
+            const ITEM = new Item(this.DROPS[0], {POS: {x: this.POS.x - this.w / 2, y: this.POS.y - this.h / 2}, amount: Math.round(dmg * this.DPD)})
+            
+            Game.Data.Add(ITEM)
         }
 
         this.w *= 0.90
