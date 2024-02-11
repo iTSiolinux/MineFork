@@ -33,15 +33,11 @@ const Game = {
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block(Game.vanilla.block.oak, { POS: { x: -64, y: -64 } })
-
-        // Test item
-        const i = new Item(Game.vanilla.item.oakDrop, { POS: { x: 64, y: 64 } })
+        const b = new Block(Game.vanilla.block.oak, { POS: { x: 0, y: 0 } })
 
 
         Game.Data.Add(p)
         Game.Data.Add(b)
-        Game.Data.Add(i)
     },
     update: () => {
         Game.keyboard.update()
@@ -313,6 +309,12 @@ Game.vanilla.item = {
         TYPE: "Game:oakDrop",
         size: 64,
         amount: 1
+    },
+    oakSeed: {
+        texture: Texture.getImage("oakSeed"),
+        TYPE: "Game:oakSeed",
+        size: 64,
+        amount: 1
     }
 },
 Game.vanilla.entity = {
@@ -325,7 +327,7 @@ Game.vanilla.block = {
         HP: 50,
         w: 128,
         h: 128,
-        DROPS: [Game.vanilla.item.oakDrop]
+        DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed]
     }
 }
 

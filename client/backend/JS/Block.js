@@ -1,82 +1,100 @@
 class Block {
-    constructor (values, additionalValues) {
+    constructor(values, additionalValues) {
         // Use additionalValues if available, otherwise use values or default values
         this.CONST_HP = additionalValues?.CONST_HP || values?.CONST_HP || 1;
         this.HP = additionalValues?.HP || values?.HP || 1;
-    
+
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
         this.w = additionalValues?.w || values?.w || scale;
         this.h = additionalValues?.h || values?.h || scale;
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
-    
-        this.POS = additionalValues?.POS || values?.POS || {x: 0, y: 0};
+
+        this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.angle = additionalValues?.angle || values?.angle || 0;
-    
+
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
-        this.DROPS =  additionalValues?.DROPS || values?.DROPS || [];
+        this.DROPS = additionalValues?.DROPS || values?.DROPS || [];
         this.DPD = additionalValues?.DPD || values?.DPD; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
-    
+
         this.onConstructor();
-    }    
+    }
 
     // Events
 
-    onConstructor () {
+    onConstructor() {
 
     }
 
-    onDeath () {
+    onDeath() {
 
     }
 
-    onDamage (dmg) {
+    onDamage(dmg) {
 
     }
 
     // Functions
 
-    update () {
+    update() {
 
     }
 
-    damage (dmg) {
+    damage(dmg) {
+
+        const damgeDealt = dmg > this.HP ? this.HP : dmg;
         this.onDamage(dmg)
 
 
-        if (this.HP <= dmg){
+        if (this.HP <= damgeDealt) {
             this.HP = 0;
             this.die()
         } else {
-            this.HP -= dmg;
+            this.HP -= damgeDealt;
         }
 
-        if (this.DROPS.length > 1){
-            for (let i = Math.round(dmg * this.DPD); i > 0; i--){
+        if (this.DROPS.length > 1) {
+            for (let i = Math.round(damgeDealt * this.DPD); i > 0; i--) {
                 const INT_RANDOM = random(0, this.DROPS.length - 1),
-                ITEM = new Item(this.DROPS[INT_RANDOM], {POS: {x: this.POS.x - this.w / 2, y: this.POS.y - this.h / 2}})
-                
+                    ITEM = new Item(
+                        this.DROPS[INT_RANDOM],
+                        {
+                            POS: { x: this.POS.x, y: this.POS.y }
+                        }
+                    )
+
+
                 Game.Data.Add(ITEM)
             }
-        } else if (this.DROPS.length == 1){
-            const ITEM = new Item(this.DROPS[0], {POS: {x: this.POS.x - this.w / 2, y: this.POS.y - this.h / 2}, amount: Math.round(dmg * this.DPD)})
-            
+        } else if (this.DROPS.length == 1) {
+            const ITEM = new Item(
+                this.DROPS[0],
+                {
+                    POS: {
+                        x: this.POS.x,
+                        y: this.POS.y,
+                    },
+                    amount: Math.round(damgeDealt * this.DPD)
+                }
+            )
+
+
             Game.Data.Add(ITEM)
         }
-
+        
         this.w *= 0.90
         this.h *= 0.90
-        setTimeout(()=>{this.h *= 10 / 9;this.w *= 10 / 9}, 250)
+        setTimeout(() => { this.h *= 10 / 9; this.w *= 10 / 9 }, 250)
     }
 
-    die () {
+    die() {
         this.HP = 0;
         Game.Data.Remove(this)
     }
 
     render = {
         update: () => {
-            if (this.isVisible){
+            if (this.isVisible) {
                 this.render.base()
             }
         },
@@ -86,10 +104,10 @@ class Block {
 
             // Translate to the center of the object
             DRAW.translate(this.POS.x, this.POS.y);
-        
+
             // Rotate around the center
             DRAW.rotate(this.angle * Math.PI / 180);
-        
+
 
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
@@ -99,7 +117,7 @@ class Block {
                 this.w,
                 this.h
             );
-        
+
             // Restore the original drawing context
             DRAW.restore();
         },

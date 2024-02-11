@@ -25,7 +25,6 @@ class Inv {
             );
 
             if (sameItems.length > 0) {
-                console.log(sameItems)
                 sameItems.forEach(sameItem => {
                     const leftSpace = sameItem.MaxStack - sameItem.amount;
 
@@ -42,7 +41,7 @@ class Inv {
             if (item.amount > 0){
                 this.items.push(item);
             }
-            
+
             return true;
         }
 
