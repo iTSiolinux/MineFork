@@ -129,10 +129,11 @@ class Player extends Entity {
     }
 
     pickupItems() {
-        Game.Data.items.forEach((item, index) => {
+        Game.Data.items.forEach(item => {
             if (isColliding(this, item)) {
-                this.INV.addItem(item)
-                Game.Data.items.splice(index, 1);
+                const isAdded = this.INV.addItem(item)
+
+                isAdded  ?  Game.Data.Remove(item) : null;
             }
         });
     }
