@@ -53,6 +53,16 @@ CANVAS.width = window.innerWidth * 0.95;
 CANVAS.height = window.innerHeight * 0.95;
 document.body.appendChild(CANVAS);
 
+Array.prototype.remove = function (object) {
+    const index = this.indexOf(object);
+    if (index !== -1) {
+        this.splice(index, 1);
+        return true; // Indicate successful removal
+    }
+    return false; // Indicate that the item was not found
+}; // the missing heart of Array implementation.
+
+
 class TextureLoader {
     constructor(src = "/null.png") {
         this.textures = {};

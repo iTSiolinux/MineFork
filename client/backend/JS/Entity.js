@@ -153,8 +153,8 @@ class Player extends Entity {
             handItem.POS.x = Game.mouse.data.position.canvas.x;
             handItem.POS.y = Game.mouse.data.position.canvas.y;
 
-
             Game.Data.Add(handItem);
+
         }
     }
 
@@ -180,10 +180,11 @@ class Player extends Entity {
     }
 
     interact() {
-        if (Game.mouse.data.isDownRight){
+        const handItem = this.INV.items[this.INV.handIndex];
+
+        if (Game.mouse.data.isDownRight && handItem instanceof Item){
             this.isInteracting = true;
 
-            const handItem = this.INV.items[this.INV.handIndex];
             handItem?.interact()
             this.isInteracting = false;
         }

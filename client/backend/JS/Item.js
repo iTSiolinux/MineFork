@@ -48,3 +48,5 @@ class Item {
         
     }
 }
+
+class VoidItem {}

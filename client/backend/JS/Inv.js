@@ -39,7 +39,13 @@ class Inv {
             }
 
             if (item.amount > 0) {
-                this.items.push(item);
+                const voidItemIndex = this.items.findIndex(existingItem => existingItem instanceof VoidItem);
+
+                if (voidItemIndex !== -1) {
+                    this.items[voidItemIndex] = item;
+                } else {
+                    this.items.push(item);
+                }
             }
 
             return true;
@@ -63,8 +69,7 @@ class Inv {
     removeItem(item) {
         if (item instanceof Item) {
             let indexOfItem = this.items.findIndex(o => o == item)
-            console.log(indexOfItem)
-            this.items[indexOfItem] = new Item()
+            this.items[indexOfItem] = new VoidItem()
         }
     }
 }

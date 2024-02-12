@@ -98,15 +98,22 @@ Game.Data = {
     },
     Remove: (object) => {
         if (object instanceof Block) {
-            Game.Data.blocks.pop(object)
+            if (!Game.Data.blocks.remove(object)) {
+                console.warn("Object not found in Game.Data.blocks");
+            }
         }
         if (object instanceof Item) {
-            Game.Data.items.pop(object)
+            if (!Game.Data.items.remove(object)) {
+                console.warn("Object not found in Game.Data.items");
+            }
         }
         if (object instanceof Entity) {
-            Game.Data.entitys.pop(object)
+            if (!Game.Data.entities.remove(object)) {
+                console.warn("Object not found in Game.Data.entities");
+            }
         }
     }
+    
 
 }
 
