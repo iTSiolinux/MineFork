@@ -1,6 +1,3 @@
-[X] (1) summon Player entity and manage to move it around
-[X] (2) create new clean Block class 
-[ ] (3) practice chunk generation in better way
-[ ] (4) try to add practices on death and etc
-[X] (5) render minimal gui
-[X] (6) split between render and update systems
+[] 1. make it online with WebSocket
+[] 2. make an interact with an item
+[] 3. add weapons to the items list and interactions with them
