@@ -178,6 +178,12 @@ class Player extends Entity {
         }
     }
 
+    interact() {
+        if (Game.mouse.data.isDownRight){
+
+        }
+    }
+
     hasPlayerHit () {
         // Get the hand being used for mining
         const hand = this.hands[this.lastHit];
