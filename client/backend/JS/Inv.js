@@ -3,7 +3,7 @@ class Inv {
         this.maxSlots = values?.maxSlots || 8;
         this.handIndex = 0;
         this.offHandIndex = 1;
-        this.items = values?.items || [];
+        this.items = values?.items || new Array();
         this.armor = {
             head: values?.armor?.head || null,
             chest: values?.armor?.chest || null,
@@ -14,7 +14,7 @@ class Inv {
 
     addItem(item) {
         if (item instanceof Item && this.items.length < this.maxSlots) {
-                const sameItems = this.items.filter(itemArgs =>
+            const sameItems = this.items.filter(itemArgs =>
                 itemArgs.amount < itemArgs.MaxStack
                 &&
                 item.TYPE == itemArgs.TYPE
@@ -28,7 +28,7 @@ class Inv {
                 sameItems.forEach(sameItem => {
                     const leftSpace = sameItem.MaxStack - sameItem.amount;
 
-                    if (leftSpace >= item.amount){
+                    if (leftSpace >= item.amount) {
                         sameItem.amount += item.amount;
                         item.amount = 0
                     } else {
@@ -36,9 +36,9 @@ class Inv {
                         item.amount -= leftSpace;
                     }
                 })
-            } 
+            }
 
-            if (item.amount > 0){
+            if (item.amount > 0) {
                 this.items.push(item);
             }
 
@@ -61,7 +61,10 @@ class Inv {
     }
 
     removeItem(item) {
-        if (item instanceof Item)
-            this.items.pop(item);
+        if (item instanceof Item) {
+            let indexOfItem = this.items.findIndex(o => o == item)
+            console.log(indexOfItem)
+            this.items[indexOfItem] = new Item()
+        }
     }
 }
