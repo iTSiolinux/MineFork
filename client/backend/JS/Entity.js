@@ -1,4 +1,3 @@
-
 class Entity {
     constructor(values) {
         this.CONST_HP = values?.HP || 1;
@@ -101,12 +100,14 @@ class Player extends Entity {
         this.hands = [{ x: -32, y: 16, w: this.w / 2, h: this.h / 4 }, { x: -32, y: -32, w: this.w / 2, h: this.h / 4 }]
         this.lastHit = 1;
         this.isMining = false;
+        this.isInteracting = false;
         this.base = values?.base || {dmg: 2};
 
         this.update = () => {
             this.updatePhysics()
             this.lookAtMouse()
             this.pickupItems()
+            this.interact()
             this.mine()
         }
     }
@@ -147,23 +148,23 @@ class Player extends Entity {
     throw() {
         const handItem = this.INV.items[this.INV.handIndex];
         if (handItem instanceof Item) {
+            this.INV.removeItem(handItem)
+
             handItem.POS.x = Game.mouse.data.position.canvas.x;
             handItem.POS.y = Game.mouse.data.position.canvas.y;
 
 
-            Game.Data.items.push(handItem);
-
-            this.INV.removeItem(handItem)
+            Game.Data.Add(handItem);
         }
     }
 
     mine() {
-        if (!this.isMining && Game.mouse.data.isDownLeft){
+        if (!this.isInteracting && !this.isMining && Game.mouse.data.isDownLeft){
             this.isMining = true;
     
             const Hand = this.hands[this.lastHit];
             const Item = this.INV.items[this.INV.handIndex];
-            if (Item?.isTool != null && Item?.isTool){
+            if (Item?.isTool){
 
             } else {
                 Hand.x -= Hand.w / 2
@@ -180,7 +181,11 @@ class Player extends Entity {
 
     interact() {
         if (Game.mouse.data.isDownRight){
+            this.isInteracting = true;
 
+            const handItem = this.INV.items[this.INV.handIndex];
+            handItem?.interact()
+            this.isInteracting = false;
         }
     }
 

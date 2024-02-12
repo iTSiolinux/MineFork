@@ -15,6 +15,10 @@ class Item {
         // Item optional values
         this.armorSlot = additionalValues?.armorSlot || values?.armorSlot || null;
         this.isTool = additionalValues?.isTool || values?.isTool || false;
+
+        // temp method for placing  
+        this.isBlockPlacer = additionalValues?.isBlockPlacer || values?.isBlockPlacer || false;
+        this.placedBlock = additionalValues?.placedBlock || values?.placedBlock || null;
     }
 
     render() {
@@ -38,5 +42,9 @@ class Item {
 
         // Restore the original drawing context
         DRAW.restore();
+    }
+
+    interact () {
+        
     }
 }
