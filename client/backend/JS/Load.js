@@ -44,7 +44,7 @@ const scale = 64,
 
         return angleDegrees;
     },
-    random = (min, max)=>{ return Math.round(Math.random * max) + min },
+    random = (min, max)=>{ return Math.floor(Math.random() * max) + min },
     CANVAS = document.createElement('canvas'),
     DRAW = CANVAS.getContext('2d'),
     FPS = 1000 / 60;

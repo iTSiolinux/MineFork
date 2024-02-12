@@ -15,7 +15,7 @@ class Block {
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
         this.DROPS = additionalValues?.DROPS || values?.DROPS || [];
-        this.DPD = additionalValues?.DPD || values?.DPD; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
+        this.DPD = additionalValues?.DPD || values?.DPD || 0.5; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
 
         this.onConstructor();
     }
@@ -55,14 +55,15 @@ class Block {
 
         if (this.DROPS.length > 1) {
             for (let i = Math.round(damgeDealt * this.DPD); i > 0; i--) {
-                const INT_RANDOM = random(0, this.DROPS.length - 1),
+                const INT_RANDOM = random(0, this.DROPS.length),
                     ITEM = new Item(
                         this.DROPS[INT_RANDOM],
                         {
                             POS: { x: this.POS.x, y: this.POS.y }
                         }
                     )
-
+                
+                    console.log(INT_RANDOM)
 
                 Game.Data.Add(ITEM)
             }

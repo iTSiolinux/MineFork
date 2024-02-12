@@ -327,7 +327,8 @@ Game.vanilla.block = {
         HP: 50,
         w: 128,
         h: 128,
-        DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed]
+        DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
+        DPD: 0.5
     }
 }
 
