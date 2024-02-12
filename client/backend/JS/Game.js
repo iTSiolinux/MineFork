@@ -222,8 +222,8 @@ Game.events = {
 
         } else if (event instanceof MouseEvent) {
             // setting the mouse position by the client pos
-            Game.mouse.data.position.window.x = event.clientX + Game.canvas.offsetLeft - Game.canvas.width / 2;
-            Game.mouse.data.position.window.y = event.clientY + Game.canvas.offsetTop - Game.canvas.height / 2;
+            Game.mouse.data.position.window.x = event.clientX - Game.canvas.offsetLeft - Game.canvas.width / 2;
+            Game.mouse.data.position.window.y = event.clientY - Game.canvas.offsetTop - Game.canvas.height / 2;
 
             // calculating realative to the canvas on Game.Camera.follow
         } else {
