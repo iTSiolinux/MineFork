@@ -17,13 +17,19 @@ class Block {
         this.DROPS = additionalValues?.DROPS || values?.DROPS || [];
         this.DPD = additionalValues?.DPD || values?.DPD || 0.5; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
 
+
+        this.growTime = additionalValues?.isGrowing || values?.isGrowing || 0; // in MS
+        this.growBlock = additionalValues?.growBlock || values?.growBlock || null;
+
         this.onConstructor();
     }
 
     // Events
 
     onConstructor() {
-
+        if (this.growTime > 0){
+            setTimeout(this.grow, this.growTime);
+        }
     }
 
     onDeath() {
@@ -90,6 +96,14 @@ class Block {
     die() {
         this.HP = 0;
         Game.Data.Remove(this)
+    }
+
+    grow () {
+        this.die()
+
+        const growenBlock = new Item(Game.vanilla.block[this.growBlock], {POS: this.POS})
+
+        Game.Data.Add(growenBlock)
     }
 
     render = {

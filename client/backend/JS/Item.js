@@ -16,7 +16,6 @@ class Item {
         this.armorSlot = additionalValues?.armorSlot || values?.armorSlot || null;
         this.isTool = additionalValues?.isTool || values?.isTool || false;
 
-        // temp method for placing  
         this.isBlockPlacer = additionalValues?.isBlockPlacer || values?.isBlockPlacer || false;
         this.placedBlock = additionalValues?.placedBlock || values?.placedBlock || null;
     }
@@ -45,7 +44,18 @@ class Item {
     }
 
     interact () {
-        
+        let iCanPlace = true;
+        Game.Data.blocks.forEach(block => {
+            if (isColliding(block, {POS: Game.mouse.data.position.canvas})){
+                iCanPlace = false;
+            }
+        });
+
+        if (this.isBlockPlacer && iCanPlace){
+            const placedBlock = new Block(Game.vanilla.block[this.placedBlock], {POS: {x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y}})
+
+            Game.Data.Add(placedBlock)
+        }
     }
 }
 

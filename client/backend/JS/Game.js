@@ -333,7 +333,9 @@ Game.vanilla.item = {
         texture: Texture.getImage("oakSeed"),
         TYPE: "Game:oakSeed",
         size: 64,
-        amount: 1
+        amount: 1,
+        isBlockPlacer: true,
+        placedBlock: "oakPlant"
     }
 },
 Game.vanilla.entity = {
@@ -348,6 +350,17 @@ Game.vanilla.block = {
         h: 128,
         DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
         DPD: 0.5
+    },
+    oakPlant: {
+        TYPE: "Game:oakPlant",
+        texture: Texture.getImage("oakSeed"),
+        HP: 2,
+        w: 128,
+        h: 128,
+        DROPS: [Game.vanilla.item.oakSeed],
+        DPD: 0.5,
+        growTime: 2000,
+        growBlock: "oak"
     }
 }
 

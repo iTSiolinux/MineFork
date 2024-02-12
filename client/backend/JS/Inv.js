@@ -13,7 +13,7 @@ class Inv {
     }
 
     addItem(item) {
-        if (item instanceof Item && this.items.length < this.maxSlots) {
+        if (item instanceof Item && this.items.length < this.maxSlots && this.items.findIndex(existingItem => existingItem instanceof VoidItem) === -1) {
             const sameItems = this.items.filter(itemArgs =>
                 itemArgs.amount < itemArgs.MaxStack
                 &&
