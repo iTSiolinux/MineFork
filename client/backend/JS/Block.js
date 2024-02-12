@@ -63,7 +63,6 @@ class Block {
                         }
                     )
                 
-                    console.log(INT_RANDOM)
 
                 Game.Data.Add(ITEM)
             }

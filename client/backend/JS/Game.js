@@ -87,11 +87,13 @@ Game.Data = {
         if (object instanceof Block) {
             Game.Data.blocks.push(object)
         }
-        if (object instanceof Item) {
+        else if (object instanceof Item) {
             Game.Data.items.push(object)
         }
-        if (object instanceof Entity) {
+        else if (object instanceof Entity) {
             Game.Data.entitys.push(object)
+        } else {
+            console.error("The added object not valid instance. \n" + object.constructor.name)
         }
     },
     Remove: (object) => {
@@ -181,17 +183,26 @@ Game.events = {
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseDown = event;
 
-        Game.mouse.data.isDown = true
+        if (event.which == 1) {
+            Game.mouse.data.isDownLeft = true;
+        } else if (event.which == 3) {
+            Game.mouse.data.isDownRight = true;
+        }
     },
     onMouseUp: (event) => {
         Game.events.handler(event);
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseUp = event;
 
-        Game.mouse.data.isDown = false
+        if (event.which == 1) {
+            Game.mouse.data.isDownLeft = false;
+        } else if (event.which == 3) {
+            Game.mouse.data.isDownRight = false;
+        }
     },
     onMouseContext: (event) => {
         event.preventDefault();
+
         Game.events.handler(event);
         Game.mouse.last.event = event;
         Game.mouse.last.onMouseContext = event;
@@ -284,7 +295,8 @@ Game.mouse = {
             canvas: { x: 0, y: 0 },
             window: { x: 0, y: 0 }
         },
-        isDown: false
+        isDownLeft: false,
+        isDownRight: false
     },
     isOver: (object) => {
         const mouseX = Game.mouse.data.position.canvas.x - Game.Camera.POS.x;

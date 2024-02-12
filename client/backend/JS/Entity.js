@@ -158,7 +158,7 @@ class Player extends Entity {
     }
 
     mine() {
-        if (!this.isMining && Game.mouse.data.isDown){
+        if (!this.isMining && Game.mouse.data.isDownLeft){
             this.isMining = true;
     
             const Hand = this.hands[this.lastHit];
