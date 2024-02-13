@@ -102,7 +102,7 @@ Texture.loadImage("/IMG/oak_drop.png", "oakDrop")
 Texture.loadImage("/IMG/oakSeed.png", "oakSeed")
 
 Texture.loadImage("/IMG/slot.png", "slot")
-Texture.loadImage("/IMG/selectedSlot.png", "selectedSlot")
+Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
 Texture.loadImage("/IMG/stone_drop.png", "stoneDrop")
 
 Texture.loadImage("/IMG/bg.png", "BG")

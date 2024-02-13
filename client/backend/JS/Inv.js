@@ -1,7 +1,7 @@
 class Inv {
     constructor(values) {
         this.maxSlots = values?.maxSlots || 8;
-        this.handIndex = 0;
+        this.handIndex = 1;
         this.offHandIndex = 1;
         this.items = values?.items || new Array();
         this.armor = {
@@ -13,31 +13,31 @@ class Inv {
     }
 
     addItem(item) {
-        if (item instanceof Item && (this.items.length < this.maxSlots || this.items.findIndex(existingItem => existingItem instanceof VoidItem) === -1)) {
-            const sameItems = this.items.filter(itemArgs =>
-                itemArgs.amount < itemArgs.MaxStack
-                &&
-                item.TYPE == itemArgs.TYPE
-                &&
-                item.displayName == itemArgs.displayName
-                &&
-                item.MaxStack == itemArgs.MaxStack
-            );
+        const sameItems = this.items.filter(itemArgs =>
+            itemArgs.amount < itemArgs.MaxStack
+            &&
+            item.TYPE == itemArgs.TYPE
+            &&
+            item.displayName == itemArgs.displayName
+            &&
+            item.MaxStack == itemArgs.MaxStack
+        );
 
-            if (sameItems.length > 0) {
-                sameItems.forEach(sameItem => {
-                    const leftSpace = sameItem.MaxStack - sameItem.amount;
+        if (sameItems.length > 0) {
+            sameItems.forEach(sameItem => {
+                const leftSpace = sameItem.MaxStack - sameItem.amount;
 
-                    if (leftSpace >= item.amount) {
-                        sameItem.amount += item.amount;
-                        item.amount = 0
-                    } else {
-                        sameItem.amount += leftSpace;
-                        item.amount -= leftSpace;
-                    }
-                })
-            }
+                if (leftSpace >= item.amount) {
+                    sameItem.amount += item.amount;
+                    item.amount = 0
+                } else {
+                    sameItem.amount += leftSpace;
+                    item.amount -= leftSpace;
+                }
+            })
+        }
 
+        if (item instanceof Item && (this.items.length < this.maxSlots || this.items.findIndex(existingItem => existingItem instanceof VoidItem) !== -1)) {
             if (item.amount > 0) {
                 const voidItemIndex = this.items.findIndex(existingItem => existingItem instanceof VoidItem);
 

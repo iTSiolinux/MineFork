@@ -125,8 +125,19 @@ Game.Data = {
 Game.render = {
     // awake functions
     hotbar : () => {
+        const slotProperties = 
+        {
+            w: scale / 2, // width
+            h: scale / 2, // height
+            m: scale / 8 // margin
+        }
+
+        let s = slotProperties;
+        const halfSize = (s.w + s.m) * -4;
+
+
         for (i = Game.player.INV.maxSlots; i > 0; i--){
-            const values = {index: i}
+            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: Game.canvas.height / 2 - s.h}, w: s.w, h: s.h}
             const newSlot = new Slot(values)
 
             Game.Data.Add(newSlot)
