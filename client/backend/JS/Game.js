@@ -129,7 +129,9 @@ Game.render = {
 
         Game.render.mouse()
     },
-    refreshCanvas: () => { DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height) },
+    refreshCanvas: () => { 
+        DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height);
+    },
     items: () => {
         Game.Data.items.forEach(items => {
             items?.render()
@@ -306,8 +308,8 @@ Game.mouse = {
         isDownRight: false
     },
     isOver: (object) => {
-        const mouseX = Game.mouse.data.position.canvas.x - Game.Camera.POS.x;
-        const mouseY = Game.mouse.data.position.canvas.y - Game.Camera.POS.y;
+        const mouseX = Game.mouse.data.position.canvas.x;
+        const mouseY = Game.mouse.data.position.canvas.y;
 
         return (
             mouseX >= object.POS.x - object.w / 2 &&
@@ -345,7 +347,7 @@ Game.vanilla.block = {
     oak: {
         TYPE: "Game:oak",
         texture: Texture.getImage("oak"),
-        HP: 50,
+        HP: 16,
         w: 128,
         h: 128,
         DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],

@@ -18,7 +18,7 @@ class Block {
         this.DPD = additionalValues?.DPD || values?.DPD || 0.5; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
 
 
-        this.growTime = additionalValues?.isGrowing || values?.isGrowing || 0; // in MS
+        this.growTime = additionalValues?.growTime || values?.growTime || 0; // in MS
         this.growBlock = additionalValues?.growBlock || values?.growBlock || null;
 
         this.onConstructor();
@@ -28,7 +28,7 @@ class Block {
 
     onConstructor() {
         if (this.growTime > 0){
-            setTimeout(this.grow, this.growTime);
+            setTimeout(this.grow, this.growTime, this);
         }
     }
 
@@ -98,10 +98,10 @@ class Block {
         Game.Data.Remove(this)
     }
 
-    grow () {
-        this.die()
+    grow (THIS) {
+        THIS.die()
 
-        const growenBlock = new Item(Game.vanilla.block[this.growBlock], {POS: this.POS})
+        const growenBlock = new Block(Game.vanilla.block[THIS.growBlock], {POS: THIS.POS})
 
         Game.Data.Add(growenBlock)
     }

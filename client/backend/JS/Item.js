@@ -46,7 +46,10 @@ class Item {
     interact () {
         let iCanPlace = true;
         Game.Data.blocks.forEach(block => {
-            if (isColliding(block, {POS: Game.mouse.data.position.canvas})){
+            if (Game.mouse.isOver(block)){
+                iCanPlace = false;
+            }
+            if (Game.mouse.isOver(Game.player)){
                 iCanPlace = false;
             }
         });
