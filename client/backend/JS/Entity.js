@@ -133,7 +133,6 @@ class Player extends Entity {
         Game.Data.items.forEach(item => {
             if (isColliding(this, item)) {
                 const isAdded = this.INV.addItem(item)
-
                 isAdded  ?  Game.Data.Remove(item) : null;
             }
         });
