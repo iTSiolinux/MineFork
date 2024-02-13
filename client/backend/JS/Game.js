@@ -38,6 +38,8 @@ const Game = {
 
         Game.Data.Add(p)
         Game.Data.Add(b)
+
+        Game.render.hotbar()
     },
     update: () => {
         Game.keyboard.update()
