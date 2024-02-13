@@ -14,21 +14,24 @@
     <link rel="icon" href="/IMG/player.png" type="image/x-icon">
 
     <!-- Page style -->
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.css">  <!-- the style includes the layout of the game -->
 
     <!-- Page scripts -->
     <script id="Destroy">
         window.addEventListener("load", async (e)=> {
-            const scripts = ["/JS/Load.js","/JS/Inv.js", "/JS/Entity.js", "/JS/Block.js", "/JS/Item.js", "/JS/Gui.js", "/JS/Game.js"]
+            const scripts = ["/JS/Load.js","/JS/Inv.js", "/JS/Entity.js", "/JS/Block.js", "/JS/Item.js", "/JS/Gui.js", "/JS/Game.js"] // array of scripts that should be loaded one after one.
 
             async function loadClasses(array, index = 0){
                 const script = document.createElement("script");
-                script.type = "text/javascript";
+                // creating virtul script <tag>
                 script.src = array[index];
+                // setting the source to the link provided in the array.
                 document.head.appendChild(script)
+                // appending to head <tag>
 
+                // when the script loads, load the next if even exsits.
                 script.addEventListener("load", ()=>{
-                    if (array[index + 1] !== undefined){
+                    if (array[index + 1]){
                         loadClasses(array, index + 1);
                     }
                 })

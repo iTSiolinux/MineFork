@@ -55,6 +55,11 @@ class Item {
         });
 
         if (this.isBlockPlacer && iCanPlace){
+            if (this.amount > 1){
+                this.amount--;  
+            } else {
+                Game.player.INV.removeItem(this)
+            }
             const placedBlock = new Block(Game.vanilla.block[this.placedBlock], {POS: {x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y}})
 
             Game.Data.Add(placedBlock)

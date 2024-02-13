@@ -99,11 +99,13 @@ class Block {
     }
 
     grow (THIS) {
-        THIS.die()
+        if (THIS.HP > 0){
+            THIS.die()
 
-        const growenBlock = new Block(Game.vanilla.block[THIS.growBlock], {POS: THIS.POS})
-
-        Game.Data.Add(growenBlock)
+            const growenBlock = new Block(Game.vanilla.block[THIS.growBlock], {POS: THIS.POS})
+    
+            Game.Data.Add(growenBlock)
+        }
     }
 
     render = {
