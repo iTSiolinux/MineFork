@@ -92,6 +92,8 @@ Game.Data = {
         }
         else if (object instanceof Entity) {
             Game.Data.entitys.push(object)
+        } else if (object instanceof Button || object instanceof Slot) {
+            Game.Data.GUI.push(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
         }
@@ -119,6 +121,16 @@ Game.Data = {
 
 // Game render system
 Game.render = {
+    // awake functions
+    hotbar : () => {
+        for (i = Game.player.INV.maxSlots; i > 0; i--){
+            const values = {index: i}
+            const newSlot = new Slot(values)
+
+            Game.Data.Add(newSlot)
+        }
+    },
+    // loop functions
     update() {
         Game.render.refreshCanvas()
         Game.Camera.update()
