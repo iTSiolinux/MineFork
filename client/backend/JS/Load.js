@@ -95,14 +95,23 @@ class TextureLoader {
 }
 
 const Texture = new TextureLoader("/IMG/null.png")
-Texture.loadImage("/IMG/player.png", "player")
+
+// GUI
+Texture.loadImage("/IMG/slot.png", "slot")
+Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
 Texture.loadImage("/IMG/_cursor.png", "cursor")
+Texture.loadImage("/IMG/bg.png", "BG")
+Texture.loadImage("/IMG/heart.png", "heart")
+Texture.loadImage("/IMG/heart2.png", "heart2")
+
+// Entitys assets
+Texture.loadImage("/IMG/player.png", "player")
+
+// Blocks assets
 Texture.loadImage("/IMG/oakTree.png", "oak")
+
+// Items assets
 Texture.loadImage("/IMG/oak_drop.png", "oakDrop")
 Texture.loadImage("/IMG/oakSeed.png", "oakSeed")
 
-Texture.loadImage("/IMG/slot.png", "slot")
-Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
-Texture.loadImage("/IMG/stone_drop.png", "stoneDrop")
 
-Texture.loadImage("/IMG/bg.png", "BG")

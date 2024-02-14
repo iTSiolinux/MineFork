@@ -59,7 +59,7 @@ class Button {
     }
 
     update() {
-        const fixedThis = { POS: { x: this.POS.x + + Game.Camera.POS.x, y: this.POS.y + + Game.Camera.POS.y }, w: this.w, h: this.h }
+        const fixedThis = { POS: { x: this.POS.x + Game.Camera.POS.x, y: this.POS.y + Game.Camera.POS.y }, w: this.w, h: this.h }
         if (Game.mouse.isOver(fixedThis)) {
             this.hover()
         }

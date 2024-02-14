@@ -26,7 +26,7 @@ const Game = {
         Game.renderInterval = setInterval(Game.render.update, FPS)
 
         // Player 
-        const p = new Player({ POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
+        const p = new Player({HP: 100, POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
         Game.player = p;
 
         // Attaching player to the camera as target
@@ -137,7 +137,7 @@ Game.render = {
 
 
         for (i = Game.player.INV.maxSlots; i > 0; i--){
-            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h)}, w: s.w, h: s.h, ID: i}
+            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h * 1.5)}, w: s.w, h: s.h, ID: i}
             const newSlot = new Slot(values)
 
             Game.Data.Add(newSlot)
@@ -151,6 +151,7 @@ Game.render = {
         Game.render.entitys()
         Game.render.blocks()
         Game.render.GUI()
+        Game.render.hearts()
 
         Game.render.mouse()
     },
@@ -177,6 +178,21 @@ Game.render = {
             GUI?.render()
         })
     },
+    hearts: () => {
+        const player = Game.player;
+        const heartSize = scale / 2;
+        const margin = heartSize + 4;
+        const startX = Game.Camera.POS.x - (margin + heartSize) * 2.25;
+        const staticY = Game.Camera.POS.y + (Game.canvas.height / 2 - scale / 2);
+        
+        for (let i = 0; i < Math.floor(player.HP / 10); i++) {
+            DRAW.drawImage(Texture.getImage("heart"), startX + i * margin, staticY, heartSize, heartSize);
+        }
+        
+        if (player.HP % 10 > 0) {
+            DRAW.drawImage(Texture.getImage("heart2"), startX + Math.floor(player.HP / 10) * margin, staticY, heartSize, heartSize);
+        }        
+    },    
     mouse: () => {
         DRAW.save()
         // move to mouse position

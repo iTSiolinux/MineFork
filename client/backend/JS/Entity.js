@@ -27,6 +27,8 @@ class Entity {
 
     onDeath () { }
 
+    onDamage (dmg) { }
+
     onCollide () { }
 
     // update function
@@ -67,7 +69,16 @@ class Entity {
     // functions
 
     damage(dmg) {
+        const damgeDealt = dmg > this.HP ? this.HP : dmg;
+        this.onDamage(dmg)
 
+
+        if (this.HP <= damgeDealt) {
+            this.HP = 0;
+            this.die()
+        } else {
+            this.HP -= damgeDealt;
+        }
     }
 
     // list of Velocity functions
