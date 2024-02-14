@@ -33,22 +33,22 @@ class Button {
 
     hover() {
         this.onHover();
-    
+
         if (Game.mouse.data.isDownLeft && !this.isPressed) {
             this.leftClick();
             this.isPressed = true;
         }
-    
+
         if (Game.mouse.data.isDownRight && !this.isPressed) {
             this.rightClick();
             this.isPressed = true;
         }
-    
+
         if (!Game.mouse.data.isDownLeft && !Game.mouse.data.isDownRight) {
             this.isPressed = false;
         }
     }
-    
+
 
     leftClick() {
         this.onLeftClick()
@@ -59,7 +59,7 @@ class Button {
     }
 
     update() {
-        const fixedThis = {POS: {x: this.POS.x + + Game.Camera.POS.x, y: this.POS.y + + Game.Camera.POS.y}, w: this.w, h: this.h}
+        const fixedThis = { POS: { x: this.POS.x + + Game.Camera.POS.x, y: this.POS.y + + Game.Camera.POS.y }, w: this.w, h: this.h }
         if (Game.mouse.isOver(fixedThis)) {
             this.hover()
         }
@@ -95,67 +95,52 @@ class Slot extends Button {
         super(values)
 
         this.index = values?.index || -1;
+    }
 
-        this.render = () => {
-                // Save original drawing context
-                DRAW.save();
+    render() {
+        // Save original drawing context
+        DRAW.save();
 
-                // Translate to the center of the object
-                DRAW.translate(this.POS.x, this.POS.y);
+        DRAW.translate(this.POS.x, this.POS.y);
+        DRAW.rotate(this.angle * Math.PI / 180);
+        DRAW.drawImage(
+            this.index - 1 == Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
+            -this.w / 2 + Game.Camera.POS.x,
+            -this.h / 2 + Game.Camera.POS.y,
+            this.w,
+            this.h
+        );
 
-                // Rotate around the center
-                DRAW.rotate(this.angle * Math.PI / 180);
+        const targetItem = Game.player.INV.items[this.index - 1]
+        if (targetItem instanceof Item) {
 
-                // Draw the image with its center at (0, 0)
-                DRAW.drawImage(
-                    this.index - 1== Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
-                    -this.w / 2 + Game.Camera.POS.x,
-                    -this.h / 2 + Game.Camera.POS.y,
-                    this.w,
-                    this.h
-                );
+            DRAW.drawImage(
+                targetItem.texture,
+                -this.w / 2 + Game.Camera.POS.x,
+                -this.h / 2 + Game.Camera.POS.y,
+                this.w,
+                this.h
+            );
 
-                // Restore the original drawing context
-                DRAW.restore(); 
-
-        
-            const targetItem = Game.player.INV.items[this.index - 1]
-            if (targetItem instanceof Item){
-                // Save original drawing context
-                DRAW.save();
-
-                // Translate to the center of the object
-                DRAW.translate(this.POS.x, this.POS.y);
-
-                // Rotate around the center
-                DRAW.rotate(this.angle * Math.PI / 180);
-
-                // Draw the image with its center at (0, 0)
-                DRAW.drawImage(
-                    targetItem.texture,
-                    -this.w / 2 + Game.Camera.POS.x,
-                    -this.h / 2 + Game.Camera.POS.y,
-                    this.w,
-                    this.h
-                );
-
-                DRAW.fillStyle = "blue";
-                DRAW.font = '20px Arial';
-                DRAW.fillText(targetItem.amount, Game.Camera.POS.x - (DRAW.measureText(targetItem.amount).width / 2), Game.Camera.POS.y - this.h / 2)
-
-                // Restore the original drawing context
-                DRAW.restore(); 
-            }
+            // drawing Item amount
+            DRAW.fillStyle = "blue";
+            DRAW.font = '20px Arial';
+            DRAW.fillText(targetItem.amount, Game.Camera.POS.x - (DRAW.measureText(targetItem.amount).width / 2), Game.Camera.POS.y - this.h / 2)
         }
 
-        this.leftClick = () => {
-            this.onLeftClick()
+        DRAW.restore();
+    }
 
-            const currentItem = Game.player.INV.items[this.index - 1]
-            if (currentItem instanceof Item || currentItem instanceof VoidItem){
-                Game.player.INV.items[this.index - 1] = Game.mouse.item;
-                Game.mouse.item = currentItem;
-            }
+    leftClick() {
+        this.onLeftClick()
+
+        const currentItem = Game.player.INV.items[this.index - 1]
+        const mouseItem = Game.mouse.item;
+
+
+        if (currentItem instanceof Item || currentItem instanceof VoidItem) {
+            Game.player.INV.items[this.index - 1] = mouseItem;
+            Game.mouse.item = currentItem;
         }
     }
 }

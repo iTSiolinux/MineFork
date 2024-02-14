@@ -23,14 +23,14 @@ class Entity {
     }
 
     // list of Events
-    onSpawn = () => { }
+    onSpawn () { }
 
-    onDeath = () => { }
+    onDeath () { }
 
-    onCollide = () => { }
+    onCollide () { }
 
     // update function
-    update = () => {
+    update () {
         this.updatePhysics()
     }
 
@@ -103,13 +103,14 @@ class Player extends Entity {
         this.isInteracting = false;
         this.base = values?.base || {dmg: 2};
 
-        this.update = () => {
-            this.updatePhysics()
-            this.lookAtMouse()
-            this.pickupItems()
-            this.interact()
-            this.mine()
-        }
+    }
+
+    update () {
+        this.updatePhysics()
+        this.lookAtMouse()
+        this.pickupItems()
+        this.interact()
+        this.mine()
     }
 
     lookAtMouse() {
@@ -144,16 +145,30 @@ class Player extends Entity {
         }
     }
 
-    throw() {
-        const handItem = this.INV.items[this.INV.handIndex];
-        if (handItem instanceof Item) {
-            this.INV.removeItem(handItem)
+    throw(type = "handIndex") {
+        if (type == "handIndex"){
+            const handItem = this.INV.items[this.INV.handIndex];
 
-            handItem.POS.x = Game.mouse.data.position.canvas.x;
-            handItem.POS.y = Game.mouse.data.position.canvas.y;
+            if (handItem instanceof Item) {
+                this.INV.removeItem(handItem)
+    
+                handItem.POS.x = Game.mouse.data.position.canvas.x;
+                handItem.POS.y = Game.mouse.data.position.canvas.y;
+    
+                Game.Data.Add(handItem);
+            }
+        } else if (type == "mouseItem"){
+            const mouseItem = Game.mouse.item;
 
-            Game.Data.Add(handItem);
+            if (mouseItem instanceof Item){
 
+                mouseItem.POS.x = Game.mouse.data.position.canvas.x;
+                mouseItem.POS.y = Game.mouse.data.position.canvas.y;
+    
+                Game.Data.Add(mouseItem);
+
+                Game.mouse.item = new VoidItem()
+            }
         }
     }
 

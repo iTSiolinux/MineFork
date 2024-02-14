@@ -179,8 +179,21 @@ Game.render = {
     },
     mouse: () => {
         DRAW.save()
-        DRAW.fillStyle = "red"
-        DRAW.drawImage(Texture.getImage("cursor"), Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y, scale / 2, scale / 2)
+        // move to mouse position
+        DRAW.translate(Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y)
+        // draw the item if exsits
+        const mouseItem = Game.mouse.item;
+        if (mouseItem instanceof Item){
+            DRAW.drawImage(
+                mouseItem.texture,
+                -mouseItem.w / 2,
+                -mouseItem.h / 2,
+                mouseItem.w,
+                mouseItem.h
+            );
+        }
+        // draw the mouse image
+        DRAW.drawImage(Texture.getImage("cursor"), 0, 0, scale / 2, scale / 2)
         DRAW.restore()
     },
     // need to add summon gui functionality   
@@ -343,7 +356,7 @@ Game.mouse = {
             mouseY <= object.POS.y + object.h / 2
         );
     },
-    item: new VoidItem()
+    item: new VoidItem(),
 }
 
 // Vanilla pre-confguired values for blockws
