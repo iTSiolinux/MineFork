@@ -137,7 +137,7 @@ Game.render = {
 
 
         for (i = Game.player.INV.maxSlots; i > 0; i--){
-            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: Game.canvas.height / 2 - s.h}, w: s.w, h: s.h}
+            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h)}, w: s.w, h: s.h, ID: i}
             const newSlot = new Slot(values)
 
             Game.Data.Add(newSlot)
@@ -342,8 +342,8 @@ Game.mouse = {
             mouseY >= object.POS.y - object.h / 2 &&
             mouseY <= object.POS.y + object.h / 2
         );
-    }
-
+    },
+    item: new VoidItem()
 }
 
 // Vanilla pre-confguired values for blockws

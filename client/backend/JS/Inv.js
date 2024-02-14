@@ -3,13 +3,19 @@ class Inv {
         this.maxSlots = values?.maxSlots || 8;
         this.handIndex = 1;
         this.offHandIndex = 1;
-        this.items = values?.items || new Array();
+        this.items = values?.items || [];
         this.armor = {
             head: values?.armor?.head || null,
             chest: values?.armor?.chest || null,
             legs: values?.armor?.legs || null,
             boots: values?.armor?.boots || null,
         };
+
+        if (this.items.length == 0){
+            for (let i = 0; i < this.maxSlots; i++){
+                this.items[i] = new VoidItem();
+            }
+        }
     }
 
     addItem(item) {

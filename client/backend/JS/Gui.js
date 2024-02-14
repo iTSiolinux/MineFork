@@ -7,6 +7,8 @@ class Button {
 
         this.POS = values?.POS || { x: 0, y: 0 }
         this.ID = values?.ID || null;
+
+        this.isPressed = false
     }
 
     // Events
@@ -15,20 +17,51 @@ class Button {
 
     }
 
-    onClick() {
+    onRightClick() {
+
+    }
+
+    onLeftClick() {
 
     }
 
     onHover() {
-        if (Game.isDebugging)
-            console.log("Mouse is over: " + this.ID);
+
     }
 
     // Functions
 
+    hover() {
+        this.onHover();
+    
+        if (Game.mouse.data.isDownLeft && !this.isPressed) {
+            this.leftClick();
+            this.isPressed = true;
+        }
+    
+        if (Game.mouse.data.isDownRight && !this.isPressed) {
+            this.rightClick();
+            this.isPressed = true;
+        }
+    
+        if (!Game.mouse.data.isDownLeft && !Game.mouse.data.isDownRight) {
+            this.isPressed = false;
+        }
+    }
+    
+
+    leftClick() {
+        this.onLeftClick()
+    }
+
+    rightClick() {
+        this.onRightClick()
+    }
+
     update() {
-        if (Game.mouse.isOver(this)) {
-            this.onHover()
+        const fixedThis = {POS: {x: this.POS.x + + Game.Camera.POS.x, y: this.POS.y + + Game.Camera.POS.y}, w: this.w, h: this.h}
+        if (Game.mouse.isOver(fixedThis)) {
+            this.hover()
         }
     }
 
@@ -112,6 +145,16 @@ class Slot extends Button {
 
                 // Restore the original drawing context
                 DRAW.restore(); 
+            }
+        }
+
+        this.leftClick = () => {
+            this.onLeftClick()
+
+            const currentItem = Game.player.INV.items[this.index - 1]
+            if (currentItem instanceof Item || currentItem instanceof VoidItem){
+                Game.player.INV.items[this.index - 1] = Game.mouse.item;
+                Game.mouse.item = currentItem;
             }
         }
     }
