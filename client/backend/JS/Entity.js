@@ -11,6 +11,9 @@ class Entity {
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.name = additionalValues?.name || values?.name || null;
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
+
+        this.stateList = additionalValues?.stateList || values?.stateList || null;
+        this.currentState = "IDLE";
     
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
@@ -36,6 +39,7 @@ class Entity {
     // update function
     update () {
         this.updatePhysics()
+        // this.AI.update()
     }
 
     // render array
@@ -95,6 +99,36 @@ class Entity {
             DRAW.restore()
         }
     }
+
+    // AI of an entitys
+
+    AI = {
+        tickPer: FPS * 25,
+        ticksAlive: 0,
+        update: ()=>{
+            if (this.AI.ticksAlive % this.AI.tickPer == 0){
+                this.AI.rollState()
+            }
+            this.AI.ticksAlive++;
+        },
+        rollState:  ()=>{
+            if (this.stateList.length > 1){
+                const rolledState = this.stateList[random(0, this.stateList.length)];
+                if (this.AI[rolledState] instanceof Function){
+                    this.currentState = rolledState;
+                    this.AI[rolledState]();
+                }
+            } 
+        },
+        WALK: ()=>{
+            this.step(5)
+            this.turn(90 *  plusOrMinus(), 1000)
+            this.currentState = "IDLE"
+        },
+        IDLE: ()=>{
+
+        }
+    }
     // functions
 
     damage(dmg) {
@@ -121,10 +155,12 @@ class Entity {
         let loop = setInterval(() => {
             this.angle += degreesPerInterval;
             time -= 10;
+            
             if (time <= 0) {
                 clearInterval(loop);
+                this.angle = NA(Math.round(this.angle))
             }
-        }, 10);
+        }, 10);        
     }
 
     step (amount = 0) {

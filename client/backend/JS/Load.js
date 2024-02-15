@@ -53,12 +53,23 @@ const scale = 64,
     RTD = (rad) => {return rad * ( Math.PI / 180 )},
     // returns random int between min ~ max - 1
     random = (min, max)=>{ return Math.floor(Math.random() * max) + min },
+    plusOrMinus = ()=>{
+        const int = random(0, 2);
+        if (int){
+            return 1;
+        } else {
+            return -1;
+        }
+    },
+    NA = (angle) => {
+        return (angle % 360 + 360) % 360;
+    },
     // creating virtul canvas element
     CANVAS = document.createElement('canvas'),
     // setting alias that will be used less then ctx
     DRAW = CANVAS.getContext('2d'),
     // setting the render update loop to 16.666666666666668 ms for an render update
-    FPS = 1000 / 1000;
+    FPS = 1000 / 100;
 
 // setting canvas width and height and then appending him to the document body
 CANVAS.width = window.innerWidth * 0.95;

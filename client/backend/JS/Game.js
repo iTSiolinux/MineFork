@@ -402,7 +402,8 @@ Game.vanilla.entity = {
     chicken: {
         HP: 10,
         texture: Texture.getImage("chicken"),
-        TYPE: "Game:chicken"
+        TYPE: "Game:chicken",
+        stateList: ["WALK", "IDLE", "IDLE"]
     }
 },
 Game.vanilla.block = {
