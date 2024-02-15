@@ -100,7 +100,6 @@ const Texture = new TextureLoader("/IMG/null.png")
 Texture.loadImage("/IMG/slot.png", "slot")
 Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
 Texture.loadImage("/IMG/_cursor.png", "cursor")
-Texture.loadImage("/IMG/bg.png", "BG")
 Texture.loadImage("/IMG/heart.png", "heart")
 Texture.loadImage("/IMG/heart2.png", "heart2")
 

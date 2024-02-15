@@ -1,27 +1,28 @@
 class Entity {
-    constructor(values) {
-        this.CONST_HP = values?.HP || 1;
-        this.HP = values?.HP || 1;
-
-        this.texture = values?.texture || Texture.getImage();
-        this.w = values?.w || scale;
-        this.h = values?.h || scale;
-        this.angle = values?.angle || 0;
-
-        this.UUID = values?.UUID || genUUID();
-        this.name = values?.name || null;
-        this.TYPE = values?.TYPE || null;
-
-        this.isVisible = values?.isVisible || true;
-        this.isHostile = values?.isHostile || false;
-
-        this.POS = values?.POS || { x: 0, y: 0 };
-        this.VEL = { x: 0, y: 0 };
-        this.SPEED = { x: 0, y: 0 };
-        this.INV = new Inv(values?.INV) || new Inv()
-
-        this.onSpawn()
+    constructor(values, additionalValues) {
+        this.CONST_HP = additionalValues?.HP || values?.HP || 1;
+        this.HP = additionalValues?.HP || values?.HP || 1;
+    
+        this.texture = additionalValues?.texture || values?.texture || Texture.getImage();
+        this.w = additionalValues?.w || values?.w || scale;
+        this.h = additionalValues?.h || values?.h || scale;
+        this.angle = additionalValues?.angle || values?.angle || 0;
+    
+        this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
+        this.name = additionalValues?.name || values?.name || null;
+        this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
+    
+        this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
+        this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
+    
+        this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
+        this.VEL = additionalValues?.VEL || values?.VEL || { x: 0, y: 0 };
+        this.SPEED = additionalValues?.SPEED || values?.SPEED || { x: 0, y: 0 };
+        this.INV = new Inv(additionalValues?.INV || values?.INV) || new Inv();
+    
+        this.onSpawn();
     }
+    
 
     // list of Events
     onSpawn () { }

@@ -69,7 +69,8 @@ Game.Camera = {
     target: null,
     follow: () => {
         if (Game.Camera.target?.POS) {
-            Game.Camera.POS = Game.Camera.target.POS
+            Game.Camera.POS.x = Game.Camera.target.POS.x
+            Game.Camera.POS.y = Game.Camera.target.POS.y
         }
         // calculating realative to the canvas
         Game.mouse.data.position.canvas.x = Game.mouse.data.position.window.x + Game.Camera.POS.x - scale / 4;
