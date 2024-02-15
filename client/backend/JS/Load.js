@@ -49,6 +49,8 @@ const scale = 64,
 
         return angleDegrees;
     },
+    DTR = (deg) => {return deg * ( 180 / Math.PI )},
+    RTD = (rad) => {return rad * ( Math.PI / 180 )},
     // returns random int between min ~ max - 1
     random = (min, max)=>{ return Math.floor(Math.random() * max) + min },
     // creating virtul canvas element

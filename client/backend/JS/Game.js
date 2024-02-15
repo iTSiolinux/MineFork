@@ -35,7 +35,10 @@ const Game = {
         // Test block
         const b = new Block(Game.vanilla.block.oak, { POS: { x: 0, y: 0 } })
 
+        // Test chicken
+        const c = new Entity(Game.vanilla.entity.chicken, {POS: {x: 128, y: 0}})
 
+        Game.Data.Add(c)
         Game.Data.Add(p)
         Game.Data.Add(b)
 

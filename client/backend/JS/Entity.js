@@ -116,6 +116,22 @@ class Entity {
         Game.Data.Remove(this)
     }
 
+    turn(amount = 90, time = 1000) {
+        const degreesPerInterval = amount / (time / 10);
+        let loop = setInterval(() => {
+            this.angle += degreesPerInterval;
+            time -= 10;
+            if (time <= 0) {
+                clearInterval(loop);
+            }
+        }, 10);
+    }
+
+    step (amount = 0) {
+        this.POS.x -= amount * Math.cos(DTR(this.angle))
+        this.POS.y -= amount * Math.sin(DTR(this.angle))
+    }
+
     // list of Velocity functions
 
     setSpeed(X = this.SPEED.x, Y = this.SPEED.y) {
@@ -250,7 +266,7 @@ class Player extends Entity {
         }
     }
 
-    hasPlayerHit () {
+    hasPlayerHit() {
         // Get the hand being used for mining
         const hand = this.hands[this.lastHit];
     
@@ -258,20 +274,21 @@ class Player extends Entity {
         for (const B of Game.Data.blocks) {
             // Check for collision
             if (
-                distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2 
-                && 
-                this.angle - 45 < Math.abs(calculateAngle(this, B)) && Math.abs(calculateAngle(this, B)) < this.angle + 45
+                distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2
+                &&
+                this.isInAngle(this.angle) 
             ) {
                 B?.damage(this.base.dmg);
             }
         }
-
+    
+        // Loop through each entity
         for (const E of Game.Data.entitys) {
             // Check for collision
             if (
-                distance(this, E) <= E.w / 2 + Game.player.w / 2 + hand.w / 2 
-                && 
-                this.angle - 45 < Math.abs(calculateAngle(this, E)) && Math.abs(calculateAngle(this, E)) < this.angle + 45
+                distance(this, E) <= E.w / 2 + Game.player.w / 2 + hand.w / 2
+                &&
+                this.isInAngle(this.angle) 
                 &&
                 E != this
             ) {
@@ -279,6 +296,19 @@ class Player extends Entity {
             }
         }
     }
+
+    isInAngle (angle){
+        return (
+            angle <= 45 && angle >= -45 // right to left
+            ||
+            angle <= 180 + 45 && angle >= 180 - 45 // left to right 
+            ||
+            angle <= 90 + 45 && angle >= 90 - 45 // botttom to top
+            ||
+            angle <= -90 + 45 && angle >= -90 -45 // top to bottom
+        )
+    }
+    
     
     render = {
         update: () => {
