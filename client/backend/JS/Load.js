@@ -45,7 +45,7 @@ const scale = 64,
         const angleRadians = Math.atan2(deltaY, deltaX);
 
         // Convert the angle from radians to degrees
-        const angleDegrees = angleRadians * (180 / Math.PI);
+        const angleDegrees = RTD(angleRadians);
 
         return angleDegrees;
     },

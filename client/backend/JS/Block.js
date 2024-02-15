@@ -122,7 +122,7 @@ class Block {
             DRAW.translate(this.POS.x, this.POS.y);
 
             // Rotate around the center
-            DRAW.rotate(this.angle * Math.PI / 180);
+            DRAW.rotate(DTR(this.angle));
 
 
             // Draw the image with its center at (0, 0)

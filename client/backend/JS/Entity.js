@@ -60,7 +60,7 @@ class Entity {
             DRAW.translate(this.POS.x, this.POS.y);
 
             // Rotate around the center
-            DRAW.rotate(this.angle * Math.PI / 180);
+            DRAW.rotate(DTR(this.angle));
 
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
@@ -87,7 +87,7 @@ class Entity {
 
             DRAW.save()
 
-            DRAW.translate(this.POS.x - this.w,  this.POS.y - this.h * 2)
+            DRAW.translate(this.POS.x - this.w,  this.POS.y - this.h)
 
             DRAW.strokeStyle = hpBarP.border
             DRAW.lineWidth = hpBarP.stroke
@@ -222,10 +222,10 @@ class Player extends Entity {
         }
 
         // Calculate the angle in radians
-        const angleRadians = Math.atan2(deltaY, deltaX);
+        const angleInDeegre = Math.atan2(deltaY, deltaX);
 
         // Convert radians to degrees
-        this.angle = angleRadians * (180 / Math.PI);
+        this.angle = DTR(angleInDeegre)
     }
 
     pickupItems() {
