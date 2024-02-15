@@ -56,7 +56,7 @@ const scale = 64,
     // setting alias that will be used less then ctx
     DRAW = CANVAS.getContext('2d'),
     // setting the render update loop to 16.666666666666668 ms for an render update
-    FPS = 1000 / 60;
+    FPS = 1000 / 1000;
 
 // setting canvas width and height and then appending him to the document body
 CANVAS.width = window.innerWidth * 0.95;

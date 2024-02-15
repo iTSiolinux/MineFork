@@ -261,7 +261,6 @@ class Player extends Entity {
                 distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2 
                 && 
                 this.angle - 45 < Math.abs(calculateAngle(this, B)) && Math.abs(calculateAngle(this, B)) < this.angle + 45
-
             ) {
                 B?.damage(this.base.dmg);
             }
@@ -273,7 +272,8 @@ class Player extends Entity {
                 distance(this, E) <= E.w / 2 + Game.player.w / 2 + hand.w / 2 
                 && 
                 this.angle - 45 < Math.abs(calculateAngle(this, E)) && Math.abs(calculateAngle(this, E)) < this.angle + 45
-
+                &&
+                E != this
             ) {
                 E?.damage(this.base.dmg);
             }
@@ -334,4 +334,8 @@ class Player extends Entity {
             }
         }
     }
+
+    // Events 
+
+    onDamage (dmg) { console.log("your got hitten by yourself " + dmg)}
 }

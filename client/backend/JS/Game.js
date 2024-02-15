@@ -420,7 +420,7 @@ Game.vanilla.block = {
         h: 128,
         DROPS: [Game.vanilla.item.oakSeed],
         DPD: 0.5,
-        growTime: 2000,
+        growTime: 5000,
         growBlock: "oak"
     }
 }
