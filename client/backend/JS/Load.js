@@ -106,6 +106,8 @@ Texture.loadImage("/IMG/heart2.png", "heart2")
 
 // Entitys assets
 Texture.loadImage("/IMG/player.png", "player")
+Texture.loadImage("/IMG/chicken.png", "chicken")
+
 
 // Blocks assets
 Texture.loadImage("/IMG/oakTree.png", "oak")

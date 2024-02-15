@@ -112,8 +112,8 @@ Game.Data = {
             }
         }
         if (object instanceof Entity) {
-            if (!Game.Data.entities.remove(object)) {
-                console.warn("Object not found in Game.Data.entities");
+            if (!Game.Data.entitys.remove(object)) {
+                console.warn("Object not found in Game.Data.entitys");
             }
         }
     }
@@ -395,7 +395,11 @@ Game.vanilla.item = {
     }
 },
 Game.vanilla.entity = {
-
+    chicken: {
+        HP: 10,
+        texture: Texture.getImage("chicken"),
+        TYPE: "Game:chicken"
+    }
 },
 Game.vanilla.block = {
     oak: {

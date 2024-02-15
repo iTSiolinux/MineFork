@@ -13,6 +13,7 @@ class Entity {
         this.TYPE = values?.TYPE || null;
 
         this.isVisible = values?.isVisible || true;
+        this.isHostile = values?.isHostile || false;
 
         this.POS = values?.POS || { x: 0, y: 0 };
         this.VEL = { x: 0, y: 0 };
@@ -41,6 +42,9 @@ class Entity {
         update: () => {
             if (this.isVisible) {
                 this.render.base()
+                if (this.HP < this.CONST_HP){
+                    this.render.healthBar()
+                }
             }
         },
         base: () => {
@@ -64,6 +68,30 @@ class Entity {
 
             // Restore the original drawing context
             DRAW.restore();
+        },
+        healthBar: () => {
+            const hpBarP = {
+                width: this.w * 2,
+                height: this.h / 4,
+                border: "black",
+                stroke: 2,
+                color: "green"
+            }
+
+            if (this.CONST_HP / 3 > this.HP){hpBarP.color = "red"} else if (this.CONST_HP / 2 > this.HP){hpBarP.color = "orange"}
+
+            DRAW.save()
+
+            DRAW.translate(this.POS.x - this.w,  this.POS.y - this.h * 2)
+
+            DRAW.strokeStyle = hpBarP.border
+            DRAW.lineWidth = hpBarP.stroke
+            DRAW.strokeRect(-hpBarP.stroke / 2, -hpBarP.stroke / 2, hpBarP.width + hpBarP.stroke, hpBarP.height + hpBarP.stroke)
+
+            DRAW.fillStyle = hpBarP.color
+            DRAW.fillRect(0, 0, hpBarP.width * (this.HP / this.CONST_HP), hpBarP.height)
+
+            DRAW.restore()
         }
     }
     // functions
@@ -79,6 +107,12 @@ class Entity {
         } else {
             this.HP -= damgeDealt;
         }
+    }
+
+    die () {
+        this.onDeath()
+
+        Game.Data.Remove(this)
     }
 
     // list of Velocity functions
@@ -229,6 +263,18 @@ class Player extends Entity {
 
             ) {
                 B?.damage(this.base.dmg);
+            }
+        }
+
+        for (const E of Game.Data.entitys) {
+            // Check for collision
+            if (
+                distance(this, E) <= E.w / 2 + Game.player.w / 2 + hand.w / 2 
+                && 
+                this.angle - 45 < Math.abs(calculateAngle(this, E)) && Math.abs(calculateAngle(this, E)) < this.angle + 45
+
+            ) {
+                E?.damage(this.base.dmg);
             }
         }
     }
