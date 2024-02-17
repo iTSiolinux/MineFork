@@ -14,7 +14,7 @@ class Entity {
 
         this.stateList = additionalValues?.stateList || values?.stateList || null;
         this.currentState = "IDLE";
-        this.panicTime =  additionalValues?.panicTime || values?.panicTime || 15;
+        this.panicTime =  additionalValues?.panicTime || values?.panicTime || 15000;
     
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
@@ -131,7 +131,7 @@ class Entity {
             this.currentState = "PANIC"
             this.angle = calculateAngle(object, this)
 
-            const zig = () => { this.turn(22.5 *  plusOrMinus(), 250);this.step(25, 250)}
+            const zig = () => { this.turn(22.5 *  plusOrMinus(), 250);this.step(15, 250)}
             const loop = setInterval(zig, 500)
 
             setTimeout(()=>{ clearInterval(loop) }, time)
