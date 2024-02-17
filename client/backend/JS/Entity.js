@@ -14,6 +14,7 @@ class Entity {
 
         this.stateList = additionalValues?.stateList || values?.stateList || null;
         this.currentState = "IDLE";
+        this.panicTime =  additionalValues?.panicTime || values?.panicTime || 15;
     
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
@@ -39,7 +40,7 @@ class Entity {
     // update function
     update () {
         this.updatePhysics()
-        // this.AI.update()
+        this.AI.update()
     }
 
     // render array
@@ -112,7 +113,7 @@ class Entity {
             this.AI.ticksAlive++;
         },
         rollState:  ()=>{
-            if (this.stateList.length > 1){
+            if (this.stateList.length > 1 && this.currentState == "IDLE"){
                 const rolledState = this.stateList[random(0, this.stateList.length)];
                 if (this.AI[rolledState] instanceof Function){
                     this.currentState = rolledState;
@@ -123,17 +124,29 @@ class Entity {
         WALK: ()=>{
             this.step(5)
             this.turn(90 *  plusOrMinus(), 1000)
-            this.currentState = "IDLE"
+            this.step(5)
+            this.AI.IDLE()
+        },
+        PANIC: (time = 15000, object) => {
+            this.currentState = "PANIC"
+            this.angle = calculateAngle(object, this)
+
+            const zig = () => { this.turn(22.5 *  plusOrMinus(), 250);this.step(25, 250)}
+            const loop = setInterval(zig, 500)
+
+            setTimeout(()=>{ clearInterval(loop) }, time)
+
+            this.AI.IDLE()
         },
         IDLE: ()=>{
-
+            this.currentState = "IDLE"
         }
     }
     // functions
 
-    damage(dmg) {
+    damage(dmg = 1, object) {
         const damgeDealt = dmg > this.HP ? this.HP : dmg;
-        this.onDamage(dmg)
+        this.onDamage(dmg, object)
 
 
         if (this.HP <= damgeDealt) {
@@ -141,6 +154,10 @@ class Entity {
             this.die()
         } else {
             this.HP -= damgeDealt;
+        }
+
+        if (object !== null){
+            this.AI.PANIC(this.panicTime, object)
         }
     }
 
@@ -150,7 +167,7 @@ class Entity {
         Game.Data.Remove(this)
     }
 
-    turn(amount = 90, time = 1000) {
+    async turn(amount = 90, time = 1000) {
         const degreesPerInterval = amount / (time / 10);
         let loop = setInterval(() => {
             this.angle += degreesPerInterval;
@@ -163,9 +180,20 @@ class Entity {
         }, 10);        
     }
 
-    step (amount = 0) {
-        this.POS.x -= amount * Math.cos(DTR(this.angle))
-        this.POS.y -= amount * Math.sin(DTR(this.angle))
+    async step (amount = 10, time = 1000) {
+        let loop = setInterval(() => {
+            const stepPerIntervalX = (amount * Math.cos(DTR(this.angle))) / (time / 10);
+            const stepPerIntervalY = (amount * Math.sin(DTR(this.angle))) / (time / 10);
+
+
+            this.POS.x -= stepPerIntervalX
+            this.POS.y -= stepPerIntervalY
+            time -= 10;
+            
+            if (time <= 0) {
+                clearInterval(loop);
+            }
+        }, 10);    
     }
 
     // list of Velocity functions
@@ -222,10 +250,10 @@ class Player extends Entity {
         }
 
         // Calculate the angle in radians
-        const angleInDeegre = Math.atan2(deltaY, deltaX);
+        const angleInRadians = Math.atan2(deltaY, deltaX);
 
         // Convert radians to degrees
-        this.angle = DTR(angleInDeegre)
+        this.angle = RTD(angleInRadians)
     }
 
     pickupItems() {
@@ -314,7 +342,7 @@ class Player extends Entity {
                 &&
                 this.isInAngle(this.angle) 
             ) {
-                B?.damage(this.base.dmg);
+                B?.damage(this.base.dmg, this);
             }
         }
     
@@ -328,7 +356,7 @@ class Player extends Entity {
                 &&
                 E != this
             ) {
-                E?.damage(this.base.dmg);
+                E?.damage(this.base.dmg, this);
             }
         }
     }
