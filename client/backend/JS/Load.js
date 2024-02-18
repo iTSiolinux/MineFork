@@ -127,5 +127,4 @@ Texture.loadImage("/IMG/oakTree.png", "oak")
 // Items assets
 Texture.loadImage("/IMG/oak_drop.png", "oakDrop")
 Texture.loadImage("/IMG/oakSeed.png", "oakSeed")
-
-
+Texture.loadImage("/IMG/feather.png", "feather")

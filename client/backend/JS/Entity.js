@@ -16,6 +16,8 @@ class Entity {
         this.currentState = "IDLE";
         this.panicTime =  additionalValues?.panicTime || values?.panicTime || 15000;
     
+        this.dropList = additionalValues?.dropList || values?.dropList || [];
+
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
     
@@ -163,6 +165,21 @@ class Entity {
 
     die () {
         this.onDeath()
+
+        if (this.dropList.length > 0){
+            // example structure of an drop in the list:
+            // {item: "new Item()", min: 1, max: 2}
+            this.dropList.forEach(drop =>{
+                const item = new Item(drop.item);
+
+                item.POS.x = this.POS.x;
+                item.POS.y = this.POS.y;
+
+                item.amount = random(drop.min, drop.max)
+
+                Game.Data.Add(item);
+            })
+        }
 
         Game.Data.Remove(this)
     }

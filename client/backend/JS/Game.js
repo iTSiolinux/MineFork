@@ -396,6 +396,12 @@ Game.vanilla.item = {
         amount: 1,
         isBlockPlacer: true,
         placedBlock: "oakPlant"
+    },
+    feather: {
+        texture: Texture.getImage("feather"),
+        TYPE: "Game:feather",
+        size: 64,
+        amount: 1,
     }
 },
 Game.vanilla.entity = {
@@ -403,7 +409,10 @@ Game.vanilla.entity = {
         HP: 10,
         texture: Texture.getImage("chicken"),
         TYPE: "Game:chicken",
-        stateList: ["WALK", "IDLE", "IDLE"]
+        stateList: ["WALK", "IDLE", "IDLE"],
+        dropList: [
+            {item: Game.vanilla.item.feather, min: 1, max: 3}
+        ]
     }
 },
 Game.vanilla.block = {
