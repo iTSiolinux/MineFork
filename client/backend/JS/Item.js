@@ -18,6 +18,9 @@ class Item {
 
         this.isBlockPlacer = additionalValues?.isBlockPlacer || values?.isBlockPlacer || false;
         this.placedBlock = additionalValues?.placedBlock || values?.placedBlock || null;
+
+        this.isConsumeAble = additionalValues?.isConsumeAble || values?.isConsumeAble || false;
+        this.hungerPoints = additionalValues?.hungerPoints || values?.hungerPoints || 0; // how to call how many hunger points the item will add on consume (eating)
     }
 
     render() {
@@ -44,25 +47,34 @@ class Item {
     }
 
     interact () {
-        let iCanPlace = true;
-        Game.Data.blocks.forEach(block => {
-            if (Game.mouse.isOver(block)){
-                iCanPlace = false;
-            }
-            if (Game.mouse.isOver(Game.player)){
-                iCanPlace = false;
-            }
-        });
+        // checking if could place block 
+        if (this.isBlockPlacer){
+            
+            let iCanPlace = true;
+            Game.Data.blocks.forEach(block => {
+                if (Game.mouse.isOver(block)){
+                    iCanPlace = false;
+                }
+                if (Game.mouse.isOver(Game.player)){
+                    iCanPlace = false;
+                }
+            });
 
-        if (this.isBlockPlacer && iCanPlace){
-            if (this.amount > 1){
-                this.amount--;  
-            } else {
-                Game.player.INV.removeItem(this)
+            if (iCanPlace) {
+                if (this.amount > 1){
+                    this.amount--;  
+                } else {
+                    Game.player.INV.removeItem(this)
+                }
+                const placedBlock = new Block(Game.vanilla.block[this.placedBlock], {POS: {x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y}})
+    
+                Game.Data.Add(placedBlock)
             }
-            const placedBlock = new Block(Game.vanilla.block[this.placedBlock], {POS: {x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y}})
+        }
 
-            Game.Data.Add(placedBlock)
+        // eating if is eatable item
+        if (this.isConsumeAble){
+
         }
     }
 }

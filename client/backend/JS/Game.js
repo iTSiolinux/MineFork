@@ -402,6 +402,14 @@ Game.vanilla.item = {
         TYPE: "Game:feather",
         size: 64,
         amount: 1,
+    },
+    rawChicken: {
+        texture: Texture.getImage("rawChicken"),
+        TYPE: "Game:rawChicken",
+        size: 64,
+        amount: 1,
+        isConsumeAble: true,
+        hungerPoints: 1
     }
 },
 Game.vanilla.entity = {
@@ -411,7 +419,8 @@ Game.vanilla.entity = {
         TYPE: "Game:chicken",
         stateList: ["WALK", "IDLE", "IDLE"],
         dropList: [
-            {item: Game.vanilla.item.feather, min: 1, max: 3}
+            {item: Game.vanilla.item.feather, min: 1, max: 3},
+            {item: Game.vanilla.item.rawChicken, min: 1, max: 2}
         ]
     }
 },
