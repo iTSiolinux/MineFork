@@ -343,6 +343,10 @@ class Player extends Entity {
             this.isInteracting = true;
 
             handItem?.interact()
+            if (handItem.amount <= 0){
+                this.INV.items[this.INV.handIndex] = new VoidItem()
+            }
+
             this.isInteracting = false;
         }
     }

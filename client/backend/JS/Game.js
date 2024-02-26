@@ -409,7 +409,8 @@ Game.vanilla.item = {
         size: 64,
         amount: 1,
         isConsumeAble: true,
-        hungerPoints: 1
+        hungerPoints: 1,
+        consumeTime: 2500
     }
 },
 Game.vanilla.entity = {

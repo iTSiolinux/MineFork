@@ -21,6 +21,11 @@ class Item {
 
         this.isConsumeAble = additionalValues?.isConsumeAble || values?.isConsumeAble || false;
         this.hungerPoints = additionalValues?.hungerPoints || values?.hungerPoints || 0; // how to call how many hunger points the item will add on consume (eating)
+        this.consumeTime = additionalValues?.consumeTime || values?.consumeTime || 1000;
+        this.consumeSound = additionalValues?.consumeSound || values?.consumeSound || "https://www.myinstants.com/media/sounds/nom-nom-nom_gPJiWn4.mp3";
+
+        // constant
+        this.lastInteractTime = 0;
     }
 
     render() {
@@ -46,37 +51,61 @@ class Item {
         DRAW.restore();
     }
 
-    interact () {
+    interact() {
         // checking if could place block 
-        if (this.isBlockPlacer){
-            
+        if (this.isBlockPlacer) {
+
             let iCanPlace = true;
             Game.Data.blocks.forEach(block => {
-                if (Game.mouse.isOver(block)){
+                if (Game.mouse.isOver(block)) {
                     iCanPlace = false;
                 }
-                if (Game.mouse.isOver(Game.player)){
+                if (Game.mouse.isOver(Game.player)) {
                     iCanPlace = false;
                 }
             });
 
             if (iCanPlace) {
-                if (this.amount > 1){
-                    this.amount--;  
+                if (this.amount > 1) {
+                    this.amount--;
                 } else {
                     Game.player.INV.removeItem(this)
                 }
-                const placedBlock = new Block(Game.vanilla.block[this.placedBlock], {POS: {x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y}})
-    
+                const placedBlock = new Block(Game.vanilla.block[this.placedBlock], { POS: { x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y } })
+
                 Game.Data.Add(placedBlock)
             }
         }
 
-        // eating if is eatable item
-        if (this.isConsumeAble){
+        if (this.isConsumeAble) {
+            // eating if is eatable item
+            const currentTime = Date.now();
 
+            const eatingSound = new Audio(this.consumeSound)
+
+
+            // Check if the cooldown has passed since the last interaction
+            if (currentTime - this.lastInteractTime >= this.consumeTime) {
+                eatingSound.play()
+
+                this.lastInteractTime = currentTime;
+
+                Game.player.hands[0].x += 4
+                
+                setTimeout(()=>{                
+                    Game.player.hands[0].x -= 4
+                    eatingSound.pause()
+                    
+                    this.amount--;
+                    if (this.amount > 1) {
+                        // Any additional logic for consuming with multiple items
+                    } else {
+                        this.amount = 0;
+                    }
+                }, this.consumeTime / 1.05)
+            }
         }
     }
 }
 
-class VoidItem {}
+class VoidItem { }
