@@ -97,12 +97,10 @@ class Item {
                     eatingSound.pause()
                     
                     this.amount--;
-                    if (this.amount > 1) {
-                        // Any additional logic for consuming with multiple items
-                    } else {
-                        this.amount = 0;
+                    if(this.amount <= 0){
+                        Game.player.INV.removeItem(this)
                     }
-                }, this.consumeTime / 1.05)
+                }, this.consumeTime)
             }
         }
     }
