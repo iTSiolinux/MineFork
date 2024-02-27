@@ -234,52 +234,57 @@ Game.render = {
                 // Create a new crafting window only if no other windows are open
                 const newCraftDisplay = new Display("CRAFT");
     
-                // Iterate through crafting recipes
-                for (const itemName in Game.vanilla.recipes) {
-                    const recipe = Game.vanilla.recipes[itemName];
+                let offsetY = 0; // Offset for the vertical position of buttons
     
-                    // Check if the recipe is craftable based on player's inventory
-                    const isCraftable = recipe.every(({ item, amount }) => {
-                        const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
+                // Iterate through crafting recipes and sections
+                for (const sectionName in Game.vanilla.recipes) {
+                    const section = Game.vanilla.recipes[sectionName];
     
-                        return inventoryItem && inventoryItem.amount >= amount;
-                    });
+                    for (const itemName in section) {
+                        const recipe = section[itemName];
     
-                    if (isCraftable) {
-                        // Create a button for the craftable item
-                        const craftButton = new Button({
-                            texture: Texture.getImage(itemName),
-                            POS: { x:0, y: 0 },
+                        // Check if the recipe is craftable based on player's inventory
+                        const isCraftable = recipe.every(({ item, amount }) => {
+                            const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
+                            return inventoryItem && inventoryItem.amount >= amount;
                         });
-
-                        craftButton.onLeftClick = () => {
-                            // Craft the item and remove ingredients from the inventory
-                            recipe.forEach(({ item, amount }) => {
-                                const inventoryItemIndex = Game.player.INV.items.findIndex(invItem => invItem.TYPE === item.TYPE);
-                                
-                                if (inventoryItemIndex !== -1) {
-                                    Game.player.INV.items[inventoryItemIndex].amount -= amount;
-                                    if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
-                                        // Remove the item from the inventory if its amount is zero or negative
-                                        Game.player.INV.items.splice(inventoryItemIndex, 1);
-                                    }
-                                }
-                            });
-
-                            // Add the crafted item to the player's inventory
-                            const craftedItem = new Item(Game.vanilla.item[itemName]);
-
-                            Game.player.INV.addItem(craftedItem);
-                        },
     
-                        newCraftDisplay.addChild(craftButton);
+                        if (isCraftable) {
+                            // Create a button for the craftable item
+                            const craftButton = new Button({
+                                texture: Texture.getImage(itemName),
+                                POS: { x: 0, y: offsetY },
+                            });
+    
+                            craftButton.onLeftClick = () => {
+                                // Craft the item and remove ingredients from the inventory
+                                recipe.forEach(({ item, amount }) => {
+                                    const inventoryItemIndex = Game.player.INV.items.findIndex(invItem => invItem.TYPE === item.TYPE);
+    
+                                    if (inventoryItemIndex !== -1) {
+                                        Game.player.INV.items[inventoryItemIndex].amount -= amount;
+                                        if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
+                                            // Remove the item from the inventory if its amount is zero or negative
+                                            Game.player.INV.items.splice(inventoryItemIndex, 1);
+                                        }
+                                    }
+                                });
+    
+                                // Add the crafted item to the player's inventory
+                                const craftedItem = new Item(Game.vanilla.item[itemName]);
+                                Game.player.INV.addItem(craftedItem);
+                            };
+    
+                            newCraftDisplay.addChild(craftButton);
+                            offsetY += 50; // Adjust the vertical offset as needed
+                        }
                     }
                 }
     
                 Game.Data.Add(newCraftDisplay);
             }
         }
-    },     
+    },    
     // loop functions
     update() {
         Game.render.refreshCanvas()
@@ -597,9 +602,11 @@ Game.vanilla.block = {
     }
 }
 Game.vanilla.recipes = {
-    oakPlank: [
-        { item: Game.vanilla.item.oakDrop, amount: 4 },
-    ],
+    nature_blocks: {
+        oakPlank: [
+            { item: Game.vanilla.item.oakDrop, amount: 4 },
+        ]
+    }
 };
 
 setTimeout(Game.awake, 1000)
