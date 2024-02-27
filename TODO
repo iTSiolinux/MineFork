@@ -1,11 +1,43 @@
-add anytime missing TODO tasks
+### Step 1: Make Inventory GUI Manageable
+- [X] Implement basic inventory GUI with slots for items.
+- [X] Allow players to drag and drop items within the inventory.
+- [X] Add the ability to customize the hotbar.
 
-[] 1. make it online with WebSocket
+### Step 2: Make Crafting GUI
+- [ ] Design a crafting GUI layout.
+- [ ] Implement the crafting recipe system.
+- [ ] Provide visual feedback for available crafting options.
 
-[X] 2. make an interact with an item
+### Step 3: Creating Items with Custom Interactions
+- [ ] Introduce a new class for items with special interactions.
+- [ ] Implement a basic custom interaction, e.g., a gun that can be equipped.
 
-[] 3. add weapons to the items list and interactions with them
+### Step 4: Implement Basic Multiplayer Interactions
+- [ ] Set up a basic WebSocket server for real-time communication.
+- [ ] Allow players to connect to the server.
+- [ ] Synchronize player movements in the multiplayer environment.
 
-[] 4. add inventory and recipes GUI
+### Step 5: Make Realms and Multiplayer Join Mechanics
+- [ ] Develop a system for players to join realms or servers.
+- [ ] Add a basic authentication mechanism for players.
+- [ ] Allow players to see each other in the same world.
 
-[] 5. manage the server to save the data on shutdown
+### Step 6: Save Data on Server Shutdown
+- [ ] Implement server-side logic to save game state.
+- [ ] Use a simple database or file system for data persistence.
+- [ ] Ensure proper handling of player data during server shutdown and restart.
+
+### Step 7: Expand Items and Weapons List
+- [ ] Introduce additional weapons with unique attributes.
+- [ ] Implement interactions specific to each type of weapon.
+- [ ] Consider adding diverse items to enhance gameplay.
+
+### Step 8: Implement Basic Multiplayer Interactions (Continued)
+- [ ] Enhance multiplayer interactions with basic actions.
+- [ ] Synchronize basic player actions across connected clients.
+- [ ] Allow players to see and interact with each other's characters.
+
+### Step 9: Optimize and Refine
+- [ ] Optimize server and client code for better performance.
+- [ ] Refine the user interface (UI) for a smoother player experience.
+- [ ] Address and fix any reported bugs or issues.
