@@ -125,6 +125,7 @@ Texture.loadImage("/IMG/chicken.png", "chicken")
 
 // Blocks assets
 Texture.loadImage("/IMG/oakTree.png", "oak")
+Texture.loadImage("/IMG/oakPlank.png", "oakPlank")
 
 // Items assets
 Texture.loadImage("/IMG/oak_drop.png", "oakDrop")

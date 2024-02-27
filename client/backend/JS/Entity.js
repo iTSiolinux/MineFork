@@ -131,7 +131,9 @@ class Entity {
         },
         PANIC: (time = 15000, object) => {
             this.currentState = "PANIC"
-            this.angle = calculateAngle(object, this)
+            if (object instanceof Entity){
+                this.angle = calculateAngle(object, this)                
+            }
 
             const zig = () => { this.turn(22.5 *  plusOrMinus(), 250);this.step(15, 250)}
             const loop = setInterval(zig, 500)

@@ -171,50 +171,115 @@ Game.render = {
             POS: {x: Game.canvas.width / 2 - scale * 2, y: -Game.canvas.height / 2 + scale}
         })
 
-        btn.onLeftClick = Game.render.inventory
+        btn.onLeftClick = Game.render.craft
 
         Game.Data.Add(btn)
     },
     inventory: () => {
-        const invDisplay = Game.Data.GUI.find(gui => gui.ID == "INV");
+        const invDisplay = Game.Data.GUI.find(gui => gui.ID === "INV");
     
         if (invDisplay instanceof Display) {
+            // Close the existing inventory window
             Game.Data.Remove(invDisplay);
         } else {
-            const newInvDisplay = new Display("INV");
-            const slotProperties = {
-                w: scale / 2, // width
-                h: scale / 2, // height
-                m: scale / 8, // margin
-                rows: 3, // number of rows
-                cols: Game.player.INV.maxSlots / 3, // number of columns (adjust as needed)
-            };
+            const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
     
-            let s = slotProperties;
-            const halfSize = (s.w + s.m) * -s.cols / 2.5;
+            if (existingWindows.length === 0) {
+                // Create a new inventory window only if no other windows are open
+                const newInvDisplay = new Display("INV");
+                const slotProperties = {
+                    w: scale / 2,
+                    h: scale / 2,
+                    m: scale / 8,
+                    rows: 3,
+                    cols: Game.player.INV.maxSlots / 3,
+                };
     
-            for (let row = 1; row < s.rows; row++) {
-                for (let col = 0; col < s.cols; col++) {
-                    const index = row * s.cols + col;
-                    const values = {
-                        index,
-                        POS: {
-                            x: halfSize + col * (s.w + s.m),
-                            y: row * (s.h + s.m),
-                        },
-                        w: s.w,
-                        h: s.h,
-                        ID: index,
-                    };
-                    const newSlot = new Slot(values);
+                let s = slotProperties;
+                const halfSize = (s.w + s.m) * -s.cols / 2.5;
     
-                    newInvDisplay.addChild(newSlot);
+                for (let row = 1; row < s.rows; row++) {
+                    for (let col = 0; col < s.cols; col++) {
+                        const index = row * s.cols + col;
+                        const values = {
+                            index: index + 1,
+                            POS: {
+                                x: halfSize + col * (s.w + s.m),
+                                y: row * (s.h + s.m),
+                            },
+                            w: s.w,
+                            h: s.h,
+                            ID: index + 1,
+                        };
+                        const newSlot = new Slot(values);
+    
+                        newInvDisplay.addChild(newSlot);
+                    }
                 }
-            }
     
-            Game.Data.Add(newInvDisplay);
+                Game.Data.Add(newInvDisplay);
+            }
         }
-    },    
+    },
+    craft: () => {
+        const craftDisplay = Game.Data.GUI.find(gui => gui.ID === "CRAFT");
+    
+        if (craftDisplay instanceof Display) {
+            // Close the existing crafting window
+            Game.Data.Remove(craftDisplay);
+        } else {
+            const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
+    
+            if (existingWindows.length === 0) {
+                // Create a new crafting window only if no other windows are open
+                const newCraftDisplay = new Display("CRAFT");
+    
+                // Iterate through crafting recipes
+                for (const itemName in Game.vanilla.recipes) {
+                    const recipe = Game.vanilla.recipes[itemName];
+    
+                    // Check if the recipe is craftable based on player's inventory
+                    const isCraftable = recipe.every(({ item, amount }) => {
+                        const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
+    
+                        return inventoryItem && inventoryItem.amount >= amount;
+                    });
+    
+                    if (isCraftable) {
+                        // Create a button for the craftable item
+                        const craftButton = new Button({
+                            texture: Texture.getImage(itemName),
+                            POS: { x:0, y: 0 },
+                        });
+
+                        craftButton.onLeftClick = () => {
+                            // Craft the item and remove ingredients from the inventory
+                            recipe.forEach(({ item, amount }) => {
+                                const inventoryItemIndex = Game.player.INV.items.findIndex(invItem => invItem.TYPE === item.TYPE);
+                                
+                                if (inventoryItemIndex !== -1) {
+                                    Game.player.INV.items[inventoryItemIndex].amount -= amount;
+                                    if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
+                                        // Remove the item from the inventory if its amount is zero or negative
+                                        Game.player.INV.items.splice(inventoryItemIndex, 1);
+                                    }
+                                }
+                            });
+
+                            // Add the crafted item to the player's inventory
+                            const craftedItem = new Item(Game.vanilla.item[itemName]);
+
+                            Game.player.INV.addItem(craftedItem);
+                        },
+    
+                        newCraftDisplay.addChild(craftButton);
+                    }
+                }
+    
+                Game.Data.Add(newCraftDisplay);
+            }
+        }
+    },     
     // loop functions
     update() {
         Game.render.refreshCanvas()
@@ -479,7 +544,15 @@ Game.vanilla.item = {
         isConsumeAble: true,
         hungerPoints: 1,
         consumeTime: 1500
-    }
+    },
+    oakPlank: {
+        texture: Texture.getImage("oakPlank"),
+        TYPE: "Game:oakPlank",
+        size: 64,
+        amount: 16,
+        isBlockPlacer: true,
+        placedBlock: "oakPlank"
+    },
 },
 Game.vanilla.entity = {
     chicken: {
@@ -513,8 +586,20 @@ Game.vanilla.block = {
         DPD: 0.5,
         growTime: 5000,
         growBlock: "oak"
+    },
+    oakPlank: {
+        TYPE: "Game:oakPlank",
+        texture: Texture.getImage("oakPlank"),
+        HP: 2,
+        w: 128,
+        h: 128,
+        DROPS: [Game.vanilla.item.oakPlank],
     }
 }
-
+Game.vanilla.recipes = {
+    oakPlank: [
+        { item: Game.vanilla.item.oakDrop, amount: 4 },
+    ],
+};
 
 setTimeout(Game.awake, 1000)
