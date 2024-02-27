@@ -43,6 +43,7 @@ const Game = {
         Game.Data.Add(b)
 
         Game.render.hotbar()
+        Game.render.inventoryBtn()
     },
     update: () => {
         Game.keyboard.update()
@@ -98,7 +99,7 @@ Game.Data = {
         }
         else if (object instanceof Entity) {
             Game.Data.entitys.push(object)
-        } else if (object instanceof Button || object instanceof Slot) {
+        } else if (object instanceof Button || object instanceof Slot || object instanceof Display) {
             Game.Data.GUI.push(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
@@ -110,15 +111,20 @@ Game.Data = {
                 console.warn("Object not found in Game.Data.blocks");
             }
         }
-        if (object instanceof Item) {
+        else if (object instanceof Item) {
             if (!Game.Data.items.remove(object)) {
                 console.warn("Object not found in Game.Data.items");
             }
         }
-        if (object instanceof Entity) {
+        else if (object instanceof Entity) {
             if (!Game.Data.entitys.remove(object)) {
                 console.warn("Object not found in Game.Data.entitys");
             }
+        }
+        else if (object instanceof Button || object instanceof Slot || object instanceof Display) {
+            Game.Data.GUI.remove(object)
+        } else {
+            console.error("The added object not valid instance. \n" + object.constructor.name)
         }
     }
     
@@ -140,13 +146,64 @@ Game.render = {
         const halfSize = (s.w + s.m) * -4;
 
 
-        for (i = Game.player.INV.maxSlots; i > 0; i--){
+        for (i = Game.player.INV.hotbarSlots; i > 0; i--){
             const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h * 1.5)}, w: s.w, h: s.h, ID: i}
             const newSlot = new Slot(values)
 
             Game.Data.Add(newSlot)
         }
     },
+    inventoryBtn: () => {
+        const btn = new Button({
+            texture: Texture.getImage("inv"),
+            POS: {x: Game.canvas.width / 2 - scale, y: -Game.canvas.height / 2 + scale}
+        })
+
+        btn.onLeftClick = Game.render.inventory
+        Game.var = btn
+
+        Game.Data.Add(btn)
+    },
+    inventory: () => {
+        const invDisplay = Game.Data.GUI.find(gui => gui.ID == "INV");
+    
+        if (invDisplay instanceof Display) {
+            Game.Data.Remove(invDisplay);
+        } else {
+            const newInvDisplay = new Display("INV");
+            const slotProperties = {
+                w: scale / 2, // width
+                h: scale / 2, // height
+                m: scale / 8, // margin
+                rows: 3, // number of rows
+                cols: Game.player.INV.maxSlots / 3, // number of columns (adjust as needed)
+            };
+    
+            let s = slotProperties;
+            const halfSize = (s.w + s.m) * -s.cols / 2.5;
+    
+            for (let row = 1; row < s.rows; row++) {
+                for (let col = 0; col < s.cols; col++) {
+                    const index = row * s.cols + col;
+                    const values = {
+                        index,
+                        POS: {
+                            x: halfSize + col * (s.w + s.m),
+                            y: row * (s.h + s.m),
+                        },
+                        w: s.w,
+                        h: s.h,
+                        ID: index,
+                    };
+                    const newSlot = new Slot(values);
+    
+                    newInvDisplay.addChild(newSlot);
+                }
+            }
+    
+            Game.Data.Add(newInvDisplay);
+        }
+    },    
     // loop functions
     update() {
         Game.render.refreshCanvas()
@@ -379,7 +436,7 @@ Game.mouse = {
     item: new VoidItem(),
 }
 
-// Vanilla pre-confguired values for blockws
+// Vanilla pre-confguired values for blocks
 Game.vanilla = {}
 
 Game.vanilla.item = {

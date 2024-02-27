@@ -110,6 +110,7 @@ class TextureLoader {
 const Texture = new TextureLoader("/IMG/null.png")
 
 // GUI
+Texture.loadImage("/IMG/inv.png", "inv")
 Texture.loadImage("/IMG/slot.png", "slot")
 Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
 Texture.loadImage("/IMG/_cursor.png", "cursor")

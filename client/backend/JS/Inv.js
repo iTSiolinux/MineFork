@@ -1,6 +1,7 @@
 class Inv {
     constructor(values) {
-        this.maxSlots = values?.maxSlots || 8;
+        this.maxSlots = values?.maxSlots || 24;
+        this.hotbarSlots = values?.hotbarSlots || 8;
         this.handIndex = 1;
         this.offHandIndex = 1;
         this.items = values?.items || [];

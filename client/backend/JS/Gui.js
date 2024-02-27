@@ -178,3 +178,43 @@ class Slot extends Button {
         }
     }
 }
+
+class Display {
+    constructor(ID) {
+        this.children = [];
+        this.ID = ID;
+    }
+
+    addChild(guiObjects) {
+        if (Array.isArray(guiObjects)) {
+            for (const child of guiObjects) {
+                this.children.push(child);
+            }
+        } else {
+            this.children.push(guiObjects);
+        }
+    }
+
+    removeChild(child) {
+        const index = this.children.indexOf(child);
+        if (index !== -1) {
+            this.children.splice(index, 1);
+        }
+    }
+
+    removeAllChildren() {
+        this.children = [];
+    }
+
+    update() {
+        for (const child of this.children) {
+            child.update();
+        }
+    }
+
+    render() {
+        for (const child of this.children) {
+            child.render();
+        }
+    }
+}

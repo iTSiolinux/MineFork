@@ -1,7 +1,7 @@
 const express = require("express"),
     app = express(),
     expressWs = require("express-ws")
-    PORT = 5001,
+    PORT = 5000,
     FOLDER = __dirname.split('/').slice(0, -1).join('/'),
     SERVER_FOLDER = FOLDER + '/server',
     CLIENT_FOLDER = FOLDER + '/client',
