@@ -302,7 +302,7 @@ Game.keyboard = {
     },
     array: [],
     update() {
-        const keys = Game.keyboard.array;
+        const keys = this.array;
         const POS = { x: 0, y: 0 }
 
         // up key

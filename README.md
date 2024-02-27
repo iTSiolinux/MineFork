@@ -1,4 +1,4 @@
-<img src="https://github.com/iTSiolinux/MineFork/blob/main/client/backend/IMG/player.png?raw=true" width="64" height="64"> 
+<img src="client/backend/IMG/player.png" width="64" height="64"> 
 <!-- Icon -->
 
 # MineFork 2D Game

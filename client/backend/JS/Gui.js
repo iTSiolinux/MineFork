@@ -137,10 +137,44 @@ class Slot extends Button {
         const currentItem = Game.player.INV.items[this.index - 1]
         const mouseItem = Game.mouse.item;
 
+        // if it will pass that means that they are from the same type and it will try to stack as possible
+        if (
+            currentItem.amount < currentItem.MaxStack
+            &&
+            currentItem.TYPE == mouseItem.TYPE
+            &&
+            currentItem.displayName == mouseItem.displayName
+            &&
+            currentItem.MaxStack == mouseItem.MaxStack) {
+            const leftSpace = currentItem.MaxStack - currentItem.amount;
 
-        if (currentItem instanceof Item || currentItem instanceof VoidItem) {
+            if (leftSpace >= mouseItem.amount) {
+                currentItem.amount += mouseItem.amount;
+                Game.mouse.item = new VoidItem()
+            } else {
+                currentItem.amount += leftSpace;
+                mouseItem.amount -= leftSpace;
+            }
+        }
+        else {
+            // shuffle between them without thinking!
             Game.player.INV.items[this.index - 1] = mouseItem;
             Game.mouse.item = currentItem;
+        }
+    }
+
+    rightClick() {
+        this.onRightClick()
+
+        const currentItem = Game.player.INV.items[this.index - 1]
+        const mouseItem = Game.mouse.item;
+
+
+        if (currentItem instanceof Item && currentItem.amount > 1 && mouseItem instanceof VoidItem) {
+            const half = Math.round(currentItem.amount / 2)
+            currentItem.amount -= half;
+            const newMouseItem = new Item(Game.vanilla.item[currentItem.TYPE.substring(5)], { amount: half })
+            Game.mouse.item = newMouseItem;
         }
     }
 }
