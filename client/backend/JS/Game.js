@@ -44,6 +44,7 @@ const Game = {
 
         Game.render.hotbar()
         Game.render.inventoryBtn()
+        Game.render.craftBtn()
     },
     update: () => {
         Game.keyboard.update()
@@ -161,6 +162,16 @@ Game.render = {
 
         btn.onLeftClick = Game.render.inventory
         Game.var = btn
+
+        Game.Data.Add(btn)
+    },
+    craftBtn: () => {
+        const btn = new Button({
+            texture: Texture.getImage("craft"),
+            POS: {x: Game.canvas.width / 2 - scale * 2, y: -Game.canvas.height / 2 + scale}
+        })
+
+        btn.onLeftClick = Game.render.inventory
 
         Game.Data.Add(btn)
     },
