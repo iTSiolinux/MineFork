@@ -185,8 +185,6 @@ Game.render = {
             const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
     
             if (existingWindows.length === 0) {
-                // Create a new inventory window only if no other windows are open
-                const newInvDisplay = new Display("INV");
                 const slotProperties = {
                     w: scale / 2,
                     h: scale / 2,
@@ -194,6 +192,13 @@ Game.render = {
                     rows: 3,
                     cols: Game.player.INV.maxSlots / 3,
                 };
+
+                // Create a new inventory window only if no other windows are open
+                const newInvDisplay = new Display("INV", {
+                    w: (slotProperties.w + slotProperties.m) * 9,
+                    h: (slotProperties.h) * 9,
+                });
+
     
                 let s = slotProperties;
                 const halfSize = (s.w + s.m) * -s.cols / 2.5;

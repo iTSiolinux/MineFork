@@ -180,9 +180,14 @@ class Slot extends Button {
 }
 
 class Display {
-    constructor(ID) {
+    constructor(ID, Props) {
         this.children = [];
         this.ID = ID;
+
+        this.POS = Props?.POS || { x: 0, y: 0 };
+        this.w = Props?.w || scale;
+        this.h = Props?.h || scale;
+        this.bgFill = Props?.bgFill || "gray";
     }
 
     addChild(guiObjects) {
@@ -213,8 +218,34 @@ class Display {
     }
 
     render() {
+        this.renderSelf()
         for (const child of this.children) {
             child.render();
         }
+    }
+
+    renderSelf() {
+        DRAW.save();
+        DRAW.translate(this.POS.x, this.POS.y);
+        DRAW.rotate(this.angle * Math.PI / 180);
+        if (this.bgFill instanceof Image) {
+            DRAW.drawImage(
+                this.bgFill,
+                -this.w / 2 + Game.Camera.POS.x,
+                -this.h / 2 + Game.Camera.POS.y,
+                this.w,
+                this.h
+            )
+        } else {
+            DRAW.fillStyle = this.bgFill
+            DRAW.fillRect(
+                -this.w / 2 + Game.Camera.POS.x,
+                -this.h / 2 + Game.Camera.POS.y,
+                this.w,
+                this.h
+            )
+        }
+
+        DRAW.restore();
     }
 }
