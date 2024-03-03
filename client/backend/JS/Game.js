@@ -100,7 +100,7 @@ Game.Data = {
         }
         else if (object instanceof Entity) {
             Game.Data.entitys.push(object)
-        } else if (object instanceof Button || object instanceof Slot || object instanceof Display) {
+        } else if (object instanceof Button || object instanceof Slot || object instanceof Display || object instanceof Text || object instanceof NumberInput) {
             Game.Data.GUI.push(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
@@ -197,6 +197,8 @@ Game.render = {
                 const newInvDisplay = new Display("INV", {
                     w: (slotProperties.w + slotProperties.m) * 9,
                     h: (slotProperties.h) * 9,
+                    title: "Inventory",
+                    hasTitle: true
                 });
 
     

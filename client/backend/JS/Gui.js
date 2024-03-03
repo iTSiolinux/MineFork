@@ -188,6 +188,10 @@ class Display {
         this.w = Props?.w || scale;
         this.h = Props?.h || scale;
         this.bgFill = Props?.bgFill || "gray";
+        if (Props?.hasTitle) {
+            this.title = new Title((Props?.title || "No valid Display title"), { font: "32px sans-serif", POS: { x: 0, y: -scale } })
+            this.addChild(this.title)
+        }
     }
 
     addChild(guiObjects) {
@@ -249,3 +253,80 @@ class Display {
         DRAW.restore();
     }
 }
+
+class Title {
+    constructor(content, Props) {
+        this.content = content || "not defined text!"
+
+        this.font = Props?.font || "10px sans-serif"
+        this.color = Props?.color || "black"
+
+        this.POS = Props?.POS || { x: 0, y: 0 }
+        this.angle = Props?.angle || 0
+    }
+
+    render() {
+        DRAW.save();
+
+        DRAW.font = this.font;
+        DRAW.fillStyle = this.color
+
+        DRAW.translate(this.POS.x, this.POS.y);
+        DRAW.rotate(this.angle * Math.PI / 180);
+        DRAW.fillText(this.content, Game.Camera.POS.x - DRAW.measureText(this.content).width / 2, Game.Camera.POS.y);
+
+
+        DRAW.restore();
+    }
+
+    update() {
+
+    }
+}
+
+class NumberInput {
+    constructor(Props) {
+        this.index = 0;
+
+        this.margin = Props?.margin || scale;
+        this.btnScale = Props?.btnScale || scale;
+        this.padding = Props?.padding || 16;
+
+        this.POS = Props?.POS || { x: 0, y: 0 }
+
+        this.leftBtn = new Button({
+            w: this.btnScale,
+            h: this.btnScale,
+            POS: { x: -(this.padding + this.margin) + this.POS.x, y: this.POS.y },
+            texture: Texture.getImage("left")
+        })
+
+        this.indexBox = null // you should decide i have no idea how to display this
+
+        this.rightBtn = new Button({
+            w: this.btnScale,
+            h: this.btnScale,
+            POS: { x: (this.padding + this.margin) + this.POS.x, y: this.POS.y },
+            texture: Texture.getImage("right")
+        })
+
+        this.rightBtn.onLeftClick = () => {
+            this.index++
+        }
+
+        this.leftBtn.onLeftClick = () => {
+            this.index--
+        }
+    }
+
+    update() {
+
+    }
+
+    render() {
+        this.leftBtn.render()
+        this.rightBtn.render()
+    }
+}
+
+

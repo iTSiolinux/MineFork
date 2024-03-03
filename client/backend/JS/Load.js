@@ -117,6 +117,8 @@ Texture.loadImage("/IMG/selectedSlot.png", "slotFocused")
 Texture.loadImage("/IMG/_cursor.png", "cursor")
 Texture.loadImage("/IMG/heart.png", "heart")
 Texture.loadImage("/IMG/heart2.png", "heart2")
+Texture.loadImage("/IMG/left.png", "left")
+Texture.loadImage("/IMG/right.png", "right")
 
 // Entitys assets
 Texture.loadImage("/IMG/player.png", "player")
