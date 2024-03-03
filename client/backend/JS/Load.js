@@ -119,6 +119,7 @@ Texture.loadImage("/IMG/heart.png", "heart")
 Texture.loadImage("/IMG/heart2.png", "heart2")
 Texture.loadImage("/IMG/left.png", "left")
 Texture.loadImage("/IMG/right.png", "right")
+Texture.loadImage("/IMG/craftCard.png", "craftCard")
 
 // Entitys assets
 Texture.loadImage("/IMG/player.png", "player")

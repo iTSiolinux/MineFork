@@ -1,36 +1,26 @@
 class Button {
-    constructor(values) {
-        this.texture = values?.texture || Texture.getImage("null");
-        this.w = values?.w || scale;
-        this.h = values?.h || scale;
-        this.angle = values?.angle || 0;
+    constructor(Props) {
+        this.texture = Props?.texture || Texture.getImage("null");
+        this.w = Props?.w || scale;
+        this.h = Props?.h || scale;
+        this.angle = Props?.angle || 0;
 
-        this.POS = values?.POS || { x: 0, y: 0 }
-        this.ID = values?.ID || null;
+        this.POS = Props?.POS || { x: 0, y: 0 };
+        this.ID = Props?.ID || null;
 
-        this.isPressed = false
+        this.isPressed = false;
     }
 
     // Events
+    onSpawn() { }
 
-    onSpawn() {
+    onRightClick() { }
 
-    }
+    onLeftClick() { }
 
-    onRightClick() {
-
-    }
-
-    onLeftClick() {
-
-    }
-
-    onHover() {
-
-    }
+    onHover() { }
 
     // Functions
-
     hover() {
         this.onHover();
 
@@ -49,19 +39,25 @@ class Button {
         }
     }
 
-
     leftClick() {
-        this.onLeftClick()
+        this.onLeftClick();
     }
 
     rightClick() {
-        this.onRightClick()
+        this.onRightClick();
     }
 
     update() {
-        const fixedThis = { POS: { x: this.POS.x + Game.Camera.POS.x, y: this.POS.y + Game.Camera.POS.y }, w: this.w, h: this.h }
+        const fixedThis = {
+            POS: {
+                x: this.POS.x + Game.Camera.POS.x,
+                y: this.POS.y + Game.Camera.POS.y,
+            },
+            w: this.w,
+            h: this.h,
+        };
         if (Game.mouse.isOver(fixedThis)) {
-            this.hover()
+            this.hover();
         }
     }
 
@@ -189,7 +185,7 @@ class Display {
         this.h = Props?.h || scale;
         this.bgFill = Props?.bgFill || "gray";
         if (Props?.hasTitle) {
-            this.title = new Title((Props?.title || "No valid Display title"), { font: "32px sans-serif", POS: { x: 0, y: -scale } })
+            this.title = new Title((Props?.title || "No valid Display title"), { font: "32px sans-serif", POS: { x: 0, y: -this.h / 2 + scale / 2 } })
             this.addChild(this.title)
         }
     }
@@ -301,7 +297,12 @@ class NumberInput {
             texture: Texture.getImage("left")
         })
 
-        this.indexBox = null // you should decide i have no idea how to display this
+        this.indexBox = new Title({
+            content: this.index,
+            font: "20px Arial",
+            color: "black",
+            POS: { x: this.POS.x, y: this.POS.y },
+        });
 
         this.rightBtn = new Button({
             w: this.btnScale,
@@ -320,13 +321,179 @@ class NumberInput {
     }
 
     update() {
+        this.leftBtn.update()
+        this.rightBtn.update()
 
+        this.indexBox.content = this.index
     }
 
     render() {
+        this.indexBox.render()
+
         this.leftBtn.render()
         this.rightBtn.render()
     }
 }
 
+
+class CraftCard extends Display {
+    constructor(recipe, ID, Props) {
+        super(ID, Props);
+
+        this.recipe = recipe;
+        this.ID = ID;
+        this.POS = Props?.POS || { x: 0, y: 0 };
+        this.w = Props?.w || scale;
+        this.h = Props?.h || scale;
+        this.bgFill = Props?.bgFill || "gray";
+
+        this.isPressed = false;
+    }
+
+    renderIngredients() {
+        for (const itemUnit in this.recipe.ingredients) {
+            if (this.recipe.ingredients[itemUnit].item?.texture instanceof Image && itemUnit == 0) {
+                DRAW.save()
+
+                DRAW.translate(this.POS.x + Game.Camera.POS.x, this.POS.y + Game.Camera.POS.y);
+
+                DRAW.drawImage(
+                    this.recipe.ingredients[itemUnit].item?.texture,
+                    -this.w / 2,
+                    -this.h / 4,
+                    scale,
+                    scale
+                );
+
+                // drawing Item amount
+                DRAW.fillStyle = "blue";
+                DRAW.font = '20px Arial';
+                DRAW.fillText(
+                    this.recipe.ingredients[itemUnit].amount,
+                    - (DRAW.measureText(this.recipe.ingredients[itemUnit].amount).width / 2) - this.w / 2.5,
+                    - this.h / 4
+                )
+
+                DRAW.restore()
+            } else if (this.recipe.ingredients[itemUnit].item?.texture instanceof Image && itemUnit == 1) {
+                DRAW.save()
+
+                DRAW.translate(this.POS.x + Game.Camera.POS.x, this.POS.y + Game.Camera.POS.y);
+
+                DRAW.drawImage(
+                    this.recipe.ingredients[itemUnit].item?.texture,
+                    -this.w / 8,
+                    -this.h / 4,
+                    scale,
+                    scale
+                );
+
+                // drawing Item amount
+                DRAW.fillStyle = "blue";
+                DRAW.font = '20px Arial';
+                DRAW.fillText(
+                    this.recipe.ingredients[itemUnit].amount,
+                    - (DRAW.measureText(this.recipe.ingredients[itemUnit].amount).width / 2),
+                    - this.h / 4
+                )
+
+                DRAW.restore()
+            }
+        }
+    }
+
+    renderResult() {
+        const result = this.recipe.result;
+
+        DRAW.save()
+
+        DRAW.translate(this.POS.x + Game.Camera.POS.x, this.POS.y + Game.Camera.POS.y);
+
+        DRAW.drawImage(
+            result.item?.texture,
+            this.w / 4,
+            -this.h / 4,
+            scale,
+            scale
+        );
+
+        // drawing Item amount
+        DRAW.fillStyle = "blue";
+        DRAW.font = '20px Arial';
+        DRAW.fillText(
+            result.amount,
+            - (DRAW.measureText(result.amount).width / 2) + this.w / 2.5,
+            - this.h / 4
+        )
+
+        DRAW.restore()
+    }
+
+    handleClick() {
+        // Check if the player has enough resources to craft the item
+        const canCraft = this.recipe.ingredients.every(({ item, amount }) => {
+            const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
+            return inventoryItem && inventoryItem.amount >= amount;
+        });
+
+        if (canCraft) {
+            // Craft the item and remove ingredients from the inventory
+            this.recipe.ingredients.forEach(({ item, amount }) => {
+                const inventoryItemIndex = Game.player.INV.items.findIndex(invItem => invItem.TYPE === item.TYPE);
+
+                if (inventoryItemIndex !== -1) {
+                    Game.player.INV.items[inventoryItemIndex].amount -= amount;
+                    if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
+                        // Remove the item from the inventory if its amount is zero or negative
+                        Game.player.INV.items.splice(inventoryItemIndex, 1);
+                    }
+                }
+            });
+
+            // Add the crafted item to the player's inventory
+            const craftedItem = new Item(this.recipe.result.item);
+            craftedItem.amount = this.recipe.result.amount;
+            Game.player.INV.addItem(craftedItem);
+
+            // Call the custom onClick handler if provided
+            this.onClick();
+        }
+    }
+
+    onClick() {
+
+    }
+
+    onHover() {
+        if (Game.mouse.data.isDownLeft) {
+            this.handleClick();
+        }
+    }
+
+    update() {
+        const fixedThis = { POS: { x: this.POS.x + Game.Camera.POS.x, y: this.POS.y + Game.Camera.POS.y }, w: this.w, h: this.h }
+        if (Game.mouse.isOver(fixedThis)) {
+            this.onHover();
+
+            if (Game.mouse.data.isDownLeft && !this.isPressed) {
+                this.handleClick();
+                this.isPressed = true;
+            }
+
+            if (!Game.mouse.data.isDownLeft) {
+                this.isPressed = false;
+            }
+        }
+    }
+
+    render() {
+        this.renderSelf();
+        this.renderIngredients();
+        this.renderResult();
+
+        for (const child of this.children) {
+            child.render();
+        }
+    }
+}
 

@@ -26,7 +26,7 @@ const Game = {
         Game.renderInterval = setInterval(Game.render.update, FPS)
 
         // Player 
-        const p = new Player({HP: 100, POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
+        const p = new Player({ HP: 100, POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
         Game.player = p;
 
         // Attaching player to the camera as target
@@ -36,7 +36,7 @@ const Game = {
         const b = new Block(Game.vanilla.block.oak, { POS: { x: 0, y: 0 } })
 
         // Test chicken
-        const c = new Entity(Game.vanilla.entity.chicken, {POS: {x: 128, y: 0}})
+        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 } })
 
         Game.Data.Add(c)
         Game.Data.Add(p)
@@ -128,15 +128,15 @@ Game.Data = {
             console.error("The added object not valid instance. \n" + object.constructor.name)
         }
     }
-    
+
 
 }
 
 // Game render system
 Game.render = {
     // awake functions
-    hotbar : () => {
-        const slotProperties = 
+    hotbar: () => {
+        const slotProperties =
         {
             w: scale / 2, // width
             h: scale / 2, // height
@@ -147,8 +147,8 @@ Game.render = {
         const halfSize = (s.w + s.m) * -4;
 
 
-        for (i = Game.player.INV.hotbarSlots; i > 0; i--){
-            const values = {index: i, POS: {x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h * 1.5)}, w: s.w, h: s.h, ID: i}
+        for (i = Game.player.INV.hotbarSlots; i > 0; i--) {
+            const values = { index: i, POS: { x: halfSize + i * (s.w + s.m), y: (Game.canvas.height / 2 - s.h * 1.5) }, w: s.w, h: s.h, ID: i }
             const newSlot = new Slot(values)
 
             Game.Data.Add(newSlot)
@@ -157,7 +157,7 @@ Game.render = {
     inventoryBtn: () => {
         const btn = new Button({
             texture: Texture.getImage("inv"),
-            POS: {x: Game.canvas.width / 2 - scale, y: -Game.canvas.height / 2 + scale}
+            POS: { x: Game.canvas.width / 2 - scale, y: -Game.canvas.height / 2 + scale }
         })
 
         btn.onLeftClick = Game.render.inventory
@@ -168,7 +168,7 @@ Game.render = {
     craftBtn: () => {
         const btn = new Button({
             texture: Texture.getImage("craft"),
-            POS: {x: Game.canvas.width / 2 - scale * 2, y: -Game.canvas.height / 2 + scale}
+            POS: { x: Game.canvas.width / 2 - scale * 2, y: -Game.canvas.height / 2 + scale }
         })
 
         btn.onLeftClick = Game.render.craft
@@ -177,13 +177,13 @@ Game.render = {
     },
     inventory: () => {
         const invDisplay = Game.Data.GUI.find(gui => gui.ID === "INV");
-    
+
         if (invDisplay instanceof Display) {
             // Close the existing inventory window
             Game.Data.Remove(invDisplay);
         } else {
             const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
-    
+
             if (existingWindows.length === 0) {
                 const slotProperties = {
                     w: scale / 2,
@@ -201,10 +201,10 @@ Game.render = {
                     hasTitle: true
                 });
 
-    
+
                 let s = slotProperties;
                 const halfSize = (s.w + s.m) * -s.cols / 2.5;
-    
+
                 for (let row = 1; row < s.rows; row++) {
                     for (let col = 0; col < s.cols; col++) {
                         const index = row * s.cols + col;
@@ -219,11 +219,11 @@ Game.render = {
                             ID: index + 1,
                         };
                         const newSlot = new Slot(values);
-    
+
                         newInvDisplay.addChild(newSlot);
                     }
                 }
-    
+
                 Game.Data.Add(newInvDisplay);
             }
         }
@@ -238,53 +238,43 @@ Game.render = {
             const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
     
             if (existingWindows.length === 0) {
+                const cProps = {
+                    window: {
+                        w: Game.canvas.width / 2,
+                        h: Game.canvas.height / 2 + scale * 2
+                    },
+                    card: {
+                        w: scale,
+                        h: scale / 2
+                    }
+                };
                 // Create a new crafting window only if no other windows are open
-                const newCraftDisplay = new Display("CRAFT");
-    
+                const newCraftDisplay = new Display("CRAFT", {
+                    w: cProps.window.w,
+                    h: cProps.window.h,
+                    title: "Crafting",
+                    hasTitle: true
+                });
                 let offsetY = 0; // Offset for the vertical position of buttons
     
-                // Iterate through crafting recipes and sections
-                for (const sectionName in Game.vanilla.recipes) {
-                    const section = Game.vanilla.recipes[sectionName];
+                // Loop through available recipes and add CraftCard for each if craftable
+                for (const recipeName in Game.vanilla.recipes) {
+                    const recipeObject = Game.vanilla.recipes[recipeName];
     
-                    for (const itemName in section) {
-                        const recipe = section[itemName];
+                    const isCraftable = recipeObject.ingredients.every(({ item, amount }) => {
+                        const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
+                        return inventoryItem && inventoryItem.amount >= amount;
+                    });
     
-                        // Check if the recipe is craftable based on player's inventory
-                        const isCraftable = recipe.every(({ item, amount }) => {
-                            const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
-                            return inventoryItem && inventoryItem.amount >= amount;
+                    if (isCraftable) {
+                        const craftedCraft = new CraftCard(recipeObject, recipeName, {
+                            POS: { x: 0, y: offsetY },
+                            w: scale * 4,
+                            h: scale * 2,
+                            bgFill: "red"
                         });
-    
-                        if (isCraftable) {
-                            // Create a button for the craftable item
-                            const craftButton = new Button({
-                                texture: Texture.getImage(itemName),
-                                POS: { x: 0, y: offsetY },
-                            });
-    
-                            craftButton.onLeftClick = () => {
-                                // Craft the item and remove ingredients from the inventory
-                                recipe.forEach(({ item, amount }) => {
-                                    const inventoryItemIndex = Game.player.INV.items.findIndex(invItem => invItem.TYPE === item.TYPE);
-    
-                                    if (inventoryItemIndex !== -1) {
-                                        Game.player.INV.items[inventoryItemIndex].amount -= amount;
-                                        if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
-                                            // Remove the item from the inventory if its amount is zero or negative
-                                            Game.player.INV.items.splice(inventoryItemIndex, 1);
-                                        }
-                                    }
-                                });
-    
-                                // Add the crafted item to the player's inventory
-                                const craftedItem = new Item(Game.vanilla.item[itemName]);
-                                Game.player.INV.addItem(craftedItem);
-                            };
-    
-                            newCraftDisplay.addChild(craftButton);
-                            offsetY += 50; // Adjust the vertical offset as needed
-                        }
+                        newCraftDisplay.addChild(craftedCraft);
+                        offsetY += scale * 2; // Adjust the vertical offset as needed
                     }
                 }
     
@@ -304,7 +294,7 @@ Game.render = {
 
         Game.render.mouse()
     },
-    refreshCanvas: () => { 
+    refreshCanvas: () => {
         DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height);
     },
     items: () => {
@@ -333,22 +323,22 @@ Game.render = {
         const margin = heartSize + 4;
         const startX = Game.Camera.POS.x - (margin + heartSize) * 2.25;
         const staticY = Game.Camera.POS.y + (Game.canvas.height / 2 - scale / 2);
-        
+
         for (let i = 0; i < Math.floor(player.HP / 10); i++) {
             DRAW.drawImage(Texture.getImage("heart"), startX + i * margin, staticY, heartSize, heartSize);
         }
-        
+
         if (player.HP % 10 > 0) {
             DRAW.drawImage(Texture.getImage("heart2"), startX + Math.floor(player.HP / 10) * margin, staticY, heartSize, heartSize);
-        }        
-    },    
+        }
+    },
     mouse: () => {
         DRAW.save()
         // move to mouse position
         DRAW.translate(Game.mouse.data.position.canvas.x, Game.mouse.data.position.canvas.y)
         // draw the item if exsits
         const mouseItem = Game.mouse.item;
-        if (mouseItem instanceof Item){
+        if (mouseItem instanceof Item) {
             DRAW.drawImage(
                 mouseItem.texture,
                 -mouseItem.w / 2,
@@ -566,54 +556,56 @@ Game.vanilla.item = {
         placedBlock: "oakPlank"
     },
 },
-Game.vanilla.entity = {
-    chicken: {
-        HP: 10,
-        texture: Texture.getImage("chicken"),
-        TYPE: "Game:chicken",
-        stateList: ["WALK", "IDLE", "IDLE"],
-        dropList: [
-            {item: Game.vanilla.item.feather, min: 1, max: 3},
-            {item: Game.vanilla.item.rawChicken, min: 1, max: 2}
-        ]
+    Game.vanilla.entity = {
+        chicken: {
+            HP: 10,
+            texture: Texture.getImage("chicken"),
+            TYPE: "Game:chicken",
+            stateList: ["WALK", "IDLE", "IDLE"],
+            dropList: [
+                { item: Game.vanilla.item.feather, min: 1, max: 3 },
+                { item: Game.vanilla.item.rawChicken, min: 1, max: 2 }
+            ]
+        }
+    },
+    Game.vanilla.block = {
+        oak: {
+            TYPE: "Game:oak",
+            texture: Texture.getImage("oak"),
+            HP: 16,
+            w: 128,
+            h: 128,
+            DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
+            DPD: 0.5
+        },
+        oakPlant: {
+            TYPE: "Game:oakPlant",
+            texture: Texture.getImage("oakSeed"),
+            HP: 2,
+            w: 128,
+            h: 128,
+            DROPS: [Game.vanilla.item.oakSeed],
+            DPD: 0.5,
+            growTime: 5000,
+            growBlock: "oak"
+        },
+        oakPlank: {
+            TYPE: "Game:oakPlank",
+            texture: Texture.getImage("oakPlank"),
+            HP: 2,
+            w: 128,
+            h: 128,
+            DROPS: [Game.vanilla.item.oakPlank],
+        }
     }
-},
-Game.vanilla.block = {
-    oak: {
-        TYPE: "Game:oak",
-        texture: Texture.getImage("oak"),
-        HP: 16,
-        w: 128,
-        h: 128,
-        DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
-        DPD: 0.5
-    },
-    oakPlant: {
-        TYPE: "Game:oakPlant",
-        texture: Texture.getImage("oakSeed"),
-        HP: 2,
-        w: 128,
-        h: 128,
-        DROPS: [Game.vanilla.item.oakSeed],
-        DPD: 0.5,
-        growTime: 5000,
-        growBlock: "oak"
-    },
-    oakPlank: {
-        TYPE: "Game:oakPlank",
-        texture: Texture.getImage("oakPlank"),
-        HP: 2,
-        w: 128,
-        h: 128,
-        DROPS: [Game.vanilla.item.oakPlank],
+Game.vanilla.recipes = {
+    oakPlank:
+    {
+        ingredients: [
+            { item: Game.vanilla.item.oakDrop, amount: 4 }
+        ],
+        result: { item: Game.vanilla.item.oakPlank, amount: 16 }
     }
 }
-Game.vanilla.recipes = {
-    nature_blocks: {
-        oakPlank: [
-            { item: Game.vanilla.item.oakDrop, amount: 4 },
-        ]
-    }
-};
 
 setTimeout(Game.awake, 1000)
