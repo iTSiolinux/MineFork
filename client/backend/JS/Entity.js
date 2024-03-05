@@ -248,6 +248,17 @@ class Player extends Entity {
         this.isInteracting = false;
         this.base = values?.base || {dmg: 2};
 
+        this.itemTitle = new Title({
+            content: "",
+            POS: {x: 0, y: Game.canvas.height / 2 - 80},
+            font: "32px sans"
+        })
+
+        Game.Data.Add(this.itemTitle)
+    }
+
+    reloadItemTitle () {
+        this.itemTitle.content = this.INV.items[this.INV.handIndex].displayName === undefined ? "" : this.INV.items[this.INV.handIndex].displayName
     }
 
     update () {
@@ -282,12 +293,14 @@ class Player extends Entity {
                 isAdded  ?  Game.Data.Remove(item) : null;
             }
         });
+        this.reloadItemTitle()
     }
 
     switchSlot (number) {
         if (10 > number > 0){
             this.INV.handIndex = number
         }
+        this.reloadItemTitle()
     }
 
     throw(type = "handIndex") {

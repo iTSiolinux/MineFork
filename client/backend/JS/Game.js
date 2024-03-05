@@ -100,7 +100,8 @@ Game.Data = {
         }
         else if (object instanceof Entity) {
             Game.Data.entitys.push(object)
-        } else if (object instanceof Button || object instanceof Slot || object instanceof Display || object instanceof Text || object instanceof NumberInput) {
+        }
+        else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
             Game.Data.GUI.push(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
@@ -122,7 +123,7 @@ Game.Data = {
                 console.warn("Object not found in Game.Data.entitys");
             }
         }
-        else if (object instanceof Button || object instanceof Slot || object instanceof Display) {
+        else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
             Game.Data.GUI.remove(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
@@ -230,13 +231,13 @@ Game.render = {
     },
     craft: () => {
         const craftDisplay = Game.Data.GUI.find(gui => gui.ID === "CRAFT");
-    
+
         if (craftDisplay instanceof Display) {
             // Close the existing crafting window
             Game.Data.Remove(craftDisplay);
         } else {
             const existingWindows = Game.Data.GUI.filter(gui => gui instanceof Display);
-    
+
             if (existingWindows.length === 0) {
                 const cProps = {
                     window: {
@@ -244,8 +245,9 @@ Game.render = {
                         h: Game.canvas.height / 2 + scale * 2
                     },
                     card: {
-                        w: scale,
-                        h: scale / 2
+                        w: scale * 4,
+                        h: scale * 2,
+                        amount: 2
                     }
                 };
                 // Create a new crafting window only if no other windows are open
@@ -255,33 +257,79 @@ Game.render = {
                     title: "Crafting",
                     hasTitle: true
                 });
-                let offsetY = 0; // Offset for the vertical position of buttons
-    
+
+                newCraftDisplay.onUpdate = () => {
+                    if (newCraftDisplay.indexToggle instanceof NumberInput) {
+                        newCraftDisplay.indexToggle.update()
+                    }
+                }
+
+                newCraftDisplay.onRender = () => {
+                    if (newCraftDisplay.indexToggle instanceof NumberInput) {
+                        newCraftDisplay.indexToggle.render()
+                    }
+                }
+
                 // Loop through available recipes and add CraftCard for each if craftable
                 for (const recipeName in Game.vanilla.recipes) {
                     const recipeObject = Game.vanilla.recipes[recipeName];
-    
+
                     const isCraftable = recipeObject.ingredients.every(({ item, amount }) => {
                         const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
                         return inventoryItem && inventoryItem.amount >= amount;
                     });
-    
+
                     if (isCraftable) {
-                        const craftedCraft = new CraftCard(recipeObject, recipeName, {
-                            POS: { x: 0, y: offsetY },
-                            w: scale * 4,
-                            h: scale * 2,
-                            bgFill: "red"
-                        });
-                        newCraftDisplay.addChild(craftedCraft);
-                        offsetY += scale * 2; // Adjust the vertical offset as needed
+                        if (newCraftDisplay.hasRecipes !== true) {
+                            newCraftDisplay.hasRecipes = true
+                            newCraftDisplay.recipesList = []
+                        }
+
+                        newCraftDisplay.recipesList.push([recipeObject, recipeName])
                     }
                 }
-    
+
+                let offsetY = -cProps.window.h / 2 + cProps.card.h; // Offset for the vertical position of buttons
+
+                if (newCraftDisplay.hasRecipes) {
+                    let index = 0;
+                    for (i in newCraftDisplay.recipesList) {
+                        const AnObject = newCraftDisplay.recipesList[i]
+                        if (i != "remove") { // i have anarray method called "remove" and it makes an error ): <== sad face
+                            index++;
+                            if (index >= cProps.card.amount + 1)
+                                break;
+
+                            const craftedCraft = new CraftCard(AnObject[0], AnObject[1], {
+                                POS: { x: 0, y: offsetY },
+                                w: cProps.card.w,
+                                h: cProps.card.h,
+                                bgFill: "green"
+                            });
+                            newCraftDisplay.addChild(craftedCraft);
+
+                            offsetY += craftedCraft.h + craftedCraft.h / 2;
+                        }
+                    }
+
+                    if (newCraftDisplay.recipesList.length > cProps.card.amount) {
+                        newCraftDisplay.indexToggle = new NumberInput({
+                            margin: 64,
+                            numberSize: 128,
+                            numberFont: "sans",
+                            POS: { y: offsetY, x: 0 }
+                        });
+
+                        newCraftDisplay.indexToggle.onChange = () => {
+                            // TODO: left to make it update the items that would apper!
+                        }
+                    }
+                }
+
                 Game.Data.Add(newCraftDisplay);
             }
         }
-    },    
+    },
     // loop functions
     update() {
         Game.render.refreshCanvas()
@@ -522,7 +570,8 @@ Game.vanilla.item = {
         texture: Texture.getImage("oakDrop"),
         TYPE: "Game:oakDrop",
         size: 64,
-        amount: 1
+        amount: 1,
+        displayName: "Oak drop"
     },
     oakSeed: {
         texture: Texture.getImage("oakSeed"),
@@ -530,13 +579,15 @@ Game.vanilla.item = {
         size: 64,
         amount: 1,
         isBlockPlacer: true,
-        placedBlock: "oakPlant"
+        placedBlock: "oakPlant",
+        displayName: "Oak plant"
     },
     feather: {
         texture: Texture.getImage("feather"),
         TYPE: "Game:feather",
         size: 64,
         amount: 1,
+        displayName: "Feather"
     },
     rawChicken: {
         texture: Texture.getImage("rawChicken"),
@@ -545,7 +596,8 @@ Game.vanilla.item = {
         amount: 1,
         isConsumeAble: true,
         hungerPoints: 1,
-        consumeTime: 1500
+        consumeTime: 1500,
+        displayName: "Raw chicken"
     },
     oakPlank: {
         texture: Texture.getImage("oakPlank"),
@@ -553,7 +605,8 @@ Game.vanilla.item = {
         size: 64,
         amount: 16,
         isBlockPlacer: true,
-        placedBlock: "oakPlank"
+        placedBlock: "oakPlank",
+        displayName: "Oak plank"
     },
 },
     Game.vanilla.entity = {
@@ -605,6 +658,20 @@ Game.vanilla.recipes = {
             { item: Game.vanilla.item.oakDrop, amount: 4 }
         ],
         result: { item: Game.vanilla.item.oakPlank, amount: 16 }
+    },
+    oakDrop:
+    {
+        ingredients: [
+            { item: Game.vanilla.item.oakDrop, amount: 2 }
+        ],
+        result: { item: Game.vanilla.item.oakDrop, amount: 4 }
+    },
+    oakSeed:
+    {
+        ingredients: [
+            { item: Game.vanilla.item.oakDrop, amount: 0.1 }
+        ],
+        result: { item: Game.vanilla.item.oakSeed, amount: 1 }
     }
 }
 

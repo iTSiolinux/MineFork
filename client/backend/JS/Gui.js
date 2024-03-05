@@ -85,7 +85,6 @@ class Button {
     }
 }
 
-
 class Slot extends Button {
     constructor(values) {
         super(values)
@@ -185,7 +184,7 @@ class Display {
         this.h = Props?.h || scale;
         this.bgFill = Props?.bgFill || "gray";
         if (Props?.hasTitle) {
-            this.title = new Title((Props?.title || "No valid Display title"), { font: "32px sans-serif", POS: { x: 0, y: -this.h / 2 + scale / 2 } })
+            this.title = new Title({ font: "32px sans-serif", POS: { x: 0, y: -this.h / 2 + scale / 2 }, content: (Props?.title || "No valid Display title") })
             this.addChild(this.title)
         }
     }
@@ -215,6 +214,11 @@ class Display {
         for (const child of this.children) {
             child.update();
         }
+        this.onUpdate()
+    }
+
+    onUpdate () {
+
     }
 
     render() {
@@ -222,6 +226,11 @@ class Display {
         for (const child of this.children) {
             child.render();
         }
+        this.onRender()
+    }
+
+    onRender () {
+
     }
 
     renderSelf() {
@@ -251,8 +260,8 @@ class Display {
 }
 
 class Title {
-    constructor(content, Props) {
-        this.content = content || "not defined text!"
+    constructor(Props) {
+        this.content = Props?.content || "not defined text!"
 
         this.font = Props?.font || "10px sans-serif"
         this.color = Props?.color || "black"
@@ -269,8 +278,7 @@ class Title {
 
         DRAW.translate(this.POS.x, this.POS.y);
         DRAW.rotate(this.angle * Math.PI / 180);
-        DRAW.fillText(this.content, Game.Camera.POS.x - DRAW.measureText(this.content).width / 2, Game.Camera.POS.y);
-
+        DRAW.fillText(this.content, Game.Camera.POS.x - DRAW.measureText(this.content).width / 2, Game.Camera.POS.y + parseInt(this.font.match(/\d+/)[0]) / 4) ;
 
         DRAW.restore();
     }
@@ -287,37 +295,12 @@ class NumberInput {
         this.margin = Props?.margin || scale;
         this.btnScale = Props?.btnScale || scale;
         this.padding = Props?.padding || 16;
+        this.numberSize = Props?.numberSize || 20;
+        this.numberFont = Props?.numberFont || "Arial";
 
         this.POS = Props?.POS || { x: 0, y: 0 }
 
-        this.leftBtn = new Button({
-            w: this.btnScale,
-            h: this.btnScale,
-            POS: { x: -(this.padding + this.margin) + this.POS.x, y: this.POS.y },
-            texture: Texture.getImage("left")
-        })
-
-        this.indexBox = new Title({
-            content: this.index,
-            font: "20px Arial",
-            color: "black",
-            POS: { x: this.POS.x, y: this.POS.y },
-        });
-
-        this.rightBtn = new Button({
-            w: this.btnScale,
-            h: this.btnScale,
-            POS: { x: (this.padding + this.margin) + this.POS.x, y: this.POS.y },
-            texture: Texture.getImage("right")
-        })
-
-        this.rightBtn.onLeftClick = () => {
-            this.index++
-        }
-
-        this.leftBtn.onLeftClick = () => {
-            this.index--
-        }
+        this.refresh()
     }
 
     update() {
@@ -333,8 +316,44 @@ class NumberInput {
         this.leftBtn.render()
         this.rightBtn.render()
     }
-}
 
+    refresh () {
+        this.leftBtn = new Button({
+            w: this.btnScale,
+            h: this.btnScale,
+            POS: { x: -(this.padding + this.margin) + this.POS.x, y: this.POS.y },
+            texture: Texture.getImage("left")
+        })
+
+        this.indexBox = new Title({
+            content: this.index,
+            font: `${this.numberSize}px ${this.numberFont}`,
+            color: "black",
+            POS: { x: this.POS.x, y: this.POS.y },
+        });
+
+        this.rightBtn = new Button({
+            w: this.btnScale,
+            h: this.btnScale,
+            POS: { x: (this.padding + this.margin) + this.POS.x, y: this.POS.y },
+            texture: Texture.getImage("right")
+        })
+
+        this.rightBtn.onLeftClick = () => {
+            this.index++
+            this.onChange()
+        }
+
+        this.leftBtn.onLeftClick = () => {
+            this.index--
+            this.onChange()
+        }
+    }
+
+    onChange() {
+
+    }
+}
 
 class CraftCard extends Display {
     constructor(recipe, ID, Props) {
@@ -465,7 +484,7 @@ class CraftCard extends Display {
     }
 
     onHover() {
-        if (Game.mouse.data.isDownLeft) {
+        if (Game.mouse.data.isDownLeft && !this.isPressed) {
             this.handleClick();
         }
     }
