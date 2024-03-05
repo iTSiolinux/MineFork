@@ -117,25 +117,24 @@ class Block {
         base: () => {
             // Save original drawing context
             DRAW.save();
-
+        
             // Translate to the center of the object
             DRAW.translate(this.POS.x, this.POS.y);
-
+        
             // Rotate around the center
             DRAW.rotate(DTR(this.angle));
-
-
+        
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
                 this.texture,
-                -this.w / 2,
-                -this.h / 2,
-                this.w,
-                this.h
+                -this.w / 2 * scale,  
+                -this.h / 2 * scale, 
+                this.w * scale,      
+                this.h * scale   
             );
-
+        
             // Restore the original drawing context
             DRAW.restore();
-        },
+        }        
     }
 }

@@ -89,7 +89,7 @@ class Slot extends Button {
     constructor(values) {
         super(values)
 
-        this.index = values?.index || -1;
+        this.index = values?.index - 1 || -1;
     }
 
     render() {
@@ -99,14 +99,14 @@ class Slot extends Button {
         DRAW.translate(this.POS.x, this.POS.y);
         DRAW.rotate(this.angle * Math.PI / 180);
         DRAW.drawImage(
-            this.index - 1 == Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
+            this.index == Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
             -this.w / 2 + Game.Camera.POS.x,
             -this.h / 2 + Game.Camera.POS.y,
             this.w,
             this.h
         );
 
-        const targetItem = Game.player.INV.items[this.index - 1]
+        const targetItem = Game.player.INV.items[this.index]
         if (targetItem instanceof Item) {
 
             DRAW.drawImage(
@@ -129,7 +129,7 @@ class Slot extends Button {
     leftClick() {
         this.onLeftClick()
 
-        const currentItem = Game.player.INV.items[this.index - 1]
+        const currentItem = Game.player.INV.items[this.index]
         const mouseItem = Game.mouse.item;
 
         // if it will pass that means that they are from the same type and it will try to stack as possible
@@ -153,7 +153,7 @@ class Slot extends Button {
         }
         else {
             // shuffle between them without thinking!
-            Game.player.INV.items[this.index - 1] = mouseItem;
+            Game.player.INV.items[this.index] = mouseItem;
             Game.mouse.item = currentItem;
         }
     }
@@ -161,7 +161,7 @@ class Slot extends Button {
     rightClick() {
         this.onRightClick()
 
-        const currentItem = Game.player.INV.items[this.index - 1]
+        const currentItem = Game.player.INV.items[this.index]
         const mouseItem = Game.mouse.item;
 
 

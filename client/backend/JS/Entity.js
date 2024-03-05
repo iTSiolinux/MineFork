@@ -242,7 +242,7 @@ class Player extends Entity {
         super(values)
 
         // starting by adding hands
-        this.hands = [{ x: -32, y: 16, w: this.w / 2, h: this.h / 4 }, { x: -32, y: -32, w: this.w / 2, h: this.h / 4 }]
+        this.hands = [{ x: -scale / 2, y: scale / 4, w: this.w / 2, h: this.h / 4 }, { x: -scale / 2, y: -scale / 2, w: this.w / 2, h: this.h / 4 }]
         this.lastHit = 1;
         this.isMining = false;
         this.isInteracting = false;

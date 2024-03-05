@@ -1,5 +1,5 @@
 // some utillty needed functions
-const scale = 64,
+const scale =  64,
     // code that generating ID to get diffrences each object
     genUUID = () => {
         return "0000-0000-0000-0000".replace(/[018]/g, c =>

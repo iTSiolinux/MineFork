@@ -11,3 +11,19 @@ canvas {
     cursor: none;
     border: 2px solid black;
 }
+
+kbd.key {
+    background-color: rgb(227, 230, 232);
+    border: 1px solid rgb(186, 191, 197);
+    border-radius: 4px;
+    box-shadow: rgba(12, 13, 14, 0.15) 0px 1px 1px 0px, rgb(255, 255, 255) 0px 1px 0px 0px inset;
+    color: rgb(12, 13, 14);
+    display: inline-block;
+    font: 400 11px -apple-system, "system-ui", "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+    line-height: 16.5px;
+    margin: 0;
+    overflow-wrap: break-word;
+    padding: 1.1px 6.6px;
+    white-space: nowrap;
+    user-select: none;
+}

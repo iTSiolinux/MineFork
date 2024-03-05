@@ -608,49 +608,52 @@ Game.vanilla.item = {
         placedBlock: "oakPlank",
         displayName: "Oak plank"
     },
-},
-    Game.vanilla.entity = {
-        chicken: {
-            HP: 10,
-            texture: Texture.getImage("chicken"),
-            TYPE: "Game:chicken",
-            stateList: ["WALK", "IDLE", "IDLE"],
-            dropList: [
-                { item: Game.vanilla.item.feather, min: 1, max: 3 },
-                { item: Game.vanilla.item.rawChicken, min: 1, max: 2 }
-            ]
-        }
-    },
-    Game.vanilla.block = {
-        oak: {
-            TYPE: "Game:oak",
-            texture: Texture.getImage("oak"),
-            HP: 16,
-            w: 128,
-            h: 128,
-            DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
-            DPD: 0.5
-        },
-        oakPlant: {
-            TYPE: "Game:oakPlant",
-            texture: Texture.getImage("oakSeed"),
-            HP: 2,
-            w: 128,
-            h: 128,
-            DROPS: [Game.vanilla.item.oakSeed],
-            DPD: 0.5,
-            growTime: 5000,
-            growBlock: "oak"
-        },
-        oakPlank: {
-            TYPE: "Game:oakPlank",
-            texture: Texture.getImage("oakPlank"),
-            HP: 2,
-            w: 128,
-            h: 128,
-            DROPS: [Game.vanilla.item.oakPlank],
-        }
+}
+
+Game.vanilla.entity = {
+    chicken: {
+        HP: 10,
+        texture: Texture.getImage("chicken"),
+        TYPE: "Game:chicken",
+        stateList: ["WALK", "IDLE", "IDLE"],
+        dropList: [
+            { item: Game.vanilla.item.feather, min: 1, max: 3 },
+            { item: Game.vanilla.item.rawChicken, min: 1, max: 2 }
+        ]
     }
+}
+
+Game.vanilla.block = {
+    oak: {
+        TYPE: "Game:oak",
+        texture: Texture.getImage("oak"),
+        HP: 16,
+        w: 2,
+        h: 2,
+        DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
+        DPD: 0.5
+    },
+    oakPlant: {
+        TYPE: "Game:oakPlant",
+        texture: Texture.getImage("oakSeed"),
+        HP: 2,
+        w: 2,
+        h: 2,
+        DROPS: [Game.vanilla.item.oakSeed],
+        DPD: 0.5,
+        growTime: 5000,
+        growBlock: "oak"
+    },
+    oakPlank: {
+        TYPE: "Game:oakPlank",
+        texture: Texture.getImage("oakPlank"),
+        HP: 2,
+        w: 2,
+        h: 2,
+        DROPS: [Game.vanilla.item.oakPlank],
+    }
+}
+
 Game.vanilla.recipes = {
     oakPlank:
     {
