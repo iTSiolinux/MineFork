@@ -315,14 +315,39 @@ Game.render = {
                     if (newCraftDisplay.recipesList.length > cProps.card.amount) {
                         newCraftDisplay.indexToggle = new NumberInput({
                             margin: 64,
-                            numberSize: 128,
+                            numberSize: 64,
                             numberFont: "sans",
-                            POS: { y: offsetY, x: 0 }
+                            POS: { y: offsetY - 64, x: 0 }
                         });
 
                         newCraftDisplay.indexToggle.onChange = () => {
-                            // TODO: left to make it update the items that would apper!
-                        }
+                            let startIndex = newCraftDisplay.indexToggle.index * cProps.card.amount;
+                            let endIndex = startIndex + cProps.card.amount;
+
+                            if (newCraftDisplay.recipesList[startIndex] != null){
+                                let offsetY = -cProps.window.h / 2 + cProps.card.h; // Offset for the vertical position of buttons
+                                newCraftDisplay.removeAllChildren()
+                            
+    
+                            
+                                for (let i = startIndex; i < endIndex && i < newCraftDisplay.recipesList.length; i++) {
+                                    const AnObject = newCraftDisplay.recipesList[i];
+                                    if (AnObject != null) {
+                                        const craftedCraft = new CraftCard(AnObject[0], AnObject[1], {
+                                            POS: { x: 0, y: offsetY },
+                                            w: cProps.card.w,
+                                            h: cProps.card.h,
+                                            bgFill: "green"
+                                        });
+                            
+                                        newCraftDisplay.addChild(craftedCraft);
+                                        offsetY += craftedCraft.h + craftedCraft.h / 2;
+                                    }
+                                }
+                            } else {
+                                newCraftDisplay.indexToggle.index -= newCraftDisplay.indexToggle.lastMove;
+                            }
+                        }                        
                     }
                 }
 
@@ -672,9 +697,9 @@ Game.vanilla.recipes = {
     oakSeed:
     {
         ingredients: [
-            { item: Game.vanilla.item.oakDrop, amount: 0.1 }
+            { item: Game.vanilla.item.oakDrop, amount: 2 }
         ],
-        result: { item: Game.vanilla.item.oakSeed, amount: 1 }
+        result: { item: Game.vanilla.item.oakSeed, amount: 4 }
     }
 }
 

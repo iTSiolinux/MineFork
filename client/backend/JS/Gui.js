@@ -89,7 +89,7 @@ class Slot extends Button {
     constructor(values) {
         super(values)
 
-        this.index = values?.index - 1 || -1;
+        this.index = values?.index || -1;
     }
 
     render() {
@@ -99,14 +99,14 @@ class Slot extends Button {
         DRAW.translate(this.POS.x, this.POS.y);
         DRAW.rotate(this.angle * Math.PI / 180);
         DRAW.drawImage(
-            this.index == Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
+            this.index - 1 == Game.player.INV.handIndex ? Texture.getImage("slotFocused") : Texture.getImage("slot"),
             -this.w / 2 + Game.Camera.POS.x,
             -this.h / 2 + Game.Camera.POS.y,
             this.w,
             this.h
         );
 
-        const targetItem = Game.player.INV.items[this.index]
+        const targetItem = Game.player.INV.items[this.index - 1]
         if (targetItem instanceof Item) {
 
             DRAW.drawImage(
@@ -153,7 +153,7 @@ class Slot extends Button {
         }
         else {
             // shuffle between them without thinking!
-            Game.player.INV.items[this.index] = mouseItem;
+            Game.player.INV.items[this.index - 1] = mouseItem;
             Game.mouse.item = currentItem;
         }
     }
@@ -297,6 +297,7 @@ class NumberInput {
         this.padding = Props?.padding || 16;
         this.numberSize = Props?.numberSize || 20;
         this.numberFont = Props?.numberFont || "Arial";
+        this.lastMove = 0;
 
         this.POS = Props?.POS || { x: 0, y: 0 }
 
@@ -342,11 +343,13 @@ class NumberInput {
         this.rightBtn.onLeftClick = () => {
             this.index++
             this.onChange()
+            this.lastMove = 1
         }
 
         this.leftBtn.onLeftClick = () => {
             this.index--
             this.onChange()
+            this.lastMove = -1
         }
     }
 
@@ -449,6 +452,8 @@ class CraftCard extends Display {
     }
 
     handleClick() {
+        console.log("called handle click in CraftCard")
+
         // Check if the player has enough resources to craft the item
         const canCraft = this.recipe.ingredients.every(({ item, amount }) => {
             const inventoryItem = Game.player.INV.items.find(invItem => invItem.TYPE === item.TYPE);
@@ -464,7 +469,7 @@ class CraftCard extends Display {
                     Game.player.INV.items[inventoryItemIndex].amount -= amount;
                     if (Game.player.INV.items[inventoryItemIndex].amount <= 0) {
                         // Remove the item from the inventory if its amount is zero or negative
-                        Game.player.INV.items.splice(inventoryItemIndex, 1);
+                        Game.player.INV.removeItem(Game.player.INV.items[inventoryItemIndex]);
                     }
                 }
             });
@@ -486,6 +491,10 @@ class CraftCard extends Display {
     onHover() {
         if (Game.mouse.data.isDownLeft && !this.isPressed) {
             this.handleClick();
+            this.isPressed = true;
+        } 
+        else if (!Game.mouse.data.isDownLeft && this.isPressed) {
+            this.isPressed = false;
         }
     }
 
@@ -493,15 +502,6 @@ class CraftCard extends Display {
         const fixedThis = { POS: { x: this.POS.x + Game.Camera.POS.x, y: this.POS.y + Game.Camera.POS.y }, w: this.w, h: this.h }
         if (Game.mouse.isOver(fixedThis)) {
             this.onHover();
-
-            if (Game.mouse.data.isDownLeft && !this.isPressed) {
-                this.handleClick();
-                this.isPressed = true;
-            }
-
-            if (!Game.mouse.data.isDownLeft) {
-                this.isPressed = false;
-            }
         }
     }
 
