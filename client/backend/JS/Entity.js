@@ -2,45 +2,45 @@ class Entity {
     constructor(values, additionalValues) {
         this.CONST_HP = additionalValues?.HP || values?.HP || 1;
         this.HP = additionalValues?.HP || values?.HP || 1;
-    
+
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage();
         this.w = additionalValues?.w || values?.w || scale;
         this.h = additionalValues?.h || values?.h || scale;
         this.angle = additionalValues?.angle || values?.angle || 0;
-    
+
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.name = additionalValues?.name || values?.name || null;
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
 
         this.stateList = additionalValues?.stateList || values?.stateList || null;
         this.currentState = "IDLE";
-        this.panicTime =  additionalValues?.panicTime || values?.panicTime || 15000;
-    
+        this.panicTime = additionalValues?.panicTime || values?.panicTime || 15000;
+
         this.dropList = additionalValues?.dropList || values?.dropList || [];
 
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
-    
+
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.VEL = additionalValues?.VEL || values?.VEL || { x: 0, y: 0 };
         this.SPEED = additionalValues?.SPEED || values?.SPEED || { x: 0, y: 0 };
         this.INV = new Inv(additionalValues?.INV || values?.INV) || new Inv();
-    
+
         this.onSpawn();
     }
-    
+
 
     // list of Events
-    onSpawn () { }
+    onSpawn() { }
 
-    onDeath () { }
+    onDeath() { }
 
-    onDamage (dmg) { }
+    onDamage(dmg) { }
 
-    onCollide () { }
+    onCollide() { }
 
     // update function
-    update () {
+    update() {
         this.updatePhysics()
         this.AI.update()
     }
@@ -50,7 +50,7 @@ class Entity {
         update: () => {
             if (this.isVisible) {
                 this.render.base()
-                if (this.HP < this.CONST_HP){
+                if (this.HP < this.CONST_HP) {
                     this.render.healthBar()
                 }
             }
@@ -86,11 +86,11 @@ class Entity {
                 color: "green"
             }
 
-            if (this.CONST_HP / 3 > this.HP){hpBarP.color = "red"} else if (this.CONST_HP / 2 > this.HP){hpBarP.color = "orange"}
+            if (this.CONST_HP / 3 > this.HP) { hpBarP.color = "red" } else if (this.CONST_HP / 2 > this.HP) { hpBarP.color = "orange" }
 
             DRAW.save()
 
-            DRAW.translate(this.POS.x - this.w,  this.POS.y - this.h)
+            DRAW.translate(this.POS.x - this.w, this.POS.y - this.h)
 
             DRAW.strokeStyle = hpBarP.border
             DRAW.lineWidth = hpBarP.stroke
@@ -108,41 +108,41 @@ class Entity {
     AI = {
         tickPer: FPS * 25,
         ticksAlive: 0,
-        update: ()=>{
-            if (this.AI.ticksAlive % this.AI.tickPer == 0){
+        update: () => {
+            if (this.AI.ticksAlive % this.AI.tickPer == 0) {
                 this.AI.rollState()
             }
             this.AI.ticksAlive++;
         },
-        rollState:  ()=>{
-            if (this.stateList.length > 1 && this.currentState == "IDLE"){
+        rollState: () => {
+            if (this.stateList.length > 1 && this.currentState == "IDLE") {
                 const rolledState = this.stateList[random(0, this.stateList.length)];
-                if (this.AI[rolledState] instanceof Function){
+                if (this.AI[rolledState] instanceof Function) {
                     this.currentState = rolledState;
                     this.AI[rolledState]();
                 }
-            } 
+            }
         },
-        WALK: ()=>{
+        WALK: () => {
             this.step(5)
-            this.turn(90 *  plusOrMinus(), 1000)
+            this.turn(90 * plusOrMinus(), 1000)
             this.step(5)
             this.AI.IDLE()
         },
         PANIC: (time = 15000, object) => {
             this.currentState = "PANIC"
-            if (object instanceof Entity){
-                this.angle = calculateAngle(object, this)                
+            if (object instanceof Entity) {
+                this.angle = calculateAngle(object, this)
             }
 
-            const zig = () => { this.turn(22.5 *  plusOrMinus(), 250);this.step(15, 250)}
+            const zig = () => { this.turn(22.5 * plusOrMinus(), 250); this.step(15, 250) }
             const loop = setInterval(zig, 500)
 
-            setTimeout(()=>{ clearInterval(loop) }, time)
+            setTimeout(() => { clearInterval(loop) }, time)
 
             this.AI.IDLE()
         },
-        IDLE: ()=>{
+        IDLE: () => {
             this.currentState = "IDLE"
         }
     }
@@ -160,18 +160,18 @@ class Entity {
             this.HP -= damgeDealt;
         }
 
-        if (object !== null){
+        if (object !== null) {
             this.AI.PANIC(this.panicTime, object)
         }
     }
 
-    die () {
+    die() {
         this.onDeath()
 
-        if (this.dropList.length > 0){
+        if (this.dropList.length > 0) {
             // example structure of an drop in the list:
             // {item: "new Item()", min: 1, max: 2}
-            this.dropList.forEach(drop =>{
+            this.dropList.forEach(drop => {
                 const item = new Item(drop.item);
 
                 item.POS.x = this.POS.x;
@@ -191,15 +191,15 @@ class Entity {
         let loop = setInterval(() => {
             this.angle += degreesPerInterval;
             time -= 10;
-            
+
             if (time <= 0) {
                 clearInterval(loop);
                 this.angle = NA(Math.round(this.angle))
             }
-        }, 10);        
+        }, 10);
     }
 
-    async step (amount = 10, time = 1000) {
+    async step(amount = 10, time = 1000) {
         let loop = setInterval(() => {
             const stepPerIntervalX = (amount * Math.cos(DTR(this.angle))) / (time / 10);
             const stepPerIntervalY = (amount * Math.sin(DTR(this.angle))) / (time / 10);
@@ -208,11 +208,11 @@ class Entity {
             this.POS.x -= stepPerIntervalX
             this.POS.y -= stepPerIntervalY
             time -= 10;
-            
+
             if (time <= 0) {
                 clearInterval(loop);
             }
-        }, 10);    
+        }, 10);
     }
 
     // list of Velocity functions
@@ -246,22 +246,22 @@ class Player extends Entity {
         this.lastHit = 1;
         this.isMining = false;
         this.isInteracting = false;
-        this.base = values?.base || {dmg: 2};
+        this.base = values?.base || { dmg: 1 };
 
         this.itemTitle = new Title({
             content: "",
-            POS: {x: 0, y: Game.canvas.height / 2 - 80},
+            POS: { x: 0, y: Game.canvas.height / 2 - 80 },
             font: "32px sans"
         })
 
         Game.Data.Add(this.itemTitle)
     }
 
-    reloadItemTitle () {
+    reloadItemTitle() {
         this.itemTitle.content = this.INV.items[this.INV.handIndex].displayName === undefined ? "" : this.INV.items[this.INV.handIndex].displayName
     }
 
-    update () {
+    update() {
         this.updatePhysics()
         this.lookAtMouse()
         this.pickupItems()
@@ -290,39 +290,39 @@ class Player extends Entity {
         Game.Data.items.forEach(item => {
             if (isColliding(this, item)) {
                 const isAdded = this.INV.addItem(item)
-                isAdded  ?  Game.Data.Remove(item) : null;
+                isAdded ? Game.Data.Remove(item) : null;
             }
         });
         this.reloadItemTitle()
     }
 
-    switchSlot (number) {
-        if (10 > number > 0){
+    switchSlot(number) {
+        if (10 > number > 0) {
             this.INV.handIndex = number
         }
         this.reloadItemTitle()
     }
 
     throw(type = "handIndex") {
-        if (type == "handIndex"){
+        if (type == "handIndex") {
             const handItem = this.INV.items[this.INV.handIndex];
 
             if (handItem instanceof Item) {
                 this.INV.removeItem(handItem)
-    
+
                 handItem.POS.x = Game.mouse.data.position.canvas.x;
                 handItem.POS.y = Game.mouse.data.position.canvas.y;
-    
+
                 Game.Data.Add(handItem);
             }
-        } else if (type == "mouseItem"){
+        } else if (type == "mouseItem") {
             const mouseItem = Game.mouse.item;
 
-            if (mouseItem instanceof Item){
+            if (mouseItem instanceof Item) {
 
                 mouseItem.POS.x = Game.mouse.data.position.canvas.x;
                 mouseItem.POS.y = Game.mouse.data.position.canvas.y;
-    
+
                 Game.Data.Add(mouseItem);
 
                 Game.mouse.item = new VoidItem()
@@ -331,22 +331,19 @@ class Player extends Entity {
     }
 
     mine() {
-        if (!this.isInteracting && !this.isMining && Game.mouse.data.isDownLeft){
+        if (!this.isInteracting && !this.isMining && Game.mouse.data.isDownLeft) {
             this.isMining = true;
-    
-            const Hand = this.hands[this.lastHit];
-            const Item = this.INV.items[this.INV.handIndex];
-            if (Item?.isTool){
 
-            } else {
-                Hand.x -= Hand.w / 2
-                this.hasPlayerHit();
-                setTimeout(()=>{
-                    Hand.x += Hand.w / 2
-                    this.isMining = false;
-                }, 500)
-            }
-        
+            const Hand = this.hands[this.lastHit];
+            
+            Hand.x -= Hand.w / 2
+            this.hasPlayerHit();
+            setTimeout(() => {
+                Hand.x += Hand.w / 2
+                this.isMining = false;
+            }, 500)
+           
+
             this.lastHit ? (this.lastHit = 0) : (this.lastHit = 1);
         }
     }
@@ -354,7 +351,7 @@ class Player extends Entity {
     interact() {
         const handItem = this.INV.items[this.INV.handIndex];
 
-        if (Game.mouse.data.isDownRight && handItem instanceof Item){
+        if (Game.mouse.data.isDownRight && handItem instanceof Item) {
             this.isInteracting = true;
 
             handItem?.interact()
@@ -366,26 +363,30 @@ class Player extends Entity {
     hasPlayerHit() {
         // Get the hand being used for mining
         const hand = this.hands[this.lastHit];
-    
+        const tool = this.INV.items[this.INV.handIndex];
+
+
         // Loop through each block
         for (const B of Game.Data.blocks) {
             // Check for collision
             if (
-                distance(this, B) <= B.w / 2 + Game.player.w / 2 + hand.w / 2
-                &&
-                this.isInAngle(this.angle) 
+                this.canMine(B)
             ) {
-                B?.damage(this.base.dmg, this);
+                let DMG = this.base.dmg
+                if (tool.isTool && B.TOOLTYPE == tool.TOOLTYPE)
+                    DMG += tool.mineDamage;
+
+                console.log("DMG is " + DMG)
+
+                B?.damage(DMG, this);
             }
         }
-    
+
         // Loop through each entity
         for (const E of Game.Data.entitys) {
             // Check for collision
             if (
-                distance(this, E) <= E.w / 2 + Game.player.w / 2 + hand.w / 2
-                &&
-                this.isInAngle(this.angle) 
+                this.canMine(E)
                 &&
                 E != this
             ) {
@@ -394,19 +395,13 @@ class Player extends Entity {
         }
     }
 
-    isInAngle (angle){
-        return (
-            angle <= 45 && angle >= -45 // right to left
-            ||
-            angle <= 180 + 45 && angle >= 180 - 45 // left to right 
-            ||
-            angle <= 90 + 45 && angle >= 90 - 45 // botttom to top
-            ||
-            angle <= -90 + 45 && angle >= -90 -45 // top to bottom
-        )
+    canMine(object) {
+        const hand = this.hands[this.lastHit];
+
+        return (distance(this, object) <= object.w / 2 + Game.player.w / 2 + hand.w / 2)
     }
-    
-    
+
+
     render = {
         update: () => {
             if (this.isVisible) {
@@ -447,22 +442,44 @@ class Player extends Entity {
         },
         handItem: () => {
             const handItem = Game.player.INV.items[Game.player.INV.handIndex];
-
+        
             const offsetX = this.hands[0].x - this.hands[0].w;
-
+        
             if (handItem instanceof Item) {
-                DRAW.drawImage(
-                    handItem.texture,
-                    offsetX,
-                    0,
-                    handItem.w,
-                    handItem.h
-                )
-            }
+                if (!handItem.isTool) {
+                    DRAW.drawImage(
+                        handItem.texture,
+                        offsetX,
+                        0,
+                        handItem.w,
+                        handItem.h
+                    );
+                } else {
+                    DRAW.save();
+
+                    // Translate to the center of the image
+                    const centerX = this.hands[0].x - handItem.w / 2;  // Adjust based on the center of the image
+                    const centerY = this.hands[0].y - handItem.h / 2;  // Adjust based on the center of the image
+                    DRAW.translate(centerX, centerY);
+        
+                    DRAW.rotate(-45);
+                    // Draw the image with its center at (0, 0)
+                    DRAW.drawImage(
+                        handItem.texture,
+                        -handItem.w,
+                        -handItem.h / 4,
+                        handItem.w,
+                        handItem.h
+                    );
+        
+                    // Restore the original drawing context
+                    DRAW.restore();
+                }
+            }        
         }
     }
 
     // Events 
 
-    onDamage (dmg) { console.log("your got hitten by yourself " + dmg)}
+    onDamage(dmg) { console.log("your got hitten by yourself " + dmg) }
 }

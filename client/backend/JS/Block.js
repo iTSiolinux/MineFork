@@ -12,6 +12,7 @@ class Block {
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.angle = additionalValues?.angle || values?.angle || 0;
 
+        this.TOOLTYPE = additionalValues?.TOOLTYPE || values?.TOOLTYPE || null;
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
         this.DROPS = additionalValues?.DROPS || values?.DROPS || [];

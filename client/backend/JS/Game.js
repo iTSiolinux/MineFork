@@ -33,14 +33,18 @@ const Game = {
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block(Game.vanilla.block.oak, { POS: { x: 0, y: 0 } })
+        const b = new Block(Game.vanilla.block.oak)
 
         // Test chicken
         const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 } })
 
+        // Test tool
+        const pick = new Item(Game.vanilla.item.woodenPickaxe)
+        
         Game.Data.Add(c)
         Game.Data.Add(p)
         Game.Data.Add(b)
+        Game.Data.Add(pick)
 
         Game.render.hotbar()
         Game.render.inventoryBtn()
@@ -633,6 +637,17 @@ Game.vanilla.item = {
         placedBlock: "oakPlank",
         displayName: "Oak plank"
     },
+    woodenPickaxe: {
+        texture: Texture.getImage("woodenPickaxe"),
+        displayName: "Wooden pickaxe",
+        TYPE: "Game:woodenPickaxe",
+        size: 64,
+        amount: 1,
+        mineDamage: 1,
+        isTool: true,
+        MaxStack: 1,
+        TOOLTYPE: 1 // 1 for wood
+    }
 }
 
 Game.vanilla.entity = {
@@ -652,6 +667,7 @@ Game.vanilla.block = {
     oak: {
         TYPE: "Game:oak",
         texture: Texture.getImage("oak"),
+        TOOLTYPE: 1,
         HP: 16,
         w: 2,
         h: 2,
@@ -672,6 +688,7 @@ Game.vanilla.block = {
     oakPlank: {
         TYPE: "Game:oakPlank",
         texture: Texture.getImage("oakPlank"),
+        TOOLTYPE: 1,
         HP: 2,
         w: 2,
         h: 2,
@@ -687,19 +704,12 @@ Game.vanilla.recipes = {
         ],
         result: { item: Game.vanilla.item.oakPlank, amount: 16 }
     },
-    oakDrop:
+    woodenPickaxe:
     {
         ingredients: [
-            { item: Game.vanilla.item.oakDrop, amount: 2 }
+            { item: Game.vanilla.item.oakDrop, amount: 5 }
         ],
-        result: { item: Game.vanilla.item.oakDrop, amount: 4 }
-    },
-    oakSeed:
-    {
-        ingredients: [
-            { item: Game.vanilla.item.oakDrop, amount: 0.1 }
-        ],
-        result: { item: Game.vanilla.item.oakSeed, amount: 1 }
+        result: { item: Game.vanilla.item.woodenPickaxe, amount: 1 }
     }
 }
 

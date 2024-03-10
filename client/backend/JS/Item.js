@@ -14,7 +14,10 @@ class Item {
 
         // Item optional values
         this.armorSlot = additionalValues?.armorSlot || values?.armorSlot || null;
+
         this.isTool = additionalValues?.isTool || values?.isTool || false;
+        this.mineDamage = additionalValues?.mineDamage || values?.mineDamage || false;
+        this.TOOLTYPE = additionalValues?.TOOLTYPE || values?.TOOLTYPE || false;
 
         this.isBlockPlacer = additionalValues?.isBlockPlacer || values?.isBlockPlacer || false;
         this.placedBlock = additionalValues?.placedBlock || values?.placedBlock || null;

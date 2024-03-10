@@ -4,10 +4,10 @@
 - [X] Add the ability to customize the hotbar.
 
 ### Step 2: Make Crafting GUI
-- [ ] Design a crafting GUI layout.
+- [X] Design a crafting GUI layout.
     -> [ ] Add to Display class texture that will fit his width and height 
-    -> [ ] Draw the section crafting name and switch arrows
-    -> [ ] make number toggle to next items in section
+    -> [X] Draw the section crafting name and switch arrows
+    -> [X] make number toggle to next items in section
 - [X] Implement the crafting recipe system.
 - [ ] Provide visual feedback for available crafting options.
 
