@@ -133,8 +133,6 @@ Game.Data = {
             console.error("The added object not valid instance. \n" + object.constructor.name)
         }
     }
-
-
 }
 
 // Game render system
