@@ -5,8 +5,8 @@ class Block {
         this.HP = additionalValues?.HP || values?.HP || 1;
 
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
-        this.w = additionalValues?.w || values?.w || scale;
-        this.h = additionalValues?.h || values?.h || scale;
+        this.w = additionalValues?.w || values?.w || 2;
+        this.h = additionalValues?.h || values?.h || 2;
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
 
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
@@ -16,7 +16,7 @@ class Block {
         this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
         this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
         this.DROPS = additionalValues?.DROPS || values?.DROPS || [];
-        this.DPD = additionalValues?.DPD || values?.DPD || 0.5; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
+        this.DPD = additionalValues?.DPD || values?.DPD || 1; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
 
 
         this.growTime = additionalValues?.growTime || values?.growTime || 0; // in MS
@@ -48,7 +48,6 @@ class Block {
     }
 
     damage(dmg) {
-
         const damgeDealt = dmg > this.HP ? this.HP : dmg;
         this.onDamage(dmg)
 

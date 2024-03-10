@@ -376,8 +376,6 @@ class Player extends Entity {
                 if (tool.isTool && B.TOOLTYPE == tool.TOOLTYPE)
                     DMG += tool.mineDamage;
 
-                console.log("DMG is " + DMG)
-
                 B?.damage(DMG, this);
             }
         }

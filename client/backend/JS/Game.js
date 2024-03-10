@@ -668,20 +668,16 @@ Game.vanilla.block = {
         TYPE: "Game:oak",
         texture: Texture.getImage("oak"),
         TOOLTYPE: 1,
-        HP: 16,
-        w: 2,
-        h: 2,
+        HP: 8,
         DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
-        DPD: 0.5
+        DPD: 1
     },
     oakPlant: {
         TYPE: "Game:oakPlant",
         texture: Texture.getImage("oakSeed"),
-        HP: 2,
-        w: 2,
-        h: 2,
+        HP: 1,
         DROPS: [Game.vanilla.item.oakSeed],
-        DPD: 0.5,
+        DPD: 1,
         growTime: 5000,
         growBlock: "oak"
     },
@@ -689,9 +685,6 @@ Game.vanilla.block = {
         TYPE: "Game:oakPlank",
         texture: Texture.getImage("oakPlank"),
         TOOLTYPE: 1,
-        HP: 2,
-        w: 2,
-        h: 2,
         DROPS: [Game.vanilla.item.oakPlank],
     }
 }

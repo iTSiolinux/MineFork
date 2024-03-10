@@ -12,7 +12,7 @@
 - [ ] Provide visual feedback for available crafting options.
 
 ### Step 3: Creating Items with Custom Interactions
-- [ ] Introduce a new class for items with special interactions.
+- [X] Introduce a new class for items with special interactions.
 - [ ] Implement a basic custom interaction, e.g., a gun that can be equipped.
 
 ### Step 4: Implement Basic Multiplayer Interactions

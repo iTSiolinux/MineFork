@@ -59,13 +59,12 @@ class Item {
         if (this.isBlockPlacer) {
 
             let iCanPlace = true;
+            const fixedBlock = Game.vanilla.block[this.placedBlock];
+
             Game.Data.blocks.forEach(block => {
-                if (Game.mouse.isOver(block)) {
+                if (Game.mouse.isOver(block) || Game.mouse.isOver(Game.player)) {
                     iCanPlace = false;
-                }
-                if (Game.mouse.isOver(Game.player)) {
-                    iCanPlace = false;
-                }
+                } 
             });
 
             if (iCanPlace) {
@@ -78,9 +77,7 @@ class Item {
 
                 Game.Data.Add(placedBlock)
             }
-        }
-
-        if (this.isConsumeAble) {
+        } else if (this.isConsumeAble) {
             // eating if is eatable item
             const currentTime = Date.now();
 
