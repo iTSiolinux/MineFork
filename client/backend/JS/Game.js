@@ -347,7 +347,7 @@ Game.render = {
                             } else {
                                 newCraftDisplay.indexToggle.index -= newCraftDisplay.indexToggle.lastMove;
                             }
-                        }                        
+                        }    
                     }
                 }
 
@@ -697,9 +697,9 @@ Game.vanilla.recipes = {
     oakSeed:
     {
         ingredients: [
-            { item: Game.vanilla.item.oakDrop, amount: 2 }
+            { item: Game.vanilla.item.oakDrop, amount: 0.1 }
         ],
-        result: { item: Game.vanilla.item.oakSeed, amount: 4 }
+        result: { item: Game.vanilla.item.oakSeed, amount: 1 }
     }
 }
 
