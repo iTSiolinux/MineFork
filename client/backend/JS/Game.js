@@ -48,8 +48,8 @@ const Game = {
         //     POS: {x: 128, y: 0}
         // })
         
-        Game.Data.Add(c)
         Game.Data.Add(p)
+        Game.Data.Add(c)
         Game.Data.Add(b)
         Game.Data.Add(pick)
         // Game.Data.Add(bullet)
@@ -105,16 +105,16 @@ Game.Data = {
 
     Add: (object) => {
         if (object instanceof Block) {
-            Game.Data.blocks.push(object)
+            Game.Data.blocks.unshift(object)
         }
         else if (object instanceof Item) {
-            Game.Data.items.push(object)
+            Game.Data.items.unshift(object)
         }
         else if (object instanceof Entity || object instanceof Projectile) {
-            Game.Data.entitys.push(object)
+            Game.Data.entitys.unshift(object)
         }
         else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
-            Game.Data.GUI.push(object)
+            Game.Data.GUI.unshift(object)
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
         }
@@ -663,7 +663,16 @@ Game.vanilla.item = {
         size: 64,
         toolRotate: -135,
         amount: 1,
-        MaxStack: 1
+        MaxStack: 1,
+        isProjectileShooter: true,
+        Projectile: {
+            dmg: 5,
+            SPEED: 2.5,
+            texture: Texture.getImage("arrow"),
+            cooldown: 500,
+            renderHitbox: true,
+            hitboxSize: 8
+        }
     }
 }
 

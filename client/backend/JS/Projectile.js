@@ -1,18 +1,20 @@
 class Projectile {
-    constructor(Props) {
-        this.dmg = Props?.dmg || 1;
-        this.angle = Props?.angle || 0;
+    constructor(v /* values */, a /* additionalValues */) {
+        this.dmg = a?.dmg || v?.dmg || 1;
+        this.angle = a?.angle || v?.angle || 0;
 
-        this.texture = Props?.texture || Texture.getImage("bullet");
-        this.w = Props?.w * scale || scale;
-        this.h = Props?.h * scale || scale;
+        this.texture = a?.texture || v?.texture || Texture.getImage("bullet");
+        this.w = a?.w * scale || v?.w * scale || scale;
+        this.h = a?.h * scale || v?.h * scale || scale;
 
-        this.SPEED = Props?.SPEED || 1;
-        this.POS = Props?.POS || { x: 0, y: 0 };
-        this.DMG = Props?.DMG || 5;
+        this.SPEED = a?.SPEED || v?.SPEED || 1;
+        this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
+        this.DMG = a?.DMG || v?.DMG || 5;
 
-        this.hitboxSize = Props?.hitboxSize || 4
-        this.renderHitbox = true
+        
+        this.shooter = a?.shooter || v?.shooter || null;
+        this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
+        this.renderHitbox = a?.renderHitbox || v?.renderHitbox || false;
     }
 
     render = {
@@ -89,7 +91,7 @@ class Projectile {
 
     isHitting () {
         Game.Data.entitys.forEach(entity => {
-            if (entity !== this && entity instanceof Entity && isColliding(this, entity)) {
+            if (entity !== this && entity !== this.shooter && entity instanceof Entity && isColliding(this, entity)) {
                 this.collide(entity)
                 return true;
             }

@@ -1,31 +1,34 @@
 class Item {
-    constructor(values, additionalValues) {
-        this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
-        this.w = additionalValues?.w || values?.w || scale / 2;
-        this.h = additionalValues?.h || values?.h || scale / 2;
-        this.angle = additionalValues?.angle || values?.angle || 0;
+    constructor(v /* values */, a /* additionalValues */) {
+        this.texture = a?.texture || v?.texture || Texture.getImage("null");
+        this.w = a?.w || v?.w || scale / 2;
+        this.h = a?.h || v?.h || scale / 2;
+        this.angle = a?.angle || v?.angle || 0;
 
-        this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
-        this.amount = additionalValues?.amount || values?.amount || 1;
-        this.MaxStack = additionalValues?.MaxStack || values?.MaxStack || 64;
-        this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
-        this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
-        this.displayName = additionalValues?.displayName || values?.displayName || null;
+        this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
+        this.amount = a?.amount || v?.amount || 1;
+        this.MaxStack = a?.MaxStack || v?.MaxStack || 64;
+        this.UUID = a?.UUID || v?.UUID || genUUID();
+        this.TYPE = a?.TYPE || v?.TYPE || null;
+        this.displayName = a?.displayName || v?.displayName || null;
 
         // Item optional values
-        this.armorSlot = additionalValues?.armorSlot || values?.armorSlot || null;
+        this.armorSlot = a?.armorSlot || v?.armorSlot || null;
 
-        this.toolRotate = additionalValues?.toolRotate || values?.toolRotate || 0;
-        this.mineDamage = additionalValues?.mineDamage || values?.mineDamage || false;
-        this.TOOLTYPE = additionalValues?.TOOLTYPE || values?.TOOLTYPE || false;
+        this.toolRotate = a?.toolRotate || v?.toolRotate || 0;
+        this.mineDamage = a?.mineDamage || v?.mineDamage || false;
+        this.TOOLTYPE = a?.TOOLTYPE || v?.TOOLTYPE || false;
 
-        this.isBlockPlacer = additionalValues?.isBlockPlacer || values?.isBlockPlacer || false;
-        this.placedBlock = additionalValues?.placedBlock || values?.placedBlock || null;
+        this.isBlockPlacer = a?.isBlockPlacer || v?.isBlockPlacer || false;
+        this.placedBlock = a?.placedBlock || v?.placedBlock || null;
 
-        this.isConsumeAble = additionalValues?.isConsumeAble || values?.isConsumeAble || false;
-        this.hungerPoints = additionalValues?.hungerPoints || values?.hungerPoints || 0; // how to call how many hunger points the item will add on consume (eating)
-        this.consumeTime = additionalValues?.consumeTime || values?.consumeTime || 1000;
-        this.consumeSound = additionalValues?.consumeSound || values?.consumeSound || "/MP3/eat.mp3";
+        this.isConsumeAble = a?.isConsumeAble || v?.isConsumeAble || false;
+        this.hungerPoints = a?.hungerPoints || v?.hungerPoints || 0;
+        this.consumeTime = a?.consumeTime || v?.consumeTime || 1000;
+        this.consumeSound = a?.consumeSound || v?.consumeSound || "/MP3/eat.mp3";
+
+        this.isProjectileShooter = a?.isProjectileShooter || v?.isProjectileShooter || false;
+        this.Projectile = a?.Projectile || v?.Projectile || null;
 
         // constant
         this.lastInteractTime = 0;
@@ -101,6 +104,14 @@ class Item {
                         Game.player.INV.removeItem(this)
                     }
                 }, this.consumeTime)
+            }
+        } else if (this.isProjectileShooter){
+            const currentTime = Date.now();
+            if (currentTime - this.lastInteractTime >= this.Projectile.cooldown) {
+                this.lastInteractTime = currentTime;
+
+                const newProjectile = new Projectile(this.Projectile, {shooter: Game.player, POS: {x: Game.player.POS.x, y: Game.player.POS.y}, angle: Game.player.angle})
+                Game.Data.Add(newProjectile)
             }
         }
     }
