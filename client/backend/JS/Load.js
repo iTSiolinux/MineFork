@@ -125,6 +125,8 @@ Texture.loadImage("/IMG/craftCard.png", "craftCard")
 Texture.loadImage("/IMG/player.png", "player")
 Texture.loadImage("/IMG/chicken.png", "chicken")
 Texture.loadImage("/IMG/bullet.png", "bullet")
+Texture.loadImage("/IMG/arrow.png", "arrow")
+
 // Blocks assets
 Texture.loadImage("/IMG/oakTree.png", "oak")
 Texture.loadImage("/IMG/oakPlank.png", "oakPlank")
@@ -135,3 +137,4 @@ Texture.loadImage("/IMG/oakSeed.png", "oakSeed")
 Texture.loadImage("/IMG/feather.png", "feather")
 Texture.loadImage("/IMG/rawChicken.png", "rawChicken")
 Texture.loadImage("/IMG/woodenPickaxe.png", "woodenPickaxe")
+Texture.loadImage("/IMG/bow.png", "bow")

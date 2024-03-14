@@ -652,9 +652,18 @@ Game.vanilla.item = {
         size: 64,
         amount: 1,
         mineDamage: 1,
-        isTool: true,
+        toolRotate: -45,
         MaxStack: 1,
         TOOLTYPE: 1 // 1 for wood
+    },
+    bow: {
+        texture: Texture.getImage("bow"),
+        displayName: "bow",
+        TYPE: "Game:bow",
+        size: 64,
+        toolRotate: -135,
+        amount: 1,
+        MaxStack: 1
     }
 }
 

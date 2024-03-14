@@ -445,7 +445,7 @@ class Player extends Entity {
             const offsetX = this.hands[0].x - this.hands[0].w;
         
             if (handItem instanceof Item) {
-                if (!handItem.isTool) {
+                if (handItem.toolRotate === 0) {
                     DRAW.drawImage(
                         handItem.texture,
                         offsetX,
@@ -461,7 +461,7 @@ class Player extends Entity {
                     const centerY = this.hands[0].y - handItem.h / 2;  // Adjust based on the center of the image
                     DRAW.translate(centerX, centerY);
         
-                    DRAW.rotate(-45);
+                    DRAW.rotate(DTR(handItem.toolRotate));
                     // Draw the image with its center at (0, 0)
                     DRAW.drawImage(
                         handItem.texture,
