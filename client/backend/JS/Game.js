@@ -40,11 +40,19 @@ const Game = {
 
         // Test tool
         const pick = new Item(Game.vanilla.item.woodenPickaxe)
+
+        // Test bullet
+        // const bullet = new Projectile({
+        //     SPEED: 0.5,
+        //     angle: 180,
+        //     POS: {x: 128, y: 0}
+        // })
         
         Game.Data.Add(c)
         Game.Data.Add(p)
         Game.Data.Add(b)
         Game.Data.Add(pick)
+        // Game.Data.Add(bullet)
 
         Game.render.hotbar()
         Game.render.inventoryBtn()
@@ -102,7 +110,7 @@ Game.Data = {
         else if (object instanceof Item) {
             Game.Data.items.push(object)
         }
-        else if (object instanceof Entity) {
+        else if (object instanceof Entity || object instanceof Projectile) {
             Game.Data.entitys.push(object)
         }
         else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
@@ -122,15 +130,17 @@ Game.Data = {
                 console.warn("Object not found in Game.Data.items");
             }
         }
-        else if (object instanceof Entity) {
+        else if (object instanceof Entity || object instanceof Projectile) {
             if (!Game.Data.entitys.remove(object)) {
                 console.warn("Object not found in Game.Data.entitys");
             }
         }
         else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
-            Game.Data.GUI.remove(object)
+            if (!Game.Data.GUI.remove(object)) {
+                console.warn("Object not found in Game.Data.GUI");
+            }
         } else {
-            console.error("The added object not valid instance. \n" + object.constructor.name)
+            console.error("The removed object not valid instance. \n" + object.constructor.name)
         }
     }
 }

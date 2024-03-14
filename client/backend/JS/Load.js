@@ -124,8 +124,7 @@ Texture.loadImage("/IMG/craftCard.png", "craftCard")
 // Entitys assets
 Texture.loadImage("/IMG/player.png", "player")
 Texture.loadImage("/IMG/chicken.png", "chicken")
-
-
+Texture.loadImage("/IMG/bullet.png", "bullet")
 // Blocks assets
 Texture.loadImage("/IMG/oakTree.png", "oak")
 Texture.loadImage("/IMG/oakPlank.png", "oakPlank")

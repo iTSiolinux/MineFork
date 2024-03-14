@@ -25,7 +25,7 @@ class Item {
         this.isConsumeAble = additionalValues?.isConsumeAble || values?.isConsumeAble || false;
         this.hungerPoints = additionalValues?.hungerPoints || values?.hungerPoints || 0; // how to call how many hunger points the item will add on consume (eating)
         this.consumeTime = additionalValues?.consumeTime || values?.consumeTime || 1000;
-        this.consumeSound = additionalValues?.consumeSound || values?.consumeSound || "https://www.myinstants.com/media/sounds/nom-nom-nom_gPJiWn4.mp3";
+        this.consumeSound = additionalValues?.consumeSound || values?.consumeSound || "/MP3/eat.mp3";
 
         // constant
         this.lastInteractTime = 0;

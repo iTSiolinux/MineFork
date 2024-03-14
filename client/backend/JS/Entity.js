@@ -20,6 +20,7 @@ class Entity {
 
         this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
         this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
+        this.isAI = !(this instanceof Player)
 
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.VEL = additionalValues?.VEL || values?.VEL || { x: 0, y: 0 };
@@ -160,7 +161,7 @@ class Entity {
             this.HP -= damgeDealt;
         }
 
-        if (object !== null) {
+        if (object !== null && this.isAI) {
             this.AI.PANIC(this.panicTime, object)
         }
     }
