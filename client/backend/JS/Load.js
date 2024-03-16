@@ -64,6 +64,15 @@ const scale =  64,
     NA = (angle) => {
         return (angle % 360 + 360) % 360;
     },
+    returnFirstExsits = (a = null, v = null, def) => {
+        if (a !== null) {
+            return a;
+        } else if(v !== null) {
+            return v;
+        } else {
+            return def;
+        }
+    }
     // creating virtul canvas element
     CANVAS = document.createElement('canvas'),
     // setting alias that will be used less then ctx

@@ -18,9 +18,9 @@ class Entity {
 
         this.dropList = a?.dropList || v?.dropList || [];
 
-        this.isVisible = a?.isVisible || v?.isVisible || true;
-        this.isHostile = a?.isHostile || v?.isHostile || false;
-        this.isAI = (a?.isAI) || (v?.isAI) || (true);
+        this.isVisible = returnFirstExsits(a?.isVisible, v?.isVisible, true)
+        this.isHostile = returnFirstExsits(a?.isHostile, v?.isHostile, false)
+        this.isAI = returnFirstExsits(a?.isAI, v?.isAI, true)
 
         this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
         this.VEL = a?.VEL || v?.VEL || { x: 0, y: 0 };
