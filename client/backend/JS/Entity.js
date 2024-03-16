@@ -1,31 +1,31 @@
 class Entity {
-    constructor(values, additionalValues) {
-        this.CONST_HP = additionalValues?.HP || values?.HP || 1;
-        this.HP = additionalValues?.HP || values?.HP || 1;
+    constructor(v /* values */, a /* additionalValues */) {
+        this.CONST_HP = a?.HP || v?.HP || 1;
+        this.HP = a?.HP || v?.HP || 1;
 
-        this.texture = additionalValues?.texture || values?.texture || Texture.getImage();
-        this.w = additionalValues?.w || values?.w || scale;
-        this.h = additionalValues?.h || values?.h || scale;
-        this.angle = additionalValues?.angle || values?.angle || 0;
+        this.texture = a?.texture || v?.texture || Texture.getImage();
+        this.w = a?.w || v?.w || scale;
+        this.h = a?.h || v?.h || scale;
+        this.angle = a?.angle || v?.angle || 0;
 
-        this.UUID = additionalValues?.UUID || values?.UUID || genUUID();
-        this.name = additionalValues?.name || values?.name || null;
-        this.TYPE = additionalValues?.TYPE || values?.TYPE || null;
+        this.UUID = a?.UUID || v?.UUID || genUUID();
+        this.name = a?.name || v?.name || null;
+        this.TYPE = a?.TYPE || v?.TYPE || null;
 
-        this.stateList = additionalValues?.stateList || values?.stateList || null;
+        this.stateList = a?.stateList || v?.stateList || null;
         this.currentState = "IDLE";
-        this.panicTime = additionalValues?.panicTime || values?.panicTime || 15000;
+        this.panicTime = a?.panicTime || v?.panicTime || 15000;
 
-        this.dropList = additionalValues?.dropList || values?.dropList || [];
+        this.dropList = a?.dropList || v?.dropList || [];
 
-        this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
-        this.isHostile = additionalValues?.isHostile || values?.isHostile || false;
-        this.isAI = !(this instanceof Player)
+        this.isVisible = a?.isVisible || v?.isVisible || true;
+        this.isHostile = a?.isHostile || v?.isHostile || false;
+        this.isAI = (a?.isAI) || (v?.isAI) || (true);
 
-        this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
-        this.VEL = additionalValues?.VEL || values?.VEL || { x: 0, y: 0 };
-        this.SPEED = additionalValues?.SPEED || values?.SPEED || { x: 0, y: 0 };
-        this.INV = new Inv(additionalValues?.INV || values?.INV) || new Inv();
+        this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
+        this.VEL = a?.VEL || v?.VEL || { x: 0, y: 0 };
+        this.SPEED = a?.SPEED || v?.SPEED || { x: 0, y: 0 };
+        this.INV = new Inv(a?.INV || v?.INV) || new Inv();
 
         this.onSpawn();
     }
@@ -43,7 +43,9 @@ class Entity {
     // update function
     update() {
         this.updatePhysics()
-        this.AI.update()
+        if (this.isAI){
+            this.AI.update()
+        }
     }
 
     // render array
@@ -241,6 +243,9 @@ class Entity {
 class Player extends Entity {
     constructor(values) {
         super(values)
+
+        // removing the AI functionality
+        this.isAI = false
 
         // starting by adding hands
         this.hands = [{ x: -scale / 2, y: scale / 4, w: this.w / 2, h: this.h / 4 }, { x: -scale / 2, y: -scale / 2, w: this.w / 2, h: this.h / 4 }]

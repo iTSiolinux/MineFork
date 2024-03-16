@@ -36,8 +36,7 @@ const Game = {
         const b = new Block(Game.vanilla.block.oak)
 
         // Test chicken
-        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 } })
-
+        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: false })
         // Test tool
         const pick = new Item(Game.vanilla.item.woodenPickaxe)
 
@@ -671,7 +670,8 @@ Game.vanilla.item = {
             texture: Texture.getImage("arrow"),
             cooldown: 500,
             renderHitbox: true,
-            hitboxSize: 8
+            hitboxSize: 8,
+            MaxDistance: 1024
         }
     }
 }

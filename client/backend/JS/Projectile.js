@@ -11,6 +11,8 @@ class Projectile {
         this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
         this.DMG = a?.DMG || v?.DMG || 5;
 
+        this.MaxDistance = a?.MaxDistance || v?.MaxDistance || 1024;
+        this.reachedDistance = 0;
         
         this.shooter = a?.shooter || v?.shooter || null;
         this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
@@ -85,8 +87,14 @@ class Projectile {
     }
 
     simulatePhysics() {
-        this.POS.x -= Math.cos(DTR(this.angle)) * this.SPEED;
-        this.POS.y -= Math.sin(DTR(this.angle)) * this.SPEED;
+        this.reachedDistance += this.SPEED;
+        if (this.reachedDistance < this.MaxDistance){
+            this.POS.x -= Math.cos(DTR(this.angle)) * this.SPEED;
+            this.POS.y -= Math.sin(DTR(this.angle)) * this.SPEED;
+        } else {
+            this.explode()
+        }
+
     }
 
     isHitting () {
