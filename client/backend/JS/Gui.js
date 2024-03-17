@@ -129,7 +129,7 @@ class Slot extends Button {
     leftClick() {
         this.onLeftClick()
 
-        const currentItem = Game.player.INV.items[this.index]
+        const currentItem = Game.player.INV.items[this.index - 1]
         const mouseItem = Game.mouse.item;
 
         // if it will pass that means that they are from the same type and it will try to stack as possible
