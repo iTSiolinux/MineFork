@@ -38,15 +38,8 @@ const Game = {
         // Test chicken
         const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: false })
         // Test tool
-        const pick = new Item(Game.vanilla.item.woodenPickaxe)
+        const pick = new Item(Game.vanilla.item.bow)
 
-        // Test bullet
-        // const bullet = new Projectile({
-        //     SPEED: 0.5,
-        //     angle: 180,
-        //     POS: {x: 128, y: 0}
-        // })
-        
         Game.Data.Add(p)
         Game.Data.Add(c)
         Game.Data.Add(b)
@@ -335,12 +328,12 @@ Game.render = {
                             let startIndex = newCraftDisplay.indexToggle.index * cProps.card.amount;
                             let endIndex = startIndex + cProps.card.amount;
 
-                            if (newCraftDisplay.recipesList[startIndex] != null){
+                            if (newCraftDisplay.recipesList[startIndex] != null) {
                                 let offsetY = -cProps.window.h / 2 + cProps.card.h; // Offset for the vertical position of buttons
                                 newCraftDisplay.removeAllChildren()
-                            
-    
-                            
+
+
+
                                 for (let i = startIndex; i < endIndex && i < newCraftDisplay.recipesList.length; i++) {
                                     const AnObject = newCraftDisplay.recipesList[i];
                                     if (AnObject != null) {
@@ -350,7 +343,7 @@ Game.render = {
                                             h: cProps.card.h,
                                             bgFill: "green"
                                         });
-                            
+
                                         newCraftDisplay.addChild(craftedCraft);
                                         offsetY += craftedCraft.h + craftedCraft.h / 2;
                                     }
@@ -358,7 +351,7 @@ Game.render = {
                             } else {
                                 newCraftDisplay.indexToggle.index -= newCraftDisplay.indexToggle.lastMove;
                             }
-                        }    
+                        }
                     }
                 }
 
@@ -552,7 +545,7 @@ Game.keyboard = {
             POS.x--;
         }
 
-        Game.player.setSpeed(POS.x * 0.5, POS.y * 0.5)
+        Game.player.setSpeed(POS.x * 0.25, POS.y * 0.25)
 
         for (let i = 0; i < 8; i++) {
             if (keys[49 + i]) {
@@ -669,8 +662,8 @@ Game.vanilla.item = {
             SPEED: 2.5,
             texture: Texture.getImage("arrow"),
             cooldown: 500,
-            renderHitbox: true,
             hitboxSize: 8,
+            renderHitbox: true,
             MaxDistance: 1024
         }
     }
