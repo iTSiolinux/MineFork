@@ -6,6 +6,7 @@ class Entity {
         this.texture = a?.texture || v?.texture || Texture.getImage();
         this.w = a?.w || v?.w || scale;
         this.h = a?.h || v?.h || scale;
+        this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
         this.angle = a?.angle || v?.angle || 0;
 
         this.UUID = a?.UUID || v?.UUID || genUUID();
@@ -14,7 +15,7 @@ class Entity {
 
         this.stateList = a?.stateList || v?.stateList || null;
         this.currentState = "IDLE";
-        this.panicTime = a?.panicTime || v?.panicTime || 15000;
+        this.panicTime = a?.panicTime || v?.panicTime || {min: 3, max: 15};
 
         this.dropList = a?.dropList || v?.dropList || [];
 
@@ -55,6 +56,9 @@ class Entity {
                 this.render.base()
                 if (this.HP < this.CONST_HP) {
                     this.render.healthBar()
+                }
+                if (Game.isDebugging){
+                    this.render.hitBox()
                 }
             }
         },
@@ -103,6 +107,24 @@ class Entity {
             DRAW.fillRect(0, 0, hpBarP.width * (this.HP / this.CONST_HP), hpBarP.height)
 
             DRAW.restore()
+        },
+        hitBox: () => {
+            DRAW.save();
+
+            // Translate to the center of the object
+            DRAW.translate(this.POS.x, this.POS.y);
+
+            // Draw the image with its center at (0, 0)
+            DRAW.strokeStyle = "red"
+            DRAW.strokeRect(
+                -this.w / this.hitboxSize,
+                -this.h / this.hitboxSize,
+                this.w / (this.hitboxSize / 2),
+                this.h / (this.hitboxSize / 2)
+            );
+
+            // Restore the original drawing context
+            DRAW.restore();
         }
     }
 
@@ -164,7 +186,9 @@ class Entity {
         }
 
         if (object !== null && this.isAI) {
-            this.AI.PANIC(this.panicTime, object)
+            const panicTime = random(this.panicTime.min, this.panicTime.max);
+            console.log("time the entity will panic is: " + panicTime)
+            this.AI.PANIC(panicTime, object)
         }
     }
 

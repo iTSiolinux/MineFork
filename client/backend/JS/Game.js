@@ -36,7 +36,16 @@ const Game = {
         const b = new Block(Game.vanilla.block.oak)
 
         // Test chicken
-        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: false })
+        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: true })
+
+        const onDeath = () => {
+            const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: true })
+            c.onDeath = onDeath;
+            c.AI.PANIC()
+            Game.Data.Add(c)
+        }
+
+        c.onDeath = onDeath;
         // Test tool
         const pick = new Item(Game.vanilla.item.bow)
 
@@ -489,8 +498,6 @@ Game.events = {
     handler(event) {
         if (event instanceof KeyboardEvent) {
             Game.keyboard.array[event.keyCode] = !(event.type == "keyup");
-            if (Game.isDebugging)
-                alert(event.keyCode + ' ' + event.type);
 
         } else if (event instanceof MouseEvent) {
             // setting the mouse position by the client pos
@@ -663,7 +670,6 @@ Game.vanilla.item = {
             texture: Texture.getImage("arrow"),
             cooldown: 500,
             hitboxSize: 8,
-            renderHitbox: true,
             MaxDistance: 1024
         }
     }

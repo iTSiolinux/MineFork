@@ -1,11 +1,12 @@
 class Projectile {
     constructor(v /* values */, a /* additionalValues */) {
         this.dmg = a?.dmg || v?.dmg || 1;
-        this.angle = a?.angle || v?.angle || 0;
 
         this.texture = a?.texture || v?.texture || Texture.getImage("bullet");
         this.w = a?.w * scale || v?.w * scale || scale;
         this.h = a?.h * scale || v?.h * scale || scale;
+        this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
+        this.angle = a?.angle || v?.angle || 0;
 
         this.SPEED = a?.SPEED || v?.SPEED || 1;
         this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
@@ -15,14 +16,13 @@ class Projectile {
         this.reachedDistance = 0;
         
         this.shooter = a?.shooter || v?.shooter || null;
-        this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
         this.renderHitbox = a?.renderHitbox || v?.renderHitbox || false;
     }
 
     render = {
         update: () => {
             this.render.base()
-            if (this.renderHitbox){
+            if (this.renderHitbox || Game.isDebugging){
                 this.render.hitbox()
             }
         },
@@ -99,7 +99,29 @@ class Projectile {
 
     isHitting () {
         Game.Data.entitys.forEach(entity => {
-            if (entity !== this && entity !== this.shooter && entity instanceof Entity && isColliding(this, entity)) {
+            const fixedCollider = {}
+            fixedCollider.w = this.w
+            fixedCollider.h = this.h
+
+            fixedCollider.POS = {}
+            fixedCollider.POS.x = this.POS.x
+            fixedCollider.POS.y = this.POS.y
+
+            fixedCollider.w = this.w / (this.hitboxSize / 2)
+            fixedCollider.h = this.h / (this.hitboxSize / 2)
+
+            const fixedEntityCollider = {}
+            fixedEntityCollider.w = entity.w
+            fixedEntityCollider.h = entity.h
+
+            fixedEntityCollider.POS = {}
+            fixedEntityCollider.POS.x = entity.POS.x
+            fixedEntityCollider.POS.y = entity.POS.y
+
+            fixedEntityCollider.w = entity.w / (entity.hitboxSize / 2)
+            fixedEntityCollider.h = entity.h / (entity.hitboxSize / 2)
+
+            if (entity !== this && entity !== this.shooter && entity instanceof Entity && isColliding(fixedCollider, fixedEntityCollider)) {
                 this.collide(entity)
                 return true;
             }
