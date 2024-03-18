@@ -16,18 +16,18 @@ class Item {
         this.armorSlot = a?.armorSlot || v?.armorSlot || null;
 
         this.toolRotate = a?.toolRotate || v?.toolRotate || 0;
-        this.mineDamage = a?.mineDamage || v?.mineDamage || false;
-        this.TOOLTYPE = a?.TOOLTYPE || v?.TOOLTYPE || false;
+        this.mineDamage = returnFirstExsits(a?.mineDamage, v?.mineDamage, false);
+        this.TOOLTYPE = returnFirstExsits(a?.TOOLTYPE, v?.TOOLTYPE, false)
 
         this.isBlockPlacer = a?.isBlockPlacer || v?.isBlockPlacer || false;
         this.placedBlock = a?.placedBlock || v?.placedBlock || null;
 
-        this.isConsumeAble = a?.isConsumeAble || v?.isConsumeAble || false;
+        this.isConsumeAble = returnFirstExsits(a?.isConsumeAble, v?.isConsumeAble, false)
         this.hungerPoints = a?.hungerPoints || v?.hungerPoints || 0;
         this.consumeTime = a?.consumeTime || v?.consumeTime || 1000;
         this.consumeSound = a?.consumeSound || v?.consumeSound || "/MP3/eat.mp3";
 
-        this.isProjectileShooter = a?.isProjectileShooter || v?.isProjectileShooter || false;
+        this.isProjectileShooter = returnFirstExsits(a?.isProjectileShooter, v?.isProjectileShooter, false);
         this.Projectile = a?.Projectile || v?.Projectile || null;
 
         // constant

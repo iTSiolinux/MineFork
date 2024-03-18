@@ -695,7 +695,8 @@ Game.vanilla.block = {
         TOOLTYPE: 1,
         HP: 8,
         DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
-        DPD: 1
+        DPD: 1,
+        isVisible: false
     },
     oakPlant: {
         TYPE: "Game:oakPlant",

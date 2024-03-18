@@ -16,7 +16,7 @@ class Projectile {
         this.reachedDistance = 0;
         
         this.shooter = a?.shooter || v?.shooter || null;
-        this.renderHitbox = a?.renderHitbox || v?.renderHitbox || false;
+        this.renderHitbox = returnFirstExsits(a?.renderHitbox, v?.renderHitbox, false);
     }
 
     render = {

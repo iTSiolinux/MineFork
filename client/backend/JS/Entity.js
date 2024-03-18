@@ -187,7 +187,6 @@ class Entity {
 
         if (object !== null && this.isAI) {
             const panicTime = random(this.panicTime.min, this.panicTime.max);
-            console.log("time the entity will panic is: " + panicTime)
             this.AI.PANIC(panicTime, object)
         }
     }

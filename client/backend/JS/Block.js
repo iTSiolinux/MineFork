@@ -7,7 +7,7 @@ class Block {
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
         this.w = additionalValues?.w || values?.w || 2;
         this.h = additionalValues?.h || values?.h || 2;
-        this.isVisible = additionalValues?.isVisible || values?.isVisible || true;
+        this.isVisible = returnFirstExsits(additionalValues?.isVisible, values?.isVisible, true);
 
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.angle = additionalValues?.angle || values?.angle || 0;

@@ -515,4 +515,3 @@ class CraftCard extends Display {
         }
     }
 }
-
