@@ -486,6 +486,7 @@ Game.events = {
             Game.mouse.data.isDownLeft = false;
         } else if (event.which == 3) {
             Game.mouse.data.isDownRight = false;
+            Game.player.interactEnd()
         }
     },
     onMouseContext: (event) => {
@@ -666,11 +667,15 @@ Game.vanilla.item = {
         isProjectileShooter: true,
         Projectile: {
             dmg: 5,
-            SPEED: 2.5,
+            SPEED: 5,
             texture: Texture.getImage("arrow"),
             cooldown: 500,
             hitboxSize: 8,
             MaxDistance: 1024
+        },
+        shootMethod: {
+            chargeTime: {min: 750, max: 3500},
+            type: "charge"
         }
     }
 }
@@ -695,8 +700,7 @@ Game.vanilla.block = {
         TOOLTYPE: 1,
         HP: 8,
         DROPS: [Game.vanilla.item.oakDrop, Game.vanilla.item.oakDrop, Game.vanilla.item.oakSeed],
-        DPD: 1,
-        isVisible: false
+        DPD: 1    
     },
     oakPlant: {
         TYPE: "Game:oakPlant",

@@ -30,7 +30,29 @@ class Item {
         this.isProjectileShooter = returnFirstExsits(a?.isProjectileShooter, v?.isProjectileShooter, false);
         this.Projectile = a?.Projectile || v?.Projectile || null;
 
-        // constant
+        this.shootMethod =
+            a?.shootMethod
+            ||
+            v?.shootMethod
+            ||
+            {
+                chargeTime: { min: 750, max: 3500 }
+            };
+
+        /* 
+        {
+            type: "charge",
+            chargeTime: {min: 750, max: 3500} 
+            ||
+            type: "reload",
+            bullets: {
+                amount: 5,
+                sprayRange: 15,
+                shootsCooldown: {min: 250, max: 500}
+            }
+        }
+        */
+
         this.lastInteractTime = 0;
     }
 
@@ -67,7 +89,7 @@ class Item {
             Game.Data.blocks.forEach(block => {
                 if (Game.mouse.isOver(block) || Game.mouse.isOver(Game.player)) {
                     iCanPlace = false;
-                } 
+                }
             });
 
             if (iCanPlace) {
@@ -94,24 +116,68 @@ class Item {
                 this.lastInteractTime = currentTime;
 
                 Game.player.hands[0].x += 4
-                
-                setTimeout(()=>{                
+
+                setTimeout(() => {
                     Game.player.hands[0].x -= 4
                     eatingSound.pause()
-                    
+
                     this.amount--;
-                    if(this.amount <= 0){
+                    if (this.amount <= 0) {
                         Game.player.INV.removeItem(this)
                     }
                 }, this.consumeTime)
             }
-        } else if (this.isProjectileShooter){
+        } else if (this.isProjectileShooter) {
             const currentTime = Date.now();
-            if (currentTime - this.lastInteractTime >= this.Projectile.cooldown) {
-                this.lastInteractTime = currentTime;
+            const DATA = this.shootMethod;
 
-                const newProjectile = new Projectile(this.Projectile, {shooter: Game.player, POS: {x: Game.player.POS.x, y: Game.player.POS.y}, angle: Game.player.angle})
-                Game.Data.Add(newProjectile)
+            if (DATA.type == "charge") {
+                // DATA.chargeTime == {min: 750, max: 3500}  => true
+                if (currentTime >= this.lastInteractTime - DATA.chargeTime.min && !this.isCharging) {
+                    this.isCharging = true
+                    this.chargeTime = currentTime;
+                }
+            } else if (DATA.type == "reload") {
+
+            }
+        }
+    }
+
+    interactEnd() {
+        if (this.isProjectileShooter) {
+            const DATA = this.shootMethod;
+            if (DATA.type == "charge") {
+                const timeCharged = (Date.now() - this.chargeTime);
+                if (timeCharged > DATA.chargeTime.min) {
+                    if (timeCharged >= DATA.chargeTime.max) {
+                        const newProjectile = new Projectile(this.Projectile,
+                            {
+                                shooter: Game.player,
+                                POS: { x: Game.player.POS.x, y: Game.player.POS.y },
+                                angle: Game.player.angle
+                            }
+                        )
+
+                        Game.Data.Add(newProjectile)
+                    } else {
+                        const multipiller = timeCharged / DATA.chargeTime.max;
+                        const newProjectile = new Projectile(this.Projectile,
+                            {
+                                shooter: Game.player,
+                                POS: { x: Game.player.POS.x, y: Game.player.POS.y },
+                                angle: Game.player.angle,
+                                SPEED: this.Projectile.SPEED * multipiller
+                            }
+                        )    
+
+                        Game.Data.Add(newProjectile)
+                    }
+                } else {
+                    // not have enogth time to charge even minimum
+                }
+
+                this.isCharging = false
+                this.chargeTime = null
             }
         }
     }
