@@ -514,5 +514,5 @@ class Player extends Entity {
 
     // Events 
 
-    onDamage(dmg) { console.log("your got hitten by yourself " + dmg) }
+    onDamage(dmg) {  }
 }
