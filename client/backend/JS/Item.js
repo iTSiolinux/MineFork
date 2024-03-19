@@ -133,7 +133,7 @@ class Item {
 
             if (DATA.type == "charge") {
                 // DATA.chargeTime == {min: 750, max: 3500}  => true
-                if (currentTime >= this.lastInteractTime - DATA.chargeTime.min && !this.isCharging) {
+                if (!this.isCharging) {
                     this.isCharging = true
                     this.chargeTime = currentTime;
                 }
@@ -148,6 +148,7 @@ class Item {
             const DATA = this.shootMethod;
             if (DATA.type == "charge") {
                 const timeCharged = (Date.now() - this.chargeTime);
+
                 if (timeCharged > DATA.chargeTime.min) {
                     if (timeCharged >= DATA.chargeTime.max) {
                         const newProjectile = new Projectile(this.Projectile,

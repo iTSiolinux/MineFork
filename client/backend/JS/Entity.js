@@ -380,7 +380,7 @@ class Player extends Entity {
     interact() {
         const handItem = this.INV.items[this.INV.handIndex];
 
-        if (handItem instanceof Item) {
+        if (handItem instanceof Item && Game.mouse.data.isDownRight) {
             this.isInteracting = true;
             handItem?.interact()
         }
@@ -389,7 +389,7 @@ class Player extends Entity {
     interactEnd () {
         const handItem = this.INV.items[this.INV.handIndex];
         
-        if (handItem instanceof Item) {
+        if (handItem instanceof Item && !Game.mouse.data.isDownRight) {
             this.isInteracting = false;
             handItem?.interactEnd()
         }

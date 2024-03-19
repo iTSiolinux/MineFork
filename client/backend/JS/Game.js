@@ -553,7 +553,7 @@ Game.keyboard = {
             POS.x--;
         }
 
-        Game.player.setSpeed(POS.x * 0.25, POS.y * 0.25)
+        Game.player.setSpeed(POS.x * 0.30, POS.y * 0.30)
 
         for (let i = 0; i < 8; i++) {
             if (keys[49 + i]) {
@@ -669,12 +669,12 @@ Game.vanilla.item = {
             dmg: 5,
             SPEED: 5,
             texture: Texture.getImage("arrow"),
-            cooldown: 500,
             hitboxSize: 8,
             MaxDistance: 1024
         },
         shootMethod: {
-            chargeTime: {min: 750, max: 3500},
+            chargeTime: {min: 100, max: 750},
+            cooldown: 500,
             type: "charge"
         }
     }
