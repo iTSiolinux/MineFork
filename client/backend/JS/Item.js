@@ -164,7 +164,7 @@ class Item {
 
                 // Reset charging state and charge start time
                 this.isCharging = false;
-                this.chargeStartTime = null;
+                this.chargeStartTime = Date.now();
                 console.log("Projectile fired with charge time:", chargeTime);
             } else {
                 console.log("Charging time not sufficient.");

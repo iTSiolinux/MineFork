@@ -371,6 +371,7 @@ Game.render = {
     // loop functions
     update() {
         Game.render.refreshCanvas()
+        Game.render.grid()
         Game.Camera.update()
         Game.render.items()
         Game.render.entitys()
@@ -382,6 +383,19 @@ Game.render = {
     },
     refreshCanvas: () => {
         DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height);
+    },
+    grid: () => {
+        const cellSize = 64; // Adjust this value to change the size of each grid cell
+        const color = 'rgba(0, 0, 0, 0.1)'; // Adjust this value to change the color of the grid lines
+        
+        // Set the style for grid lines
+        DRAW.strokeStyle = color;
+        DRAW.lineWidth = 1; // Adjust this value to change the thickness of the grid lines
+        
+        const startX = Game.Camera.POS.x - Game.canvas.width / 2;
+        const startY = Game.Camera.POS.y - Game.canvas.height / 2;
+
+        
     },
     items: () => {
         Game.Data.items.forEach(items => {
@@ -677,6 +691,20 @@ Game.vanilla.item = {
             cooldown: 500,
             type: "charge"
         }
+    },
+    wheat: {
+        texture: Texture.getImage("wheat"),
+        TYPE: "Game:wheat",
+        size: 64,
+        amount: 1,
+        displayName: "Wheat"
+    },
+    wheatSeed: {
+        texture: Texture.getImage("wheatSeed"),
+        TYPE: "Game:wheatSeed",
+        size: 64,
+        amount: 1,
+        displayName: "Wheat seed" 
     }
 }
 
