@@ -395,7 +395,13 @@ Game.render = {
         const startX = Game.Camera.POS.x - Game.canvas.width / 2;
         const startY = Game.Camera.POS.y - Game.canvas.height / 2;
 
-        
+        for (let X = startX; X < Game.Camera.POS.x + Game.canvas.width / 2; X += 64){
+            // rendering vertical lines 
+            DRAW.beginPath();
+            DRAW.moveTo(X % cellSize, y);
+            DRAW.lineTo(Game.canvas.width, y);
+            DRAW.stroke();
+        }
     },
     items: () => {
         Game.Data.items.forEach(items => {
