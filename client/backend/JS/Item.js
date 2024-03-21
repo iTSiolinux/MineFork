@@ -128,60 +128,48 @@ class Item {
                 }, this.consumeTime)
             }
         } else if (this.isProjectileShooter) {
-            const currentTime = Date.now();
-            const DATA = this.shootMethod;
-
-            if (DATA.type == "charge") {
-                // DATA.chargeTime == {min: 750, max: 3500}  => true
+            if (this.shootMethod.type == "charge") {
                 if (!this.isCharging) {
-                    this.isCharging = true
-                    this.chargeTime = currentTime;
+                    this.isCharging = true;
+                    this.chargeStartTime = Date.now();
+                    console.log("Charging started.");
                 }
-            } else if (DATA.type == "reload") {
-
             }
         }
     }
 
     interactEnd() {
-        if (this.isProjectileShooter) {
-            const DATA = this.shootMethod;
-            if (DATA.type == "charge") {
-                const timeCharged = (Date.now() - this.chargeTime);
+        if (this.isProjectileShooter && this.shootMethod.type === "charge" && this.isCharging) {
+            // Calculate charge time
+            const chargeTime = Date.now() - this.chargeStartTime;
 
-                if (timeCharged > DATA.chargeTime.min) {
-                    if (timeCharged >= DATA.chargeTime.max) {
-                        const newProjectile = new Projectile(this.Projectile,
-                            {
-                                shooter: Game.player,
-                                POS: { x: Game.player.POS.x, y: Game.player.POS.y },
-                                angle: Game.player.angle
-                            }
-                        )
+            // Ensure minimum charge time is met
+            const minChargeTime = this.shootMethod.chargeTime.min;
+            if (chargeTime >= minChargeTime) {
+                // Calculate charge strength
+                const maxChargeTime = this.shootMethod.chargeTime.max;
+                const strength = Math.min(chargeTime / maxChargeTime, 1); // Ensure strength doesn't exceed 1
 
-                        Game.Data.Add(newProjectile)
-                    } else {
-                        const multipiller = timeCharged / DATA.chargeTime.max;
-                        const newProjectile = new Projectile(this.Projectile,
-                            {
-                                shooter: Game.player,
-                                POS: { x: Game.player.POS.x, y: Game.player.POS.y },
-                                angle: Game.player.angle,
-                                SPEED: this.Projectile.SPEED * multipiller
-                            }
-                        )    
+                // Calculate projectile speed based on strength
+                const projectileSpeed = this.Projectile.SPEED * strength;
 
-                        Game.Data.Add(newProjectile)
-                    }
-                } else {
-                    // not have enogth time to charge even minimum
-                }
+                // Create and add projectile
+                const newProjectile = new Projectile(this.Projectile, {
+                    shooter: Game.player,
+                    POS: { x: Game.player.POS.x, y: Game.player.POS.y },
+                    angle: Game.player.angle,
+                    SPEED: projectileSpeed
+                });
+                Game.Data.Add(newProjectile);
 
-                this.isCharging = false
-                this.chargeTime = null
+                // Reset charging state and charge start time
+                this.isCharging = false;
+                this.chargeStartTime = null;
+                console.log("Projectile fired with charge time:", chargeTime);
+            } else {
+                console.log("Charging time not sufficient.");
             }
         }
     }
 }
-
 class VoidItem { }
