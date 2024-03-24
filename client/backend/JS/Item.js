@@ -102,6 +102,7 @@ class Item {
 
                 Game.Data.Add(placedBlock)
             }
+            Game.player.isInteracting = false
         } else if (this.isConsumeAble) {
             // eating if is eatable item
             const currentTime = Date.now();

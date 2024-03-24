@@ -392,14 +392,23 @@ Game.render = {
         DRAW.strokeStyle = color;
         DRAW.lineWidth = 1; // Adjust this value to change the thickness of the grid lines
         
-        const startX = Game.Camera.POS.x - Game.canvas.width / 2;
-        const startY = Game.Camera.POS.y - Game.canvas.height / 2;
-
-        for (let X = startX; X < Game.Camera.POS.x + Game.canvas.width / 2; X += 64){
-            // rendering vertical lines 
+        // Calculate the starting position of the grid lines based on the player's position and the size of the viewport
+        const startX = Math.floor((Game.Camera.POS.x - Game.canvas.width / 2) / cellSize) * cellSize;
+        const startY = Math.floor((Game.Camera.POS.y - Game.canvas.height / 2) / cellSize) * cellSize;
+    
+        // Render vertical lines
+        for (let x = startX; x < Game.Camera.POS.x + Game.canvas.width / 2; x += cellSize) {
             DRAW.beginPath();
-            DRAW.moveTo(X % cellSize, y);
-            DRAW.lineTo(Game.canvas.width, y);
+            DRAW.moveTo(x, startY);
+            DRAW.lineTo(x, Game.Camera.POS.y + Game.canvas.height / 2);
+            DRAW.stroke();
+        }
+    
+        // Render horizontal lines
+        for (let y = startY; y < Game.Camera.POS.y + Game.canvas.height / 2; y += cellSize) {
+            DRAW.beginPath();
+            DRAW.moveTo(startX, y);
+            DRAW.lineTo(Game.Camera.POS.x + Game.canvas.width / 2, y);
             DRAW.stroke();
         }
     },
