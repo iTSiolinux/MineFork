@@ -385,7 +385,7 @@ Game.render = {
         DRAW.clearRect(Game.Camera.POS.x - Game.canvas.width / 2, Game.Camera.POS.y - Game.canvas.height / 2, Game.canvas.width, Game.canvas.height);
     },
     grid: () => {
-        const cellSize = 64; // Adjust this value to change the size of each grid cell
+        const cellSize = 128; // Adjust this value to change the size of each grid cell
         const color = 'rgba(0, 0, 0, 0.1)'; // Adjust this value to change the color of the grid lines
         
         // Set the style for grid lines
