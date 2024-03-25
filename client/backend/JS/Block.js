@@ -8,6 +8,7 @@ class Block {
         this.w = additionalValues?.w || values?.w || 2;
         this.h = additionalValues?.h || values?.h || 2;
         this.isVisible = returnFirstExsits(additionalValues?.isVisible, values?.isVisible, true);
+        this.isFullBlock = true;
 
         this.POS = additionalValues?.POS || values?.POS || { x: 0, y: 0 };
         this.angle = additionalValues?.angle || values?.angle || 0;
@@ -18,16 +19,19 @@ class Block {
         this.DROPS = additionalValues?.DROPS || values?.DROPS || [];
         this.DPD = additionalValues?.DPD || values?.DPD || 1; // DpD ~ Drop per damage like if DPD == 0.5 => 2 dmg = 1 drop
 
-
         this.growTime = additionalValues?.growTime || values?.growTime || 0; // in MS
         this.growBlock = additionalValues?.growBlock || values?.growBlock || null;
 
-        this.onConstructor();
+        this.onConstructor()
     }
 
     // Events
 
     onConstructor() {
+
+    }
+
+    onAdd(){
         if (this.growTime > 0){
             setTimeout(this.grow, this.growTime, this);
         }

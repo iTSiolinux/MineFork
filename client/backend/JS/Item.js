@@ -56,6 +56,10 @@ class Item {
         this.lastInteractTime = 0;
     }
 
+    onAdd() {
+
+    }
+
     render() {
         // Save original drawing context
         DRAW.save();
@@ -80,7 +84,35 @@ class Item {
     }
 
     renderPlanPlace() {
+        const mousePosition = Game.mouse.data.position.canvas;
+        const block = new Block(Game.vanilla.block[this.placedBlock]);
+
+        DRAW.save();
+        if (block.isFullBlock){
+            DRAW.translate(mousePosition.x - 64 - mousePosition.x % 128, mousePosition.y - 64 - mousePosition.y % 128);
+        } else {
+            DRAW.translate(mousePosition.x, mousePosition.y);
+        }
+
+        DRAW.rotate(DTR(block.angle))
+
+        DRAW.strokeStyle = "black"
+        DRAW.strokeRect(
+            -block.w * scale / 2,
+            -block.h * scale / 2,
+            block.w * scale,
+            block.h * scale
+        );
+
+        DRAW.drawImage(
+            block.texture,
+            -block.w * scale / 2,
+            -block.h * scale / 2,
+            block.w * scale,
+            block.h * scale
+        );
         
+        DRAW.restore();
     }
 
     interact() {

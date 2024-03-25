@@ -15,7 +15,7 @@ class Entity {
 
         this.stateList = a?.stateList || v?.stateList || null;
         this.currentState = "IDLE";
-        this.panicTime = a?.panicTime || v?.panicTime || {min: 3, max: 15};
+        this.panicTime = a?.panicTime || v?.panicTime || { min: 3, max: 15 };
 
         this.dropList = a?.dropList || v?.dropList || [];
 
@@ -33,6 +33,8 @@ class Entity {
 
 
     // list of Events
+    onAdd() { }
+    
     onSpawn() { }
 
     onDeath() { }
@@ -44,7 +46,7 @@ class Entity {
     // update function
     update() {
         this.updatePhysics()
-        if (this.isAI){
+        if (this.isAI) {
             this.AI.update()
         }
     }
@@ -57,7 +59,7 @@ class Entity {
                 if (this.HP < this.CONST_HP) {
                     this.render.healthBar()
                 }
-                if (Game.isDebugging){
+                if (Game.isDebugging) {
                     this.render.hitBox()
                 }
             }
@@ -364,14 +366,14 @@ class Player extends Entity {
             this.isMining = true;
 
             const Hand = this.hands[this.lastHit];
-            
+
             Hand.x -= Hand.w / 2
             this.hasPlayerHit();
             setTimeout(() => {
                 Hand.x += Hand.w / 2
                 this.isMining = false;
             }, 500)
-           
+
 
             this.lastHit ? (this.lastHit = 0) : (this.lastHit = 1);
         }
@@ -386,9 +388,9 @@ class Player extends Entity {
         }
     }
 
-    interactEnd () {
+    interactEnd() {
         const handItem = this.INV.items[this.INV.handIndex];
-        
+
         if (handItem instanceof Item && !Game.mouse.data.isDownRight) {
             this.isInteracting = false;
             handItem?.interactEnd()
@@ -466,6 +468,11 @@ class Player extends Entity {
 
             // Restore the original drawing context
             DRAW.restore();
+
+            const handItem = Game.player.INV.items[Game.player.INV.handIndex];
+            if (handItem instanceof Item && handItem.isBlockPlacer) {
+                handItem.renderPlanPlace()
+            }
         },
         hands: () => {
             DRAW.fillStyle = Game.isDebugging ? "red" : 'rgb(255 184 45)';
@@ -475,9 +482,9 @@ class Player extends Entity {
         },
         handItem: () => {
             const handItem = Game.player.INV.items[Game.player.INV.handIndex];
-        
+
             const offsetX = this.hands[0].x - this.hands[0].w;
-        
+
             if (handItem instanceof Item) {
                 if (handItem.toolRotate === 0) {
                     DRAW.drawImage(
@@ -494,7 +501,7 @@ class Player extends Entity {
                     const centerX = this.hands[0].x - handItem.w / 2;  // Adjust based on the center of the image
                     const centerY = this.hands[0].y - handItem.h / 2;  // Adjust based on the center of the image
                     DRAW.translate(centerX, centerY);
-        
+
                     DRAW.rotate(DTR(handItem.toolRotate));
                     // Draw the image with its center at (0, 0)
                     DRAW.drawImage(
@@ -504,15 +511,15 @@ class Player extends Entity {
                         handItem.w,
                         handItem.h
                     );
-        
+
                     // Restore the original drawing context
                     DRAW.restore();
                 }
-            }        
+            }
         }
     }
 
     // Events 
 
-    onDamage(dmg) {  }
+    onDamage(dmg) { }
 }

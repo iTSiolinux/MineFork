@@ -106,15 +106,19 @@ Game.Data = {
     Add: (object) => {
         if (object instanceof Block) {
             Game.Data.blocks.unshift(object)
+            object.onAdd()
         }
         else if (object instanceof Item) {
             Game.Data.items.unshift(object)
+            object.onAdd()
         }
         else if (object instanceof Entity || object instanceof Projectile) {
             Game.Data.entitys.unshift(object)
+            object.onAdd()
         }
         else if (object instanceof Button || object instanceof Display || object instanceof Title || object instanceof NumberInput) {
             Game.Data.GUI.unshift(object)
+            object.onAdd()
         } else {
             console.error("The added object not valid instance. \n" + object.constructor.name)
         }

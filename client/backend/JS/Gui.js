@@ -14,6 +14,8 @@ class Button {
     // Events
     onSpawn() { }
 
+    onAdd() {}
+
     onRightClick() { }
 
     onLeftClick() { }
@@ -189,6 +191,10 @@ class Display {
         }
     }
 
+    onAdd() {
+
+    }
+
     addChild(guiObjects) {
         if (Array.isArray(guiObjects)) {
             for (const child of guiObjects) {
@@ -270,6 +276,10 @@ class Title {
         this.angle = Props?.angle || 0
     }
 
+    onAdd() {
+
+    }
+
     render() {
         DRAW.save();
 
@@ -303,6 +313,8 @@ class NumberInput {
 
         this.refresh()
     }
+
+    onAdd () {}
 
     update() {
         this.leftBtn.update()

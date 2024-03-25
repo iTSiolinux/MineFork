@@ -19,6 +19,8 @@ class Projectile {
         this.renderHitbox = returnFirstExsits(a?.renderHitbox, v?.renderHitbox, false);
     }
 
+    onAdd() {}
+
     render = {
         update: () => {
             this.render.base()
