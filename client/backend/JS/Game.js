@@ -26,33 +26,32 @@ const Game = {
         Game.renderInterval = setInterval(Game.render.update, FPS)
 
         // Player 
-        const p = new Player({ HP: 100, POS: { x: 0, y: 0 }, texture: Texture.getImage("player") })
+        const p = new Player({ HP: 100, POS: { x: 64, y: -64 }, texture: Texture.getImage("player") })
         Game.player = p;
 
         // Attaching player to the camera as target
         Game.Camera.target = p;
 
         // Test block
-        const b = new Block(Game.vanilla.block.oak)
+        const b = new Block(Game.vanilla.block.oak, {POS: {x: 64, y: 64}})
 
         // Test chicken
-        const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: true })
+        const ch = new Entity(Game.vanilla.entity.chicken, { POS: { x: -64, y: 64 }, isAI: false })
 
         const onDeath = () => {
-            const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: 128, y: 0 }, isAI: true })
+            const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: -64, y: 64 }, isAI: false })
             c.onDeath = onDeath;
-            c.AI.PANIC()
             Game.Data.Add(c)
         }
 
-        c.onDeath = onDeath;
+        ch.onDeath = onDeath;
         // Test tool
-        const pick = new Item(Game.vanilla.item.bow)
+        const bow = new Item(Game.vanilla.item.bow, {POS: {x: -64, y: -64}})
 
         Game.Data.Add(p)
-        Game.Data.Add(c)
+        Game.Data.Add(ch)
         Game.Data.Add(b)
-        Game.Data.Add(pick)
+        Game.Data.Add(bow)
         // Game.Data.Add(bullet)
 
         Game.render.hotbar()

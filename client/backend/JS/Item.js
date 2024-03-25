@@ -79,6 +79,10 @@ class Item {
         DRAW.restore();
     }
 
+    renderPlanPlace() {
+        
+    }
+
     interact() {
         // checking if could place block 
         if (this.isBlockPlacer) {
