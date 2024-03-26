@@ -1,8 +1,8 @@
 class Item {
     constructor(v /* values */, a /* additionalValues */) {
         this.texture = a?.texture || v?.texture || Texture.getImage("null");
-        this.w = a?.w || v?.w || scale / 2;
-        this.h = a?.h || v?.h || scale / 2;
+        this.w = a?.w || v?.w || 0.5;
+        this.h = a?.h || v?.h || 0.5;
         this.angle = a?.angle || v?.angle || 0;
 
         this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
@@ -75,8 +75,8 @@ class Item {
             this.texture,
             -this.w / 2,
             -this.h / 2,
-            this.w,
-            this.h
+            this.w * scale,
+            this.h * scale
         );
 
         // Restore the original drawing context
@@ -88,9 +88,9 @@ class Item {
         const block = new Block(Game.vanilla.block[this.placedBlock]);
 
         DRAW.save();
-        if (block.isFullBlock){
-            const pos = {x: mousePosition.x - (mousePosition.x % 64) , y: mousePosition.y - (mousePosition.y % 64)}
-            DRAW.translate( pos.x - block.w / 2, pos.y - block.h / 2);
+        if (block.isFullBlock) {
+            const pos = { x: mousePosition.x - (mousePosition.x % 64), y: mousePosition.y - (mousePosition.y % 64) }
+            DRAW.translate(pos.x, pos.y);
         } else {
             DRAW.translate(mousePosition.x, mousePosition.y);
         }
@@ -99,20 +99,20 @@ class Item {
 
         DRAW.strokeStyle = "black"
         DRAW.strokeRect(
-            -block.w * scale / 2,
-            -block.h * scale / 2,
-            block.w * scale,
-            block.h * scale
+            -block.w / 2,
+            -block.h / 2,
+            block.w,
+            block.h
         );
 
         DRAW.drawImage(
             block.texture,
-            -block.w * scale / 2,
-            -block.h * scale / 2,
-            block.w * scale,
-            block.h * scale
+            -block.w / 2,
+            -block.h / 2,
+            block.w,
+            block.h
         );
-        
+
         DRAW.restore();
     }
 
@@ -124,7 +124,9 @@ class Item {
             const fixedBlock = Game.vanilla.block[this.placedBlock];
 
             Game.Data.blocks.forEach(block => {
+                const B = block;
                 if (Game.mouse.isOver(block) || Game.mouse.isOver(Game.player)) {
+
                     iCanPlace = false;
                 }
             });
@@ -135,7 +137,11 @@ class Item {
                 } else {
                     Game.player.INV.removeItem(this)
                 }
-                const placedBlock = new Block(Game.vanilla.block[this.placedBlock], { POS: { x: Game.mouse.data.position.canvas.x, y: Game.mouse.data.position.canvas.y } })
+                
+
+                const mousePosition = Game.mouse.data.position.canvas,
+                    pos = { x: mousePosition.x - (mousePosition.x % 64), y: mousePosition.y - (mousePosition.y % 64) },
+                    placedBlock = new Block(Game.vanilla.block[this.placedBlock], { POS: { x: pos.x, y: pos.y } });
 
                 Game.Data.Add(placedBlock)
             }

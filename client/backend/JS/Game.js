@@ -634,7 +634,7 @@ Game.mouse = {
     item: new VoidItem(),
 }
 
-// Vanilla pre-confguired values for blocks
+// Vanilla pre-confguired values for objects
 Game.vanilla = {}
 
 Game.vanilla.item = {

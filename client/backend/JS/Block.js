@@ -5,8 +5,8 @@ class Block {
         this.HP = additionalValues?.HP || values?.HP || 1;
 
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
-        this.w = additionalValues?.w || values?.w || 2;
-        this.h = additionalValues?.h || values?.h || 2;
+        this.w = additionalValues?.w || values?.w || 128;
+        this.h = additionalValues?.h || values?.h || 128;
         this.isVisible = returnFirstExsits(additionalValues?.isVisible, values?.isVisible, true);
         this.isFullBlock = true;
 
@@ -131,10 +131,10 @@ class Block {
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
                 this.texture,
-                -this.w / 2 * scale,  
-                -this.h / 2 * scale, 
-                this.w * scale,      
-                this.h * scale   
+                -this.w / 2,  
+                -this.h / 2, 
+                this.w,      
+                this.h   
             );
         
             // Restore the original drawing context

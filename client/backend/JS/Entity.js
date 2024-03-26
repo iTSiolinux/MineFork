@@ -4,8 +4,8 @@ class Entity {
         this.HP = a?.HP || v?.HP || 1;
 
         this.texture = a?.texture || v?.texture || Texture.getImage();
-        this.w = a?.w || v?.w || scale;
-        this.h = a?.h || v?.h || scale;
+        this.w = a?.w || v?.w || 1;
+        this.h = a?.h || v?.h || 1;
         this.hitboxSize = a?.hitboxSize || v?.hitboxSize || 4;
         this.angle = a?.angle || v?.angle || 0;
 
@@ -34,7 +34,7 @@ class Entity {
 
     // list of Events
     onAdd() { }
-    
+
     onSpawn() { }
 
     onDeath() { }
@@ -77,10 +77,10 @@ class Entity {
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
                 this.texture,
-                -this.w / 2,
+                -this.w * scale / 2,
                 -this.h / 2,
-                this.w,
-                this.h
+                this.w * scale,
+                this.h * scale
             );
 
             // Restore the original drawing context
@@ -89,7 +89,7 @@ class Entity {
         healthBar: () => {
             const hpBarP = {
                 width: this.w * 2,
-                height: this.h / 4,
+                height: this.h * scale / 4,
                 border: "black",
                 stroke: 2,
                 color: "green"
@@ -99,7 +99,7 @@ class Entity {
 
             DRAW.save()
 
-            DRAW.translate(this.POS.x - this.w, this.POS.y - this.h)
+            DRAW.translate(this.POS.x - this.w * scale, this.POS.y - this.h)
 
             DRAW.strokeStyle = hpBarP.border
             DRAW.lineWidth = hpBarP.stroke
@@ -120,9 +120,9 @@ class Entity {
             DRAW.strokeStyle = "red"
             DRAW.strokeRect(
                 -this.w / this.hitboxSize,
-                -this.h / this.hitboxSize,
-                this.w / (this.hitboxSize / 2),
-                this.h / (this.hitboxSize / 2)
+                -this.h * scale / this.hitboxSize,
+                this.w * scale / (this.hitboxSize / 2),
+                this.h * scale / (this.hitboxSize / 2)
             );
 
             // Restore the original drawing context
@@ -273,7 +273,10 @@ class Player extends Entity {
         this.isAI = false
 
         // starting by adding hands
-        this.hands = [{ x: -scale / 2, y: scale / 4, w: this.w / 2, h: this.h / 4 }, { x: -scale / 2, y: -scale / 2, w: this.w / 2, h: this.h / 4 }]
+        this.hands = [
+            { x: -scale / 2, y: scale / 4, w: this.w * scale / 2, h: this.h * scale / 4 },
+            { x: -scale / 2, y: -scale / 2, w: this.w * scale / 2, h: this.h * scale / 4 }
+        ]
         this.lastHit = 1;
         this.isMining = false;
         this.isInteracting = false;
@@ -460,10 +463,10 @@ class Player extends Entity {
             // Draw the image with its center at (0, 0)
             DRAW.drawImage(
                 this.texture,
-                -this.w / 2,
-                -this.h / 2,
-                this.w,
-                this.h
+                -this.w * scale / 2,
+                -this.h * scale / 2,
+                this.w * scale,
+                this.h * scale
             );
 
             // Restore the original drawing context
