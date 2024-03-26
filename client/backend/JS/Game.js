@@ -38,6 +38,9 @@ const Game = {
         // Test chicken
         const ch = new Entity(Game.vanilla.entity.chicken, { POS: { x: -64, y: 64 }, isAI: false })
 
+        // Test seed
+        Game.player.INV.addItem(new Item(Game.vanilla.item.oakSeed))
+
         const onDeath = () => {
             const c = new Entity(Game.vanilla.entity.chicken, { POS: { x: -64, y: 64 }, isAI: false })
             c.onDeath = onDeath;

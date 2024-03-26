@@ -89,7 +89,8 @@ class Item {
 
         DRAW.save();
         if (block.isFullBlock){
-            DRAW.translate(mousePosition.x - 64 - mousePosition.x % 128, mousePosition.y - 64 - mousePosition.y % 128);
+            const pos = {x: mousePosition.x - (mousePosition.x % 64) , y: mousePosition.y - (mousePosition.y % 64)}
+            DRAW.translate( pos.x - block.w / 2, pos.y - block.h / 2);
         } else {
             DRAW.translate(mousePosition.x, mousePosition.y);
         }
