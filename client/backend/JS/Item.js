@@ -1,8 +1,8 @@
 class Item {
     constructor(v /* values */, a /* additionalValues */) {
         this.texture = a?.texture || v?.texture || Texture.getImage("null");
-        this.w = a?.w || v?.w || 0.5;
-        this.h = a?.h || v?.h || 0.5;
+        this.w = a?.w || v?.w || 0.5 * scale;
+        this.h = a?.h || v?.h || 0.5 * scale;
         this.angle = a?.angle || v?.angle || 0;
 
         this.POS = a?.POS || v?.POS || { x: 0, y: 0 };
@@ -75,8 +75,8 @@ class Item {
             this.texture,
             -this.w / 2,
             -this.h / 2,
-            this.w * scale,
-            this.h * scale
+            this.w,
+            this.h
         );
 
         // Restore the original drawing context

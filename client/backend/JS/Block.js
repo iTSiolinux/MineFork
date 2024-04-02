@@ -5,8 +5,8 @@ class Block {
         this.HP = additionalValues?.HP || values?.HP || 1;
 
         this.texture = additionalValues?.texture || values?.texture || Texture.getImage("null");
-        this.w = additionalValues?.w || values?.w || 128;
-        this.h = additionalValues?.h || values?.h || 128;
+        this.w = additionalValues?.w || values?.w || scale * 2;
+        this.h = additionalValues?.h || values?.h || scale * 2;
         this.isVisible = returnFirstExsits(additionalValues?.isVisible, values?.isVisible, true);
         this.isFullBlock = true;
 

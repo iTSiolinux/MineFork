@@ -10,17 +10,17 @@ const scale =  64,
     isColliding = (o, o2) => {
         // Calculate bounding box coordinates for both objects
         const oBorders = {
-            left: o.POS.x - o.w * scale / 2,
-            right: o.POS.x + o.w * scale / 2,
-            top: o.POS.y - o.h * scale / 2,
-            bottom: o.POS.y + o.h * scale / 2
+            left: o.POS.x - o.w / 2,
+            right: o.POS.x + o.w / 2,
+            top: o.POS.y - o.h / 2,
+            bottom: o.POS.y + o.h / 2
         }
 
         const oBorders2 = {
-            left: o2.POS.x - o2.w * scale / 2,
-            right: o2.POS.x + o2.w * scale / 2,
-            top: o2.POS.y - o2.h * scale / 2,
-            bottom: o2.POS.y + o2.h * scale / 2
+            left: o2.POS.x - o2.w / 2,
+            right: o2.POS.x + o2.w / 2,
+            top: o2.POS.y - o2.h / 2,
+            bottom: o2.POS.y + o2.h / 2
         };
 
         // Check for horizontal overlap
